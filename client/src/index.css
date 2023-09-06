@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  src: url("/fonts/instrumentsans-regular-subset-webfont.woff2") format("woff2");
+  font-family: "Instrument";
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  src: url("/fonts/instrumentsans-semibold-subset-webfont.woff2") format("woff2");
+  font-family: "Instrument";
+  font-weight: 600;
+  font-display: swap;
+}
+
+@font-face {
+  src: url("/fonts/instrumentsans-bold-subset-webfont.woff2") format("woff2");
+  font-family: "Instrument";
+  font-weight: 700;
+  font-display: swap;
+}
