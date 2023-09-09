@@ -22,3 +22,11 @@
   font-weight: 700;
   font-display: swap;
 }
+
+html {
+  @apply min-h-full;
+}
+
+body {
+  @apply bg-siteBg min-h-full font-Instrument;
+}
