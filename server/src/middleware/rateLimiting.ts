@@ -15,7 +15,7 @@ export const mediumRateLimit = rateLimit({
   windowMs: timeConverter.toMs(1, "minute"),
   limit: 12,
   message: new DefaultResponse(false, 429, null, [
-    "Too many requests. Please try again in 1 second.",
+    "Too many requests. Please try again in 1 minute.",
   ]),
 });
 export const lowRateLimit = rateLimit({
