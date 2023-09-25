@@ -38,7 +38,5 @@ export const deleteUserSchema = z
   .strip();
 
 export type CreateUserInput = z.TypeOf<typeof createUserSchema>;
-
 export type UpdateUserInput = z.TypeOf<typeof updateUserSchema>;
-
 export type DeleteUserInput = z.TypeOf<typeof deleteUserSchema>;

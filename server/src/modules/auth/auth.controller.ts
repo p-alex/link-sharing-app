@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import { controller, httpGet, httpPost } from "inversify-express-utils";
-import { EmailSignInInput, emailSignInSchema } from "./auth.schema";
+import {
+  EmailSignInInput,
+  OAuthSignInput,
+  emailSignInSchema,
+  oauthSignInSchema,
+} from "./auth.schema";
 import AuthService from "./auth.service";
 import { HttpResponse } from "../../utils/httpResponse";
 import { validateResource } from "../../middleware/validateResource";
@@ -29,10 +34,10 @@ class AuthController {
     });
   }
 
-  @httpGet("/google-sign-in")
-  async googleSignIn(req: CustomRequest<object, object, object, { code: string }>, res: Response) {
+  @httpGet("/google-sign-in", validateResource(oauthSignInSchema))
+  async googleSignIn(req: CustomRequest<object, object, OAuthSignInput>, res: Response) {
     const { refreshToken, refreshTokenExpireInMs } = await this._authService.oauthSignIn(
-      req.query.code,
+      req.body.code,
       "google",
     );
 
@@ -41,10 +46,10 @@ class AuthController {
     return res.redirect(config.CLIENT_BASE_URL);
   }
 
-  @httpGet("/discord-sign-in")
-  async discordSignIn(req: CustomRequest<object, object, object, { code: string }>, res: Response) {
+  @httpGet("/discord-sign-in", validateResource(oauthSignInSchema))
+  async discordSignIn(req: CustomRequest<object, object, OAuthSignInput>, res: Response) {
     const { refreshToken, refreshTokenExpireInMs } = await this._authService.oauthSignIn(
-      req.query.code,
+      req.body.code,
       "discord",
     );
 
@@ -53,13 +58,10 @@ class AuthController {
     return res.redirect(config.CLIENT_BASE_URL);
   }
 
-  @httpGet("/linkedin-sign-in")
-  async linkedinSignIn(
-    req: CustomRequest<object, object, object, { code: string }>,
-    res: Response,
-  ) {
+  @httpGet("/linkedin-sign-in", validateResource(oauthSignInSchema))
+  async linkedinSignIn(req: CustomRequest<object, object, OAuthSignInput>, res: Response) {
     const { refreshToken, refreshTokenExpireInMs } = await this._authService.oauthSignIn(
-      req.query.code,
+      req.body.code,
       "linkedin",
     );
 
@@ -68,10 +70,10 @@ class AuthController {
     return res.redirect(config.CLIENT_BASE_URL);
   }
 
-  @httpGet("/github-sign-in")
-  async githubSignIn(req: CustomRequest<object, object, object, { code: string }>, res: Response) {
+  @httpGet("/github-sign-in", validateResource(oauthSignInSchema))
+  async githubSignIn(req: CustomRequest<object, object, OAuthSignInput>, res: Response) {
     const { refreshToken, refreshTokenExpireInMs } = await this._authService.oauthSignIn(
-      req.query.code,
+      req.body.code,
       "github",
     );
 

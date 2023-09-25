@@ -8,4 +8,11 @@ export const emailSignInSchema = z
   })
   .strip();
 
+export const oauthSignInSchema = z
+  .object({
+    code: z.string({ required_error: "Authorization code required" }),
+  })
+  .strip();
+
 export type EmailSignInInput = z.TypeOf<typeof emailSignInSchema>;
+export type OAuthSignInput = z.TypeOf<typeof oauthSignInSchema>;

@@ -3,7 +3,7 @@ import Session from "../session/session.entity";
 
 const AUTH_PROVIDERS = ["github", "google", "linkedin", "discord"] as const;
 
-export type AuthProvidersType = (typeof AUTH_PROVIDERS)[number];
+export type OAuthProvidersType = (typeof AUTH_PROVIDERS)[number];
 
 @Entity("users")
 class User {
@@ -26,7 +26,7 @@ class User {
   public modified_at: number;
 
   @Column("enum", { enum: AUTH_PROVIDERS, nullable: true })
-  public readonly auth_provider: AuthProvidersType;
+  public readonly auth_provider: OAuthProvidersType;
 
   constructor(
     id: string,
@@ -35,7 +35,7 @@ class User {
     sessions: Session[],
     created_at: number,
     modified_at: number,
-    auth_provider: AuthProvidersType,
+    auth_provider: OAuthProvidersType,
   ) {
     this.id = id;
     this.email = email;

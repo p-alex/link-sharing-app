@@ -2,6 +2,7 @@ export const config = {
   PORT: process.env.PORT || 5000,
   NODE_ENV: process.env.NODE_ENV! as "development" | "production",
   CLIENT_BASE_URL: process.env.CLIENT_BASE_URL!,
+  SERVER_BASE_URL: process.env.SERVER_BASE_URL!,
   DB_HOST: process.env.DB_HOST!,
   DB_PORT: Number(process.env.DB_PORT!),
   DB_USER: process.env.DB_USER!,
@@ -17,7 +18,7 @@ export const config = {
   LINKEDIN_CLIENT_SECRET: process.env.LINKEDIN_CLIENT_SECRET!,
   DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID!,
   DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET!,
-  secrets: {
+  jwtSecrets: {
     ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET!,
     REFRESH_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET!,
   },

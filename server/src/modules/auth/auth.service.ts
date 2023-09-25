@@ -6,7 +6,7 @@ import { EmailSignInInput } from "./auth.schema";
 import { TimeConverter } from "../../utils/timeConverter";
 import InvalidCredentialsException from "../../exceptions/InvalidCredentialsException";
 import SecurePasswordGenerator from "../../utils/securePasswordGenerator";
-import User, { AuthProvidersType } from "../user/user.entity";
+import User, { OAuthProvidersType } from "../user/user.entity";
 import OAuthStrategy from "../oauthStrategy";
 
 @injectable()
@@ -60,7 +60,7 @@ class AuthService {
     };
   }
 
-  async oauthSignIn(code: string, type: AuthProvidersType) {
+  async oauthSignIn(code: string, type: OAuthProvidersType) {
     const { email } = await this._oauthStrategy[type](code);
 
     const userWithEmail = await this._unitOfWork.user.findByEmail(email);
@@ -69,7 +69,9 @@ class AuthService {
 
     if (!userWithEmail) {
       const newPassword = this._securePasswordGenerator.generate();
+
       const hashedPassword = await this._hash.slowHash(newPassword);
+
       createdUser = await this._unitOfWork.user.create({
         email,
         password: hashedPassword,
@@ -101,6 +103,7 @@ class AuthService {
 
   async logout(refreshToken: string) {
     let refreshTokenPayload = { id: "" };
+
     try {
       refreshTokenPayload = {
         ...this._jwt.verifyJwt<{ id: string }>(refreshToken, "REFRESH_TOKEN_SECRET"),
@@ -108,11 +111,14 @@ class AuthService {
     } catch (error) {
       throw new Error("You must be logged in");
     }
+
     await this._unitOfWork.session.deleteBySession(
       refreshTokenPayload.id,
       this._hash.fastHash(refreshToken),
     );
+
     await this._unitOfWork.session.deleteAllExpiredSessions(refreshTokenPayload.id, Date.now());
+
     return true;
   }
 }

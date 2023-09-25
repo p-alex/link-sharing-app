@@ -24,13 +24,13 @@ export class UserController {
     return HttpResponse.success(res, result, 201);
   }
 
-  @httpPatch("/:id", mediumRateLimit, requireAuth, validateResource(updateUserSchema, true))
+  @httpPatch("/:id", mediumRateLimit, requireAuth, validateResource(updateUserSchema))
   async update(req: Request<object, object, UpdateUserInput>, res: Response) {
     await this._userService.update(req.body);
     return HttpResponse.success(res);
   }
 
-  @httpDelete("/:id", mediumRateLimit, requireAuth, validateResource(deleteUserSchema, true))
+  @httpDelete("/:id", mediumRateLimit, requireAuth, validateResource(deleteUserSchema))
   async delete(req: Request<object, object, DeleteUserInput>, res: Response) {
     await this._userService.delete(req.body.id);
     return HttpResponse.success(res);
