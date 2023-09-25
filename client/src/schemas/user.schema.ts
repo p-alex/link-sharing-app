@@ -12,7 +12,7 @@ export const password_schema = z
   .min(8, "Password must be at least 8 characters long")
   .regex(
     /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*/g,
-    "Must contain at least 1 uppercase and lowercase letters, and 1 number",
+    "Must contain at least 1 uppercase and lowercase letter, and 1 number",
   );
 
 export const confirmPassword_schema = z

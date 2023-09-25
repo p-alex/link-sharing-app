@@ -8,13 +8,12 @@ const authReducer = (state: IAuthState, action: ActionType): IAuthState => {
         ...state,
         id: action.payload.id,
         email: action.payload.email,
-        profile_picture: action.payload.profile_picture,
-        access_token: action.payload.access_token,
+        accessToken: action.payload.accessToken,
       };
     case "LOGOUT":
-      return { ...state, id: "", email: "", profile_picture: "", access_token: "" };
+      return { ...state, id: "", email: "", accessToken: "" };
     case "REFRESH_SESSION":
-      return { ...state, access_token: action.payload.access_token };
+      return { ...state, accessToken: action.payload.access_token };
     default:
       throw new Error("Invalid action type");
   }

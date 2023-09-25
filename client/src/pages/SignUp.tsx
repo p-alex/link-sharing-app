@@ -4,19 +4,41 @@ import InputGroup from "../components/InputGroup";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUpSchemaType, signUpSchema } from "../schemas/user.schema";
+import { createUser } from "../apiRequests/users";
+import { useState } from "react";
+import { AxiosError } from "axios";
+import AuthProviderList from "../components/OAuthList/OAuthList";
+import OAuthListProvider from "../components/OAuthList/OAuthListContext";
 
 const SignUp = () => {
+  const [successMessage, setSuccessMessage] = useState("");
+  const [error, setError] = useState("");
+
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isSubmitting },
+    reset,
   } = useForm<SignUpSchemaType>({
     resolver: zodResolver(signUpSchema),
-    mode: "onBlur",
+    mode: "onChange",
   });
 
-  const submit = (data: SignUpSchemaType) => {
-    console.log({ email: data.email, password: data.password });
+  const submit = async (data: SignUpSchemaType) => {
+    try {
+      const { success } = await createUser(data);
+      if (success) {
+        setSuccessMessage("Your account was created successfully!");
+        reset();
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setError(error.response?.data.errors[0]);
+        setTimeout(() => {
+          setError("");
+        }, 4000);
+      }
+    }
   };
 
   return (
@@ -38,6 +60,8 @@ const SignUp = () => {
             <h1 className="text-[32px] leading-[48px] text-darkGray font-bold">Create account</h1>
             <p className="text-gray text-base">Let's get you started sharing your links!</p>
           </header>
+          {error && <p>{error}</p>}
+          {successMessage && <p>{successMessage}</p>}
           <div className="flex flex-col gap-6">
             <InputGroup
               label={<InputGroup.InputLabel htmlFor="email">Email address</InputGroup.InputLabel>}
@@ -47,6 +71,7 @@ const SignUp = () => {
                   id="email"
                   icon={<img src="/images/icon-email.svg" width={16} height={16} alt="" />}
                   placeholder="e.g. alex@email.com"
+                  autoComplete="email"
                 />
               }
               error={
@@ -95,9 +120,11 @@ const SignUp = () => {
                 ) : null
               }
             />
-            <Button type="submit" disabled={!isValid || isSubmitting}>
+
+            <Button type="submit" disabled={isSubmitting}>
               Create new account
             </Button>
+
             <p className="text-center">
               Already have an account?{" "}
               <Link className="text-primary" to={"/sign-in"}>
@@ -105,6 +132,9 @@ const SignUp = () => {
               </Link>
             </p>
           </div>
+          <OAuthListProvider>
+            <AuthProviderList />
+          </OAuthListProvider>
         </form>
       </div>
     </main>

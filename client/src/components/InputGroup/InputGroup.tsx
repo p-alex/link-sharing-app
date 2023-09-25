@@ -15,7 +15,7 @@ interface Props {
 const InputGroup = ({ label, input, error, describe }: Props) => {
   return (
     <InputGroupContext.Provider value={{ isError: error !== null }}>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         {label}
         {input}
         {error}

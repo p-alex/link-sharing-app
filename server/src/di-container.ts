@@ -1,3 +1,39 @@
 import { Container } from "inversify";
+import UserService from "./modules/user/user.service";
+import UserRepository from "./modules/user/user.repository";
+import { Database } from "./database";
+import { UserController } from "./modules/user/user.controller";
+import UnitOfWork from "./unitOfWork";
+import Hash from "./utils/hash";
+import Jwt from "./utils/jwt";
+import { TimeConverter } from "./utils/timeConverter";
+import AuthController from "./modules/auth/auth.controller";
+import AuthService from "./modules/auth/auth.service";
+import SessionRepository from "./modules/session/session.repository";
+import SessionService from "./modules/session/session.service";
+import SessionController from "./modules/session/session.controller";
+import SecurePasswordGenerator from "./utils/securePasswordGenerator";
+import OAuthStrategy from "./modules/oauthStrategy";
 
 export const container = new Container({ defaultScope: "Singleton" });
+
+container.bind(Database).toSelf();
+container.bind(UnitOfWork).toSelf();
+
+container.bind(UserController).toSelf();
+container.bind(UserService).toSelf();
+container.bind(UserRepository).toSelf();
+
+container.bind(SessionController).toSelf();
+container.bind(SessionService).toSelf();
+container.bind(SessionRepository).toSelf();
+
+container.bind(AuthController).toSelf();
+container.bind(AuthService).toSelf();
+
+container.bind(OAuthStrategy).toSelf();
+
+container.bind(Hash).toSelf();
+container.bind(Jwt).toSelf();
+container.bind(TimeConverter).toSelf();
+container.bind(SecurePasswordGenerator).toSelf();

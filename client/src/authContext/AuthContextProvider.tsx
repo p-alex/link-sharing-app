@@ -1,34 +1,33 @@
-import React, { createContext, useReducer } from "react";
-import authReducer from "./authReducer";
-import { ActionType } from "./authActionType";
+import React, { createContext, useState } from "react";
+// import { ActionType } from "./authActionType";
 
 export interface IAuthState {
   id: string;
   email: string;
-  profile_picture: string;
-  access_token: string;
+  accessToken: string;
 }
 
-type DispatchAuthType = ({ type, payload }: ActionType) => void;
+// type DispatchAuthType = ({ type, payload }: ActionType) => void;
 
 const intialState: IAuthState = {
   id: "",
   email: "",
-  profile_picture: "",
-  access_token: "",
+  accessToken: "",
 };
 
-export const AuthContext = createContext<{ authState: IAuthState; dispatchAuth: DispatchAuthType }>(
-  {
-    authState: intialState,
-    dispatchAuth: () => {},
-  },
-);
+export const AuthContext = createContext<{
+  authState: IAuthState;
+  setAuthState: React.Dispatch<React.SetStateAction<IAuthState>>;
+}>({
+  authState: intialState,
+  setAuthState: () => {},
+});
 
 export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [authState, dispatchAuth] = useReducer(authReducer, intialState);
+  // const [authState, dispatchAuth] = useReducer(authReducer, intialState);
+  const [authState, setAuthState] = useState<IAuthState>(intialState);
 
   return (
-    <AuthContext.Provider value={{ authState, dispatchAuth }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ authState, setAuthState }}>{children}</AuthContext.Provider>
   );
 };

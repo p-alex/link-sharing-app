@@ -5,30 +5,47 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignInSchemaType, signInSchema } from "../schemas/user.schema";
 import useAuthContext from "../authContext/useAuthContext";
+import { emailSignInRequest } from "../apiRequests/auth";
+import { useState } from "react";
+import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
+import AuthProviderList from "../components/OAuthList/OAuthList";
+import OAuthListProvider from "../components/OAuthList/OAuthListContext";
 
 const SignIn = () => {
+  const navigate = useNavigate();
+  const [successMessage, setSuccessMessage] = useState("");
+  const [error, setError] = useState("");
+
   const {
     register,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting },
     handleSubmit,
+    reset,
   } = useForm<SignInSchemaType>({
-    mode: "onBlur",
+    mode: "onChange",
     resolver: zodResolver(signInSchema),
   });
 
-  const { dispatchAuth } = useAuthContext();
+  const { setAuthState } = useAuthContext();
 
-  const submit = (data: SignInSchemaType) => {
-    console.log(data);
-    dispatchAuth({
-      type: "LOGIN",
-      payload: {
-        id: "hello",
-        email: "hello@gmail.com",
-        profile_picture: "image.png",
-        access_token: "aspfnewon3o2p5b",
-      },
-    });
+  const submit = async (formData: SignInSchemaType) => {
+    try {
+      const { success, data } = await emailSignInRequest(formData);
+      if (success && data) {
+        reset();
+        setSuccessMessage("Your account was created successfully!");
+        setAuthState((prevState) => ({ ...prevState, ...data }));
+        navigate("/");
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setError(error.response?.data.errors[0]);
+        setTimeout(() => {
+          setError("");
+        }, 4000);
+      }
+    }
   };
 
   return (
@@ -50,6 +67,8 @@ const SignIn = () => {
             <h1 className="text-[32px] leading-[48px] text-darkGray font-bold">Login</h1>
             <p className="text-gray text-base">Add your details below to get back into the app</p>
           </header>
+          {error && <p className="py-2 px-4 bg-error text-white rounded-lg">{error}</p>}
+          {successMessage && <p>{successMessage}</p>}
           <div className="flex flex-col gap-6">
             <InputGroup
               label={<InputGroup.InputLabel htmlFor="email">Email address</InputGroup.InputLabel>}
@@ -60,6 +79,7 @@ const SignIn = () => {
                   type="email"
                   icon={<img src="/images/icon-email.svg" width={16} height={16} alt="" />}
                   placeholder="Enter your email"
+                  autoComplete="email"
                 />
               }
               error={
@@ -85,7 +105,7 @@ const SignIn = () => {
                 ) : null
               }
             />
-            <Button disabled={!isValid || isSubmitting}>Login</Button>
+            <Button disabled={isSubmitting}>Login</Button>
             <p className="text-center">
               Don't have an account?{" "}
               <Link className="text-primary" to={"/sign-up"}>
@@ -93,6 +113,9 @@ const SignIn = () => {
               </Link>
             </p>
           </div>
+          <OAuthListProvider>
+            <AuthProviderList />
+          </OAuthListProvider>
         </form>
       </div>
     </main>
