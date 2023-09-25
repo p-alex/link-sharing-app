@@ -98,7 +98,6 @@ class OAuthStrategy {
     const userData = await axios.get<{ email: string }>("https://discord.com/api/users/@me", {
       headers: { Authorization: `Bearer ${getAccessToken.data.access_token}` },
     });
-    console.log(userData.data);
     return { email: userData.data.email };
   }
 }
