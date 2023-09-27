@@ -14,6 +14,8 @@ import SessionService from "./modules/session/session.service";
 import SessionController from "./modules/session/session.controller";
 import SecurePasswordGenerator from "./utils/securePasswordGenerator";
 import OAuthStrategy from "./modules/oauthStrategy";
+import Mailer from "./utils/mailer";
+import EmailVerificationTemplate from "./emailTemplates/EmailVerificationTemplate";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -37,3 +39,5 @@ container.bind(Hash).toSelf();
 container.bind(Jwt).toSelf();
 container.bind(TimeConverter).toSelf();
 container.bind(SecurePasswordGenerator).toSelf();
+container.bind(Mailer).toSelf();
+container.bind(EmailVerificationTemplate).toSelf();
