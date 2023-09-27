@@ -10,7 +10,7 @@ const Button = ({ variant = "fill", children, ...buttonProps }: Props) => {
   return (
     <button
       {...buttonProps}
-      className={`py-[11px] px-[27px] ${btnBg} text-white font-semibold rounded-lg hover:opacity-90 transition-opacity disabled:cursor-not-allowed disabled:opacity-50`}
+      className={`px-[27px] py-[11px] ${btnBg} rounded-lg font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50`}
     >
       {children}
     </button>

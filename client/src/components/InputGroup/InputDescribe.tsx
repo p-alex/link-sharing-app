@@ -8,7 +8,7 @@ interface Props extends HTMLAttributes<HTMLUListElement> {
 const InputDescribe = ({ items, ...ulProps }: Props) => {
   useInputGroupContext();
   return (
-    <ul {...ulProps} className="flex flex-col gap-1 p-4 bg-lightGray rounded-lg">
+    <ul {...ulProps} className="bg-lightGray flex flex-col gap-1 rounded-lg p-4">
       {items.map((item) => {
         return <li className=" text-xs">{item}</li>;
       })}

@@ -6,7 +6,7 @@ interface Props extends HtmlHTMLAttributes<HTMLSpanElement> {
 
 const InputError = ({ children, ...spanProps }: Props) => {
   return (
-    <span {...spanProps} className="text-xs leading-[18px] text-error">
+    <span {...spanProps} className="text-error text-xs leading-[18px]">
       {children}
     </span>
   );

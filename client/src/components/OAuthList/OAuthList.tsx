@@ -4,7 +4,7 @@ import useOAuthListContext from "./useOAuthListContext";
 const AuthProviderList = () => {
   const { isLoading } = useOAuthListContext();
   return (
-    <ul className="w-full flex flex-col gap-2">
+    <ul className="flex w-full flex-col gap-2">
       <li className="w-full">
         <AuthProviderButton variant="google" disabled={isLoading} />
       </li>

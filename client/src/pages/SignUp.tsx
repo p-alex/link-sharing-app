@@ -42,22 +42,22 @@ const SignUp = () => {
   };
 
   return (
-    <main className="w-full flex flex-col">
-      <div className="relative mx-auto w-full max-w-[476px] mt-20">
+    <main className="flex w-full flex-col">
+      <div className="relative mx-auto mt-20 w-full max-w-[476px]">
         <img
           src="/images/logo-devlinks-large.svg"
-          className="mb-[51px] mx-auto"
+          className="mx-auto mb-[51px]"
           width={183}
           height={40}
           alt=""
         />
         <form
-          className="flex flex-col gap-10 p-10 bg-white rounded-[12px]"
+          className="flex flex-col gap-10 rounded-[12px] bg-white p-10"
           onSubmit={handleSubmit(submit)}
           noValidate={true}
         >
           <header className="flex flex-col gap-2">
-            <h1 className="text-[32px] leading-[48px] text-darkGray font-bold">Create account</h1>
+            <h1 className="text-darkGray text-[32px] font-bold leading-[48px]">Create account</h1>
             <p className="text-gray text-base">Let's get you started sharing your links!</p>
           </header>
           {error && <p>{error}</p>}

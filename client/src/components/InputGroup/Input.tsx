@@ -8,16 +8,16 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 const Input = forwardRef(({ icon, ...inputProps }: Props, ref: LegacyRef<HTMLInputElement>) => {
   const { isError } = useInputGroupContext();
   return (
-    <div className="flex flex-col gap-1 relative w-full group">
+    <div className="group relative flex w-full flex-col gap-1">
       <div
-        className={`flex items-center p-4 gap-[12px] h-[48px] w-full rounded-lg bg-white border transition-shadow group-focus-within:shadow-inputFocus ${
+        className={`group-focus-within:shadow-inputFocus flex h-[48px] w-full items-center gap-[12px] rounded-lg border bg-white p-4 transition-shadow ${
           isError ? "border-error" : "border-gray"
         } group-focus-within:border-purple`}
       >
         {icon && icon}
         <input
           {...inputProps}
-          className="outline-none w-full"
+          className="w-full outline-none"
           aria-invalid={isError ? "true" : "false"}
           ref={ref}
         />

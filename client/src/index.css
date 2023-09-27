@@ -28,5 +28,5 @@ html {
 }
 
 body {
-  @apply bg-siteBg min-h-full font-Instrument;
+  @apply bg-siteBg font-Instrument min-h-full;
 }
