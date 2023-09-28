@@ -6,12 +6,7 @@ class SecurePasswordGenerator {
   generate() {
     const length = config.SECURE_PASSWORD_GENERATOR_LENGTH;
     let password = "";
-    const charList: string[] = [
-      "abcdefghijklmnopqrstuvwxyz",
-      "abcdefghijklmnopqrstuvwxyz".toUpperCase(),
-      "29374381650",
-      `!?'"$%^&*()[]{}_-+=.,:;@~#<>/`,
-    ];
+    const charList: string[] = config.SECURE_PASSWORD_CHARACTERS.split(",");
     for (let i = 0; i < length; i++) {
       if (i < charList.length) {
         password += charList[i].charAt(Math.floor(Math.random() * charList[i].length));
