@@ -1,7 +1,5 @@
 import axios from "axios";
 
-const SERVER_BASE_URL = "http://localhost:5000/api/v1";
-
 export interface IDefaultResponse<TData> {
   success: boolean;
   status_code: number;
@@ -10,14 +8,14 @@ export interface IDefaultResponse<TData> {
 }
 
 export const axiosPublic = axios.create({
-  baseURL: SERVER_BASE_URL,
+  baseURL: import.meta.env.VITE_SERVER_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
 export const axiosPrivate = axios.create({
-  baseURL: SERVER_BASE_URL,
+  baseURL: import.meta.env.VITE_SERVER_BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },

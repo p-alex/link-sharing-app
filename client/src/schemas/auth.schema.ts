@@ -1,11 +1,15 @@
 import { z } from "zod";
-import { email_schema, password_schema } from "./user.schema";
+import { emailSchema, passwordSchema } from "./user.schema";
+import { tokenSchema } from "./common.schema";
 
 export const emailSignInSchema = z
   .object({
-    email: email_schema,
-    password: password_schema,
+    email: emailSchema,
+    password: passwordSchema,
   })
   .strip();
 
-export type EmailSignInInput = z.TypeOf<typeof emailSignInSchema>;
+export const verifyEmailSchema = z.object({ token: tokenSchema }).strip();
+
+export type EmailSignInType = z.TypeOf<typeof emailSignInSchema>;
+export type VerifyEmailType = z.TypeOf<typeof verifyEmailSchema>;

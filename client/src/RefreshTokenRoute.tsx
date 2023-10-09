@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Outlet } from "react-router-dom";
-import useRefreshToken from "../hooks/useRefreshToken";
+import useRefreshToken from "./hooks/useRefreshToken";
 
 const RefreshTokenRoute = () => {
   const [isLoading, setIsLoading] = useState(false);

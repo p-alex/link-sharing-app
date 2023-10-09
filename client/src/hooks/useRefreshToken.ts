@@ -2,13 +2,13 @@ import { refreshSessionRequest } from "../apiRequests/sessions";
 import useAuthContext from "../authContext/useAuthContext";
 
 const useRefreshToken = () => {
-  const { setAuthState } = useAuthContext();
+  const { dispatchAuth } = useAuthContext();
   const handleRefreshToken = async () => {
     try {
       const result = await refreshSessionRequest();
       if (result.success && result.data) {
-        setAuthState((prevState) => ({ ...prevState, ...result.data }));
-        return result.data.access_token;
+        dispatchAuth({ type: "REFRESH_SESSION", payload: result.data });
+        return result.data.accessToken;
       }
     } catch (error) {
       return "";

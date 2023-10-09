@@ -1,24 +1,24 @@
-import AuthProviderButton from "../OAuthButton";
+import OAuthButton from "../OAuthButton/OAuthButton";
 import useOAuthListContext from "./useOAuthListContext";
 
-const AuthProviderList = () => {
+const OAuthList = () => {
   const { isLoading } = useOAuthListContext();
   return (
     <ul className="flex w-full flex-col gap-2">
       <li className="w-full">
-        <AuthProviderButton variant="google" disabled={isLoading} />
+        <OAuthButton variant="google" disabled={isLoading} />
       </li>
       <li className="w-full">
-        <AuthProviderButton variant="discord" disabled={isLoading} />
+        <OAuthButton variant="discord" disabled={isLoading} />
       </li>
       <li className="w-full">
-        <AuthProviderButton variant="linkedin" disabled={isLoading} />
+        <OAuthButton variant="linkedin" disabled={isLoading} />
       </li>
       <li className="w-full">
-        <AuthProviderButton variant="github" disabled={isLoading} />
+        <OAuthButton variant="github" disabled={isLoading} />
       </li>
     </ul>
   );
 };
 
-export default AuthProviderList;
+export default OAuthList;

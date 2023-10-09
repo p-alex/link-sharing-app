@@ -1,0 +1,17 @@
+import { Column, Entity, PrimaryColumn } from "typeorm";
+
+@Entity("verificationTokens")
+class VerificationToken {
+  @PrimaryColumn("varchar", { length: 32, nullable: false })
+  public readonly token: string;
+
+  @Column("bigint", { nullable: false })
+  public readonly expires_at: number;
+
+  constructor(token: string, expires_at: number) {
+    this.token = token;
+    this.expires_at = expires_at;
+  }
+}
+
+export default VerificationToken;

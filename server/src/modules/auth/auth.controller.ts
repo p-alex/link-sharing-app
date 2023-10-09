@@ -3,17 +3,21 @@ import { controller, httpGet, httpPost } from "inversify-express-utils";
 import {
   EmailSignInInput,
   OAuthSignInput,
+  VerifyEmailInput,
   emailSignInSchema,
   oauthSignInSchema,
+  verifyEmailSchema,
 } from "./auth.schema";
 import AuthService from "./auth.service";
 import { HttpResponse } from "../../utils/httpResponse";
 import { validateResource } from "../../middleware/validateResource";
 import requireAuth from "../../middleware/requireAuth";
 import { CustomRequest } from "../../server";
-import { highRateLimit } from "../../middleware/rateLimiting";
+import { highRateLimit, veryHighRateLimit } from "../../middleware/rateLimiting";
 import { config } from "../../config";
-import setRefreshTokenCookie from "../../utils/setRefreshTokenCookie";
+import setRefreshTokenCookie, {
+  REFRESH_TOKEN_COOKIE_NAME,
+} from "../../utils/setRefreshTokenCookie";
 
 @controller("/auth")
 class AuthController {
@@ -82,9 +86,15 @@ class AuthController {
     return res.redirect(config.CLIENT_BASE_URL);
   }
 
+  @httpPost("/verify-email/:token", veryHighRateLimit, validateResource(verifyEmailSchema))
+  async verifyEmail(req: CustomRequest<object, object, VerifyEmailInput>, res: Response) {
+    await this._authService.verifyEmail(req.body.token);
+    return HttpResponse.success(res);
+  }
+
   @httpPost("/logout", requireAuth)
   async logout(req: CustomRequest, res: Response) {
-    const refreshToken = req.cookies["refresh_token"];
+    const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE_NAME];
 
     await this._authService.logout(refreshToken);
 

@@ -1,17 +1,17 @@
-import useAuthContext from "../authContext/useAuthContext";
 import { useNavigate } from "react-router-dom";
+import useAuthContext from "../authContext/useAuthContext";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { IDefaultResponse } from "../apiRequests";
 
-const Homepage = () => {
+const HomePage = () => {
   const navigate = useNavigate();
-  const { authState, setAuthState } = useAuthContext();
+  const { authState, dispatchAuth } = useAuthContext();
   const axiosPrivate = useAxiosPrivate();
 
   const handleLogout = async () => {
     try {
       await axiosPrivate.post<IDefaultResponse<null>>("/auth/logout");
-      setAuthState({ id: "", email: "", accessToken: "" });
+      dispatchAuth({ type: "LOGOUT", payload: null });
       navigate("/sign-in");
     } catch (error) {
       console.error(error);
@@ -26,4 +26,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default HomePage;

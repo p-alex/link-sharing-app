@@ -14,7 +14,7 @@ class SessionRepository extends Repository<Session> {
     return result;
   }
 
-  async findById(id: string): Promise<Session | null> {
+  async findOneById(id: string): Promise<Session | null> {
     const result = await this._database.manager.findOneBy(Session, { id });
     return result;
   }

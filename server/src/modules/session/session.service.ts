@@ -25,7 +25,7 @@ class SessionService {
       throw new Error("Refresh token expired");
     }
 
-    const user = await this._unitOfWork.user.findById(userIdFromRefreshToken);
+    const user = await this._unitOfWork.user.findOneById(userIdFromRefreshToken);
 
     if (!user) throw new Error("User does not exist anymore");
 

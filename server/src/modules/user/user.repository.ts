@@ -14,12 +14,12 @@ class UserRepository extends Repository<User> {
     return result;
   }
 
-  async findById(id: string): Promise<User | null> {
+  async findOneById(id: string): Promise<User | null> {
     const result = await this._database.manager.findOneBy(User, { id });
     return result;
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findOneByEmail(email: string): Promise<User | null> {
     const result = await this._database.manager.findOneBy(User, { email });
     return result;
   }
@@ -30,11 +30,12 @@ class UserRepository extends Repository<User> {
   }
 
   async update(entity: Partial<User>): Promise<boolean> {
-    await this._database.manager.update(
-      User,
-      { id: entity.id },
-      { email: entity.email, password: entity.password, modified_at: entity.modified_at },
-    );
+    await this._database.manager
+      .createQueryBuilder()
+      .update(User)
+      .set(entity)
+      .where("id = :id", { id: entity.id })
+      .execute();
     return true;
   }
 

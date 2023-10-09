@@ -3,6 +3,7 @@ import { DataSource } from "typeorm";
 import User from "./modules/user/user.entity";
 import { config } from "./config";
 import Session from "./modules/session/session.entity";
+import VerificationToken from "./modules/verificationToken/verificationToken.entity";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -13,7 +14,7 @@ export const AppDataSource = new DataSource({
   database: config.DB_NAME,
   synchronize: true,
   logging: false,
-  entities: [User, Session],
+  entities: [User, Session, VerificationToken],
   migrations: [],
   subscribers: [],
 });

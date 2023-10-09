@@ -1,5 +1,6 @@
-import React, { createContext, useState } from "react";
-// import { ActionType } from "./authActionType";
+import React, { createContext, useReducer } from "react";
+import { ActionType } from "./authActionType";
+import authReducer from "./authReducer";
 
 export interface IAuthState {
   id: string;
@@ -7,7 +8,7 @@ export interface IAuthState {
   accessToken: string;
 }
 
-// type DispatchAuthType = ({ type, payload }: ActionType) => void;
+type DispatchAuthType = ({ type, payload }: ActionType) => void;
 
 const intialState: IAuthState = {
   id: "",
@@ -17,17 +18,16 @@ const intialState: IAuthState = {
 
 export const AuthContext = createContext<{
   authState: IAuthState;
-  setAuthState: React.Dispatch<React.SetStateAction<IAuthState>>;
+  dispatchAuth: DispatchAuthType;
 }>({
   authState: intialState,
-  setAuthState: () => {},
+  dispatchAuth: () => {},
 });
 
 export const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
-  // const [authState, dispatchAuth] = useReducer(authReducer, intialState);
-  const [authState, setAuthState] = useState<IAuthState>(intialState);
+  const [authState, dispatchAuth] = useReducer(authReducer, intialState);
 
   return (
-    <AuthContext.Provider value={{ authState, setAuthState }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ authState, dispatchAuth }}>{children}</AuthContext.Provider>
   );
 };

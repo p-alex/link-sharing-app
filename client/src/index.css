@@ -28,5 +28,13 @@ html {
 }
 
 body {
-  @apply bg-siteBg font-Instrument min-h-full;
+  @apply min-h-full bg-siteBg font-Instrument;
+}
+
+p {
+  @apply text-base text-gray;
+}
+
+h1 {
+  @apply text-[32px] font-bold leading-[48px] text-darkGray;
 }

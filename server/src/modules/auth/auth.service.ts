@@ -7,7 +7,7 @@ import { TimeConverter } from "../../utils/timeConverter";
 import InvalidCredentialsException from "../../exceptions/InvalidCredentialsException";
 import SecurePasswordGenerator from "../../utils/securePasswordGenerator";
 import User, { OAuthProvidersType } from "../user/user.entity";
-import OAuthStrategy from "../oauthStrategy";
+import OAuthStrategy from "./oauth.strategy";
 
 @injectable()
 class AuthService {
@@ -21,13 +21,16 @@ class AuthService {
   ) {}
 
   async emailSignIn(credentials: EmailSignInInput) {
-    const userWithEmail = await this._unitOfWork.user.findByEmail(credentials.email);
+    const userWithEmail = await this._unitOfWork.user.findOneByEmail(credentials.email);
     if (!userWithEmail) throw new InvalidCredentialsException("Invalid email or password");
+
+    if (!userWithEmail.is_email_verified) throw new Error("Account's email is not verified.");
 
     const isValidPassword = await this._hash.verifySlowHash(
       credentials.password,
       userWithEmail.password,
     );
+
     if (!isValidPassword) throw new InvalidCredentialsException("Invalid email or password");
 
     const accessToken = this._jwt.signJwt(
@@ -63,7 +66,7 @@ class AuthService {
   async oauthSignIn(code: string, type: OAuthProvidersType) {
     const { email } = await this._oauthStrategy[type](code);
 
-    const userWithEmail = await this._unitOfWork.user.findByEmail(email);
+    const userWithEmail = await this._unitOfWork.user.findOneByEmail(email);
 
     let createdUser: User | null = null;
 
@@ -76,6 +79,7 @@ class AuthService {
         email,
         password: hashedPassword,
         auth_provider: type,
+        is_email_verified: true,
       });
     }
 
@@ -99,6 +103,38 @@ class AuthService {
       refreshToken,
       refreshTokenExpireInMs,
     };
+  }
+
+  async verifyEmail(token: string) {
+    const hashedToken = this._hash.fastHash(token);
+
+    const isToken = await this._unitOfWork.verificationToken.findOneByToken(hashedToken);
+
+    if (!isToken) throw new Error("Invalid token");
+
+    let tokenPayload: { id: string };
+
+    try {
+      tokenPayload = this._jwt.verifyJwt<{ id: string }>(token, "EMAIL_VERIFICATION_TOKEN_SECRET");
+    } catch (error) {
+      throw new Error("Token expired");
+    }
+
+    const user = await this._unitOfWork.user.findOneById(tokenPayload.id);
+
+    if (!user) throw new Error("User does not exist");
+
+    if (user.is_email_verified) throw new Error("User already verified");
+
+    await this._unitOfWork.user.update({
+      id: user.id,
+      modified_at: Date.now(),
+      is_email_verified: true,
+    });
+
+    await this._unitOfWork.verificationToken.deleteByToken(hashedToken);
+
+    return true;
   }
 
   async logout(refreshToken: string) {

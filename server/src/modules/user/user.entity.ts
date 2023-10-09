@@ -28,6 +28,9 @@ class User {
   @Column("enum", { enum: AUTH_PROVIDERS, nullable: true })
   public readonly auth_provider: OAuthProvidersType;
 
+  @Column("bool", { default: false })
+  public readonly is_email_verified: boolean;
+
   constructor(
     id: string,
     email: string,
@@ -36,6 +39,7 @@ class User {
     created_at: number,
     modified_at: number,
     auth_provider: OAuthProvidersType,
+    is_email_verified: boolean,
   ) {
     this.id = id;
     this.email = email;
@@ -44,6 +48,7 @@ class User {
     this.created_at = created_at;
     this.modified_at = modified_at;
     this.auth_provider = auth_provider;
+    this.is_email_verified = is_email_verified;
   }
 }
 

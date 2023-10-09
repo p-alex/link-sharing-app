@@ -3,7 +3,9 @@ export const OAUTH_BUTTON_VARIANTS = {
     icon: "/images/github-icon.svg",
     bg: "bg-github",
     text: "text-white",
-    href: "https://github.com/login/oauth/authorize?scope=user:email&client_id=82dfd29223c5e3189096",
+    href: `https://github.com/login/oauth/authorize?scope=user:email&client_id=${
+      import.meta.env.VITE_GITHUB_CLIENT_ID
+    }`,
   },
   google: {
     icon: "/images/google-icon.svg",
@@ -11,11 +13,11 @@ export const OAUTH_BUTTON_VARIANTS = {
     text: "text-white",
     href:
       "https://accounts.google.com/o/oauth2/v2/auth" +
-      "?client_id=315135216413-5mol4o880svh2hb5u1opgtd5l56mm83f.apps.googleusercontent.com" +
-      "&redirect_uri=http://localhost:5000/api/v1/auth/google-sign-in" +
-      "&response_type=code" +
-      "&access_type=offline" +
-      "&scope=email",
+      "?response_type=code" +
+      `&client_id=${import.meta.env.VITE_GOOGLE_CLIENT_ID}` +
+      `&redirect_uri=${import.meta.env.VITE_SERVER_BASE_URL}/auth/google-sign-in` +
+      "&scope=email" +
+      "&access_type=offline",
   },
   linkedin: {
     icon: "/images/linkedin-icon.svg",
@@ -24,8 +26,8 @@ export const OAUTH_BUTTON_VARIANTS = {
     href:
       "https://www.linkedin.com/oauth/v2/authorization" +
       "?response_type=code" +
-      "&client_id=77wnshbt9a9ej2" +
-      "&redirect_uri=http://localhost:5000/api/v1/auth/linkedin-sign-in" +
+      `&client_id=${import.meta.env.VITE_LINKEDIN_CLIENT_ID}` +
+      `&redirect_uri=${import.meta.env.VITE_SERVER_BASE_URL}/auth/linkedin-sign-in` +
       "&scope=openid email",
   },
   discord: {
@@ -34,9 +36,9 @@ export const OAUTH_BUTTON_VARIANTS = {
     text: "text-white",
     href:
       "https://discord.com/api/oauth2/authorize" +
-      "?client_id=1155817544108756994" +
-      "&redirect_uri=http%3A%2F%2Flocalhost%3A5000%2Fapi%2Fv1%2Fauth%2Fdiscord-sign-in" +
-      "&response_type=code" +
+      "?response_type=code" +
+      `&client_id=${import.meta.env.VITE_DISCORD_CLIENT_ID}` +
+      `&redirect_uri=${import.meta.env.VITE_SERVER_BASE_URL}/auth/discord-sign-in` +
       "&scope=email",
   },
 };

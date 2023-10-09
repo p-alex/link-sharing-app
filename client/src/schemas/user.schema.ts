@@ -1,12 +1,12 @@
 import { z } from "zod";
 
-export const email_schema = z
+export const emailSchema = z
   .string({ required_error: "Email is required" })
   .nonempty("Email is required")
   .email("Email is invalid")
   .max(64, "Email must be at most 64 characters long");
 
-export const password_schema = z
+export const passwordSchema = z
   .string({ required_error: "Password is required" })
   .nonempty("Password is required")
   .min(8, "Password must be at least 8 characters long")
@@ -15,15 +15,15 @@ export const password_schema = z
     "Must contain at least 1 uppercase and lowercase letter, and 1 number",
   );
 
-export const confirmPassword_schema = z
+export const confirmPasswordSchema = z
   .string({ required_error: "Confirm password is required" })
   .nonempty("Confirm password is required");
 
 export const signUpSchema = z
   .object({
-    email: email_schema,
-    password: password_schema,
-    confirmPassword: confirmPassword_schema,
+    email: emailSchema,
+    password: passwordSchema,
+    confirmPassword: confirmPasswordSchema,
   })
   .refine((current) => current.password === current.confirmPassword, {
     path: ["confirmPassword"],
@@ -31,7 +31,7 @@ export const signUpSchema = z
   });
 
 export const signInSchema = z.object({
-  email: email_schema,
+  email: emailSchema,
   password: z.string().nonempty("Password is required"),
 });
 

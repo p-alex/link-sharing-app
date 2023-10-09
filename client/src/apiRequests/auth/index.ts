@@ -1,13 +1,18 @@
 import { IDefaultResponse, axiosPrivate, axiosPublic } from "..";
-import { EmailSignInInput } from "../../schemas/auth.schema";
+import { EmailSignInType, VerifyEmailType } from "../../schemas/auth.schema";
 
 export const emailSignInRequest = async (
-  body: EmailSignInInput,
-): Promise<IDefaultResponse<{ id: string; email: string; access_token: string }>> => {
+  body: EmailSignInType,
+): Promise<IDefaultResponse<{ id: string; email: string; accessToken: string }>> => {
   const result = await axiosPublic.post<
-    IDefaultResponse<{ id: string; email: string; access_token: string }>
+    IDefaultResponse<{ id: string; email: string; accessToken: string }>
   >("/auth/email-sign-in", body, { withCredentials: true });
   return result.data;
+};
+
+export const verifyEmailRequest = async (body: VerifyEmailType) => {
+  await axiosPublic.post("/auth/verify-email/" + body.token, {});
+  return { success: true };
 };
 
 export const logoutRequest = async (access_token: string): Promise<null> => {

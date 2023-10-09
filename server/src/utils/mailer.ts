@@ -10,8 +10,16 @@ class Mailer {
     this._client = sgMail;
     this._client.setApiKey(config.SENDGRID_API_KEY);
   }
-  async send(template: IEmailTemplate) {
-    return this._client.send({ from: "devlinks@pistolalex.com", ...template });
+  async send(template: IEmailTemplate): Promise<[sgMail.ClientResponse, object] | null> {
+    if (config.NODE_ENV === "production") {
+      return await this._client.send({ from: config.SENDGRID_SENDER, ...template });
+    } else {
+      return new Promise((resolve) => {
+        console.log(template);
+        resolve(null);
+      });
+    }
+    return null;
   }
 }
 
