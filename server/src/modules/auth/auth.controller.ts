@@ -40,48 +40,48 @@ class AuthController {
 
   @httpGet("/google-sign-in", validateResource(oauthSignInSchema))
   async googleSignIn(req: CustomRequest<object, object, OAuthSignInput>, res: Response) {
-    const { refreshToken, refreshTokenExpireInMs } = await this._authService.oauthSignIn(
-      req.body.code,
-      "google",
-    );
+    const { success, message, refreshToken, refreshTokenExpireInMs } =
+      await this._authService.oauthSignIn(req.body.code, "google");
 
-    setRefreshTokenCookie(res, refreshToken, refreshTokenExpireInMs);
+    if (!success) return res.redirect(config.CLIENT_BASE_URL + `/sign-in?error=${message}`);
+
+    setRefreshTokenCookie(res, refreshToken!, refreshTokenExpireInMs!);
 
     return res.redirect(config.CLIENT_BASE_URL);
   }
 
   @httpGet("/discord-sign-in", validateResource(oauthSignInSchema))
   async discordSignIn(req: CustomRequest<object, object, OAuthSignInput>, res: Response) {
-    const { refreshToken, refreshTokenExpireInMs } = await this._authService.oauthSignIn(
-      req.body.code,
-      "discord",
-    );
+    const { success, message, refreshToken, refreshTokenExpireInMs } =
+      await this._authService.oauthSignIn(req.body.code, "discord");
 
-    setRefreshTokenCookie(res, refreshToken, refreshTokenExpireInMs);
+    if (!success) return res.redirect(config.CLIENT_BASE_URL + `/sign-in?error=${message}`);
+
+    setRefreshTokenCookie(res, refreshToken!, refreshTokenExpireInMs!);
 
     return res.redirect(config.CLIENT_BASE_URL);
   }
 
   @httpGet("/linkedin-sign-in", validateResource(oauthSignInSchema))
   async linkedinSignIn(req: CustomRequest<object, object, OAuthSignInput>, res: Response) {
-    const { refreshToken, refreshTokenExpireInMs } = await this._authService.oauthSignIn(
-      req.body.code,
-      "linkedin",
-    );
+    const { success, message, refreshToken, refreshTokenExpireInMs } =
+      await this._authService.oauthSignIn(req.body.code, "linkedin");
 
-    setRefreshTokenCookie(res, refreshToken, refreshTokenExpireInMs);
+    if (!success) return res.redirect(config.CLIENT_BASE_URL + `/sign-in?error=${message}`);
+
+    setRefreshTokenCookie(res, refreshToken!, refreshTokenExpireInMs!);
 
     return res.redirect(config.CLIENT_BASE_URL);
   }
 
   @httpGet("/github-sign-in", validateResource(oauthSignInSchema))
   async githubSignIn(req: CustomRequest<object, object, OAuthSignInput>, res: Response) {
-    const { refreshToken, refreshTokenExpireInMs } = await this._authService.oauthSignIn(
-      req.body.code,
-      "github",
-    );
+    const { success, message, refreshToken, refreshTokenExpireInMs } =
+      await this._authService.oauthSignIn(req.body.code, "github");
 
-    setRefreshTokenCookie(res, refreshToken, refreshTokenExpireInMs);
+    if (!success) return res.redirect(config.CLIENT_BASE_URL + `/sign-in?error=${message}`);
+
+    setRefreshTokenCookie(res, refreshToken!, refreshTokenExpireInMs!);
 
     return res.redirect(config.CLIENT_BASE_URL);
   }

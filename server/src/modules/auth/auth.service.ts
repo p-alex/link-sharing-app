@@ -85,6 +85,14 @@ class AuthService {
       });
     }
 
+    if (userWithEmail?.auth_provider !== type)
+      return {
+        success: false,
+        message: "Account does not exist",
+        refreshToken: null,
+        refreshTokenExpireInMs: null,
+      };
+
     const user = userWithEmail !== null ? userWithEmail : createdUser!;
 
     const refreshTokenExpireInMs = this._timeConverter.toMs(14, "day");
@@ -102,6 +110,8 @@ class AuthService {
     });
 
     return {
+      success: true,
+      message: "success",
       refreshToken,
       refreshTokenExpireInMs,
     };

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import InputGroup from "../components/InputGroup";
 import { SignInSchemaType, signInSchema } from "../schemas/user.schema";
@@ -9,9 +10,11 @@ import Section from "../components/Section";
 import OAuthButton from "../components/OAuthButton/OAuthButton";
 import Button from "../components/Button";
 import Error from "../components/Error/Error";
+import getParamFromUrl from "../utils/getParamFromUrl";
 
 const SignInPage = () => {
   const navigate = useNavigate();
+  const [oauthError, setOAuthError] = useState("");
 
   const { register, formState, reset, handleSubmit } = useForm({
     payload: { email: "", password: "" },
@@ -28,6 +31,16 @@ const SignInPage = () => {
       navigate("/");
     }
   };
+
+  useEffect(() => {
+    const oauthError = getParamFromUrl("error");
+    if (oauthError) {
+      setOAuthError(oauthError);
+      setTimeout(() => {
+        setOAuthError("");
+      }, 5000);
+    }
+  }, []);
 
   return (
     <main className="flex w-full flex-col px-2">
@@ -46,6 +59,7 @@ const SignInPage = () => {
             {formState.responseError && (
               <Error message={formState.responseError} className="mb-4" />
             )}
+            {oauthError && <Error message={oauthError} className="mb-4" />}
             <div className="flex flex-col gap-6">
               <InputGroup
                 label={<InputGroup.InputLabel htmlFor="email">Email address</InputGroup.InputLabel>}
