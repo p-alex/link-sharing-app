@@ -6,6 +6,8 @@ import RefreshTokenRoute from "./RefreshTokenRoute";
 import RedirectIfSignedIn from "./RedirectIfSignedIn";
 import VerifyEmail from "./pages/VerifyEmailPage";
 import HomePage from "./pages/HomePage";
+import ForgetPasswordPage from "./pages/ForgetPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
       <Routes>
         <Route element={<RedirectIfSignedIn />}>
           <Route path="/verify-email" element={<VerifyEmail />}></Route>
+          <Route path="/forget-password" element={<ForgetPasswordPage />}></Route>
+          <Route path="/reset-password" element={<ResetPasswordPage />}></Route>
         </Route>
         <Route element={<RefreshTokenRoute />}>
           <Route element={<RedirectIfSignedIn />}>

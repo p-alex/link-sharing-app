@@ -8,6 +8,7 @@ import InvalidCredentialsException from "../../exceptions/InvalidCredentialsExce
 import SecurePasswordGenerator from "../../utils/securePasswordGenerator";
 import User, { OAuthProvidersType } from "../user/user.entity";
 import OAuthStrategy from "./oauth.strategy";
+import ValidationTokenVerifier from "../../utils/verificationTokenVerifier";
 
 @injectable()
 class AuthService {
@@ -18,6 +19,7 @@ class AuthService {
     private readonly _timeConverter: TimeConverter,
     private readonly _securePasswordGenerator: SecurePasswordGenerator,
     private readonly _oauthStrategy: OAuthStrategy,
+    private readonly _validationTokenVerifier: ValidationTokenVerifier,
   ) {}
 
   async emailSignIn(credentials: EmailSignInInput) {
@@ -106,19 +108,9 @@ class AuthService {
   }
 
   async verifyEmail(token: string) {
-    const hashedToken = this._hash.fastHash(token);
-
-    const isToken = await this._unitOfWork.verificationToken.findOneByToken(hashedToken);
-
-    if (!isToken) throw new Error("Invalid token");
-
-    let tokenPayload: { id: string };
-
-    try {
-      tokenPayload = this._jwt.verifyJwt<{ id: string }>(token, "EMAIL_VERIFICATION_TOKEN_SECRET");
-    } catch (error) {
-      throw new Error("Token expired");
-    }
+    const { tokenPayload, hashedToken } = await this._validationTokenVerifier.verify<{
+      id: string;
+    }>(token, "EMAIL_VERIFICATION_TOKEN_SECRET");
 
     const user = await this._unitOfWork.user.findOneById(tokenPayload.id);
 

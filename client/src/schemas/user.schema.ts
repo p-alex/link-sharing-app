@@ -35,6 +35,24 @@ export const signInSchema = z.object({
   password: z.string().nonempty("Password is required"),
 });
 
+export const forgetPasswordSchema = z.object({
+  email: emailSchema,
+});
+
+export const resetPasswordSchema = z
+  .object({
+    password: passwordSchema,
+    confirmPassword: z.string({ required_error: "Confirm password is required" }),
+  })
+  .refine((current) => current.password === current.confirmPassword, {
+    message: "Passwords must match",
+    path: ["confirmPassword"],
+  });
+
 export type SignUpSchemaType = z.TypeOf<typeof signUpSchema>;
 
 export type SignInSchemaType = z.TypeOf<typeof signInSchema>;
+
+export type ForgetPasswordType = z.TypeOf<typeof forgetPasswordSchema>;
+
+export type ResetPasswordType = z.TypeOf<typeof resetPasswordSchema>;

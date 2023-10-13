@@ -5,14 +5,20 @@ import { validateResource } from "../../middleware/validateResource";
 import {
   CreateUserInput,
   DeleteUserInput,
+  ForgetPasswordInput,
+  ResetPasswordConfirmationInput,
+  ResetPasswordInput,
   UpdateUserInput,
   createUserSchema,
   deleteUserSchema,
+  forgetPasswordSchema,
+  resetPasswordConfirmationSchema,
+  resetPasswordSchema,
   updateUserSchema,
 } from "./user.schema";
 import { HttpResponse } from "../../utils/httpResponse";
 import requireAuth from "../../middleware/requireAuth";
-import { highRateLimit, mediumRateLimit } from "../../middleware/rateLimiting";
+import { highRateLimit, mediumRateLimit, veryHighRateLimit } from "../../middleware/rateLimiting";
 import { CustomRequest } from "../../server";
 
 @controller("/users")
@@ -35,5 +41,30 @@ export class UserController {
   async delete(req: CustomRequest<object, object, DeleteUserInput>, res: Response) {
     await this._userService.delete(req.body.id);
     return HttpResponse.success(res);
+  }
+
+  @httpPost("/forget-password", veryHighRateLimit, validateResource(forgetPasswordSchema))
+  async forgetPassword(req: CustomRequest<object, object, ForgetPasswordInput>, res: Response) {
+    await this._userService.forgetPassword(req.body.email);
+    return HttpResponse.success(res, null, 200);
+  }
+
+  @httpPost(
+    "/reset-password-confirmation",
+    veryHighRateLimit,
+    validateResource(resetPasswordConfirmationSchema),
+  )
+  async resetPasswordConfirmation(
+    req: CustomRequest<object, object, ResetPasswordConfirmationInput>,
+    res: Response,
+  ) {
+    await this._userService.resetPasswordConfirmation(req.body.token);
+    return HttpResponse.success(res, null, 200);
+  }
+
+  @httpPost("/reset-password", veryHighRateLimit, validateResource(resetPasswordSchema))
+  async resetPassword(req: CustomRequest<object, object, ResetPasswordInput>, res: Response) {
+    await this._userService.resetPassword(req.body.password, req.body.token);
+    return HttpResponse.success(res, null, 200);
   }
 }

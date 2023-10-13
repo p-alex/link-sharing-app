@@ -8,6 +8,7 @@ import Section from "../components/Section";
 import { tokenSchema } from "../schemas/common.schema";
 import SuccessIcon from "../svgs/SuccessIcon";
 import Error from "../components/Error/Error";
+import getParamFromUrl from "../utils/getParamFromUrl";
 
 const VerifyEmailPage = () => {
   const [success, setSuccess] = useState(false);
@@ -35,17 +36,11 @@ const VerifyEmailPage = () => {
     return token;
   }, []);
 
-  const getTokenFromUrl = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
-    return token;
-  };
-
   const effectRan = useRef<boolean>(false);
 
   useEffect(() => {
     if (effectRan.current === true) {
-      const token = getTokenFromUrl();
+      const token = getParamFromUrl("token");
       if (!token) return navigate("/sign-in");
       const validToken = validateToken(token);
       if (!validToken) return navigate("/sign-in");

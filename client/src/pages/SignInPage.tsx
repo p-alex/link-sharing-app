@@ -85,12 +85,18 @@ const SignInPage = () => {
                   {formState.isLoading ? "Loading..." : "Login"}
                 </Button>
               </div>
-              <p className="text-center">
-                Don't have an account?{" "}
-                <Link className="text-primary" to={"/sign-up"}>
-                  Create account
+              <div className="flex flex-col gap-2 text-center">
+                <p>
+                  Don't have an account?{" "}
+                  <Link className="text-primary" to={"/sign-up"}>
+                    Create account
+                  </Link>
+                </p>
+                <Link className="text-primary" to={"/forget-password"}>
+                  Forgot password?
                 </Link>
-              </p>
+              </div>
+
               <ul className="mt-5 flex flex-col gap-2 border-t-2 border-zinc-100 pt-5">
                 <li>
                   <OAuthButton variant="google" disabled={formState.isLoading} onMouseUp={reset}>

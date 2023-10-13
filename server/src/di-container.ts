@@ -18,6 +18,8 @@ import Mailer from "./utils/mailer";
 import EmailVerificationTemplate from "./emailTemplates/EmailVerificationTemplate";
 import CodeGenerator from "./utils/codeGenerator";
 import VerificationTokenRepository from "./modules/verificationToken/verificationToken.repository";
+import ForgetPasswordVerificationTemplate from "./emailTemplates/ResetPasswordVerificationTemplate";
+import VerificationTokenVerifier from "./utils/verificationTokenVerifier";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -47,3 +49,5 @@ container.bind(CodeGenerator).toSelf();
 
 container.bind(Mailer).toSelf();
 container.bind(EmailVerificationTemplate).toSelf();
+container.bind(ForgetPasswordVerificationTemplate).toSelf();
+container.bind(VerificationTokenVerifier).toSelf();

@@ -8,6 +8,8 @@ import Mailer from "../../utils/mailer";
 import EmailVerificationTemplate from "../../emailTemplates/EmailVerificationTemplate";
 import { TimeConverter } from "../../utils/timeConverter";
 import Jwt from "../../utils/jwt";
+import ResetPasswordVerificationTemplate from "../../emailTemplates/ResetPasswordVerificationTemplate";
+import VerificationTokenVerifier from "../../utils/verificationTokenVerifier";
 
 @injectable()
 class UserService {
@@ -16,8 +18,10 @@ class UserService {
     private readonly _hash: Hash,
     private readonly _mailer: Mailer,
     private readonly _emailVerificationTemplate: EmailVerificationTemplate,
+    private readonly _resetPasswordVerificationTemplate: ResetPasswordVerificationTemplate,
     private readonly _timeConverter: TimeConverter,
     private readonly _jwt: Jwt,
+    private readonly _verificationTokenVerifier: VerificationTokenVerifier,
   ) {}
 
   async create(userInput: CreateUserInput): Promise<{ id: string }> {
@@ -53,6 +57,65 @@ class UserService {
 
   async delete(id: string) {
     await this._unitOfWork.user.deleteById(id);
+    return true;
+  }
+
+  async forgetPassword(email: string) {
+    const user = await this._unitOfWork.user.findOneByEmail(email);
+
+    if (!user) return true;
+
+    const verificationTokenExpireMs = this._timeConverter.toMs(24, "hour");
+
+    const verificationToken = this._jwt.signJwt(
+      { id: user.id },
+      "RESET_PASSWORD_VERIFICATION_TOKEN_SECRET",
+      this._timeConverter.toSeconds(verificationTokenExpireMs, "milisecond"),
+    );
+
+    await this._unitOfWork.verificationToken.create({
+      token: this._hash.fastHash(verificationToken),
+      expires_at: Date.now() + verificationTokenExpireMs,
+    });
+
+    await this._mailer.send(
+      this._resetPasswordVerificationTemplate.setup(user.email, verificationToken),
+    );
+
+    return true;
+  }
+
+  async resetPasswordConfirmation(token: string) {
+    const { tokenPayload } = await this._verificationTokenVerifier.verify<{
+      id: string;
+    }>(token, "RESET_PASSWORD_VERIFICATION_TOKEN_SECRET");
+
+    const user = await this._unitOfWork.user.findOneById(tokenPayload.id);
+
+    if (!user) throw new Error("User does not exist");
+
+    return true;
+  }
+
+  async resetPassword(newPassword: string, token: string) {
+    const { tokenPayload, hashedToken } = await this._verificationTokenVerifier.verify<{
+      id: string;
+    }>(token, "RESET_PASSWORD_VERIFICATION_TOKEN_SECRET");
+
+    const user = await this._unitOfWork.user.findOneById(tokenPayload.id);
+
+    if (!user) throw new Error("User does not exist");
+
+    const hashedPassword = await this._hash.slowHash(newPassword);
+
+    await this._unitOfWork.user.update({
+      ...user,
+      password: hashedPassword,
+      modified_at: Date.now(),
+    });
+
+    await this._unitOfWork.verificationToken.deleteByToken(hashedToken);
+
     return true;
   }
 }
