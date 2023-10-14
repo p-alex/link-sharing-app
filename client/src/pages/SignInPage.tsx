@@ -113,23 +113,8 @@ const SignInPage = () => {
 
               <ul className="mt-5 flex flex-col gap-2 border-t-2 border-zinc-100 pt-5">
                 <li>
-                  <OAuthButton variant="google" disabled={formState.isLoading} onMouseUp={reset}>
-                    Log In with Google
-                  </OAuthButton>
-                </li>
-                <li>
                   <OAuthButton variant="github" disabled={formState.isLoading} onMouseUp={reset}>
                     Log In with Github
-                  </OAuthButton>
-                </li>
-                <li>
-                  <OAuthButton variant="discord" disabled={formState.isLoading} onMouseUp={reset}>
-                    Log In with Discord
-                  </OAuthButton>
-                </li>
-                <li>
-                  <OAuthButton variant="linkedin" disabled={formState.isLoading} onMouseUp={reset}>
-                    Log In with LinkedIn
                   </OAuthButton>
                 </li>
               </ul>
