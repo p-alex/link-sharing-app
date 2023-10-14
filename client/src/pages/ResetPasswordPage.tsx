@@ -1,79 +1,22 @@
-import { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Section from "../components/Section";
 import useForm from "../hooks/useForm";
-import { ResetPasswordType, resetPasswordSchema } from "../schemas/user.schema";
+import { resetPasswordSchema } from "../schemas/user.schema";
 import Error from "../components/Error/Error";
 import InputGroup from "../components/InputGroup";
 import Button from "../components/Button";
-import { resetPassword, resetPasswordConfirmation } from "../apiRequests/users";
-import { AxiosError } from "axios";
-import { tokenSchema } from "../schemas/common.schema";
-import getParamFromUrl from "../utils/getParamFromUrl";
 import SuccessIcon from "../svgs/SuccessIcon";
+import useResetPasswordPage from "../hooks/useResetPasswordPage";
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate();
-
-  const [step, setStep] = useState<
-    | "token-confirmation-step"
-    | "reset-password-step"
-    | "token-confirmation-error-step"
-    | "success-step"
-  >("token-confirmation-step");
-
-  const [confirmationError, setConfirmationError] = useState("");
 
   const { formState, reset, register, handleSubmit } = useForm({
     payload: { password: "", confirmPassword: "" },
     zodSchema: resetPasswordSchema,
   });
 
-  const submit = async (data: ResetPasswordType) => {
-    const result = await resetPassword({
-      password: data.password,
-      token: getParamFromUrl("token") as string,
-    });
-    if (result.success) {
-      reset();
-      setStep("success-step");
-    }
-  };
-
-  const handleConfirmToken = async (token: string) => {
-    try {
-      const result = await resetPasswordConfirmation({ token });
-      if (result.success) {
-        setStep("reset-password-step");
-      }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      if (error instanceof AxiosError) {
-        setStep("token-confirmation-error-step");
-        setConfirmationError(error.response?.data.errors[0]);
-      }
-    }
-  };
-
-  const validateToken = useCallback((token: string) => {
-    if (!tokenSchema.safeParse(token).success) return null;
-    return token;
-  }, []);
-
-  const effectRan = useRef<boolean>(false);
-
-  useEffect(() => {
-    if (!effectRan.current) {
-      const token = getParamFromUrl("token");
-      if (!token) return navigate("/sign-in");
-      const validToken = validateToken(token);
-      if (!validToken) return navigate("/sign-in");
-      handleConfirmToken(validToken);
-    }
-    return () => {
-      effectRan.current = true;
-    };
-  }, [navigate, validateToken]);
+  const { step, confirmationError, submit } = useResetPasswordPage({ resetForm: reset });
 
   return (
     <main className="flex w-full flex-col px-2">
