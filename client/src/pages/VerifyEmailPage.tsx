@@ -1,56 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
-import { VerifyEmailType } from "../schemas/auth.schema";
-import { verifyEmailRequest } from "../apiRequests/auth";
-import { useRef, useState, useCallback, useEffect } from "react";
-import { AxiosError } from "axios";
+import { Link } from "react-router-dom";
 import Button from "../components/Button";
 import Section from "../components/Section";
-import { tokenSchema } from "../schemas/common.schema";
 import SuccessIcon from "../svgs/SuccessIcon";
 import Error from "../components/Error/Error";
-import getParamFromUrl from "../utils/getParamFromUrl";
+import useVerifyEmailPage from "../hooks/useVerifyEmailPage";
 
 const VerifyEmailPage = () => {
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
-
-  const handleVerify = useCallback(async (data: VerifyEmailType) => {
-    try {
-      const { success } = await verifyEmailRequest({ token: data.token });
-      if (success) {
-        setSuccess(success);
-      }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        setError(error.response?.data.errors[0]);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  const validateToken = useCallback((token: string) => {
-    if (!tokenSchema.safeParse(token).success) return null;
-    return token;
-  }, []);
-
-  const effectRan = useRef<boolean>(false);
-
-  useEffect(() => {
-    if (effectRan.current === true) {
-      const token = getParamFromUrl("token");
-      if (!token) return navigate("/sign-in");
-      const validToken = validateToken(token);
-      if (!validToken) return navigate("/sign-in");
-      handleVerify({ token });
-    }
-
-    return () => {
-      effectRan.current = true;
-    };
-  }, []);
+  const { error, step } = useVerifyEmailPage();
 
   return (
     <main className="flex w-full flex-col">
@@ -64,23 +20,32 @@ const VerifyEmailPage = () => {
             alt=""
           />
         </Link>
-        <Section>
-          <div className="flex justify-center">
-            {isLoading && <p>Verifying...</p>}
-            {!isLoading && success && (
-              <div className="flex flex-col gap-6">
-                <SuccessIcon width={80} height={80} className="mx-auto text-green-500" />
-                <div className="flex flex-col gap-4">
-                  <h1>Email verified</h1>
-                  <Button onClick={() => (window.location.href = "/sign-in")}>
-                    Go to Login Page
-                  </Button>
-                </div>
+
+        {step === "confirm-token-step" && (
+          <Section>
+            <p>Verifying...</p>
+          </Section>
+        )}
+
+        {step === "error-step" && (
+          <Section>
+            <Error message={error} />
+          </Section>
+        )}
+
+        {step === "success-step" && (
+          <Section>
+            <div className="flex flex-col gap-6 text-center">
+              <SuccessIcon width={80} height={80} className="mx-auto text-green-500" />
+              <div className="flex flex-col gap-4">
+                <h1>Email verified</h1>
+                <Button onClick={() => (window.location.href = "/sign-in")}>
+                  Go to Login Page
+                </Button>
               </div>
-            )}
-            {!isLoading && !success && <Error message={error} />}
-          </div>
-        </Section>
+            </div>
+          </Section>
+        )}
       </div>
     </main>
   );
