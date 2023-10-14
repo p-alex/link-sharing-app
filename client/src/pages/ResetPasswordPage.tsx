@@ -15,11 +15,14 @@ import SuccessIcon from "../svgs/SuccessIcon";
 const ResetPasswordPage = () => {
   const navigate = useNavigate();
 
-  const [confirmationState, setConfirmationState] = useState({
-    isConfirmed: false,
-    error: "",
-  });
-  const [success, setSuccess] = useState(false);
+  const [step, setStep] = useState<
+    | "token-confirmation-step"
+    | "reset-password-step"
+    | "token-confirmation-error-step"
+    | "success-step"
+  >("token-confirmation-step");
+
+  const [confirmationError, setConfirmationError] = useState("");
 
   const { formState, reset, register, handleSubmit } = useForm({
     payload: { password: "", confirmPassword: "" },
@@ -33,7 +36,7 @@ const ResetPasswordPage = () => {
     });
     if (result.success) {
       reset();
-      setSuccess(true);
+      setStep("success-step");
     }
   };
 
@@ -41,15 +44,13 @@ const ResetPasswordPage = () => {
     try {
       const result = await resetPasswordConfirmation({ token });
       if (result.success) {
-        setConfirmationState((prevState) => ({ ...prevState, isConfirmed: true }));
+        setStep("reset-password-step");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error instanceof AxiosError) {
-        setConfirmationState((prevState) => ({
-          ...prevState,
-          error: error.response?.data.errors[0],
-        }));
+        setStep("token-confirmation-error-step");
+        setConfirmationError(error.response?.data.errors[0]);
       }
     }
   };
@@ -62,7 +63,7 @@ const ResetPasswordPage = () => {
   const effectRan = useRef<boolean>(false);
 
   useEffect(() => {
-    if (!effectRan) {
+    if (!effectRan.current) {
       const token = getParamFromUrl("token");
       if (!token) return navigate("/sign-in");
       const validToken = validateToken(token);
@@ -87,17 +88,24 @@ const ResetPasswordPage = () => {
           />
         </Link>
 
-        <Section title={confirmationState.isConfirmed ? "Reset password" : undefined}>
-          {!success && (
+        {step === "token-confirmation-step" && (
+          <Section>
+            <p>Varifying...</p>
+          </Section>
+        )}
+
+        {step === "token-confirmation-error-step" && (
+          <Section>
+            <Error message={confirmationError} />
+          </Section>
+        )}
+
+        {step === "reset-password-step" && (
+          <Section title={"Reset password"} description="Please provide your new password">
             <form onSubmit={(event) => handleSubmit(event, submit)}>
               {formState.responseError && (
                 <Error message={formState.responseError} className="mb-4" />
               )}
-
-              {confirmationState.error && (
-                <Error message={confirmationState.error} className="mb-4" />
-              )}
-
               <div className="flex flex-col gap-6">
                 <InputGroup
                   label={
@@ -120,7 +128,6 @@ const ResetPasswordPage = () => {
                     ) : null
                   }
                 />
-
                 <InputGroup
                   label={
                     <InputGroup.InputLabel htmlFor="confirmPassword">
@@ -143,16 +150,18 @@ const ResetPasswordPage = () => {
                     ) : null
                   }
                 />
-
                 <div className="flex flex-col">
                   <Button type="submit" disabled={formState.isLoading || !formState.isValid}>
-                    {formState.isLoading ? "Loading..." : "Send confirmation email"}
+                    {formState.isLoading ? "Loading..." : "Reset password"}
                   </Button>
                 </div>
               </div>
             </form>
-          )}
-          {success && (
+          </Section>
+        )}
+
+        {step === "success-step" && (
+          <Section>
             <div className="flex flex-col gap-6 text-center">
               <SuccessIcon width={80} height={80} className="mx-auto text-green-500" />
               <div className="flex flex-col gap-4">
@@ -160,8 +169,8 @@ const ResetPasswordPage = () => {
                 <Button onClick={() => navigate("/sign-in")}>Go to Login Page</Button>
               </div>
             </div>
-          )}
-        </Section>
+          </Section>
+        )}
       </div>
     </main>
   );
