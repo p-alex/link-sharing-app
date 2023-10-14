@@ -1,32 +1,21 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import InputGroup from "../components/InputGroup";
-import { SignUpSchemaType, signUpSchema } from "../schemas/user.schema";
-import { createUser } from "../apiRequests/users";
+import { signUpSchema } from "../schemas/user.schema";
 import useForm from "../hooks/useForm";
 import Section from "../components/Section";
 import OAuthButton from "../components/OAuthButton/OAuthButton";
 import Button from "../components/Button";
 import SuccessIcon from "../svgs/SuccessIcon";
 import Error from "../components/Error/Error";
+import useSignUpPage from "../hooks/useSignUpPage";
 
 const SignUpPage = () => {
-  const [successMessage, setSuccessMessage] = useState("");
-
   const { register, handleSubmit, formState, reset } = useForm({
     payload: { email: "", password: "", confirmPassword: "" },
     zodSchema: signUpSchema,
   });
 
-  const submit = async (data: SignUpSchemaType) => {
-    const { success } = await createUser(data);
-    if (success) {
-      reset();
-      setSuccessMessage(
-        "We've sent you an email to verify your email address and activate your account. The link in the email will expire in 24 hours.",
-      );
-    }
-  };
+  const { successMessage, submit } = useSignUpPage({ formReset: reset });
 
   return (
     <main className="flex w-full flex-col px-2">
