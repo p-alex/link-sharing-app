@@ -1,28 +1,19 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import Section from "../components/Section";
 import useForm from "../hooks/useForm";
-import { ForgetPasswordType, forgetPasswordSchema } from "../schemas/user.schema";
+import { forgetPasswordSchema } from "../schemas/user.schema";
 import Error from "../components/Error/Error";
 import InputGroup from "../components/InputGroup";
 import Button from "../components/Button";
-import { forgetPassword } from "../apiRequests/users";
+import useForgetPasswordPage from "../hooks/useForgetPasswordPage";
 
 const ForgetPasswordPage = () => {
-  const [success, setSuccess] = useState(false);
-
   const { formState, reset, register, handleSubmit } = useForm({
     payload: { email: "" },
     zodSchema: forgetPasswordSchema,
   });
 
-  const submit = async (data: ForgetPasswordType) => {
-    const result = await forgetPassword(data);
-    if (result.success) {
-      reset();
-      setSuccess(true);
-    }
-  };
+  const { success, submit } = useForgetPasswordPage({ formReset: reset });
 
   return (
     <main className="flex w-full flex-col px-2">
