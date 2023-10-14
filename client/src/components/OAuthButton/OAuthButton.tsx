@@ -20,7 +20,7 @@ const OAuthButton = memo(({ variant, children, ...buttonProps }: Props) => {
       {...buttonProps}
       className={`flex w-full items-center gap-2 px-[27px] py-[11px] shadow ${OAUTH_BUTTON_VARIANTS[variant].bg} ${OAUTH_BUTTON_VARIANTS[variant].text} justify-center rounded-lg font-semibold transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50`}
       onClick={handleButton}
-      title={`log in with ${variant}`}
+      title={children}
       disabled={isLoading}
     >
       {
