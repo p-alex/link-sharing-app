@@ -1,46 +1,20 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import InputGroup from "../components/InputGroup";
-import { SignInSchemaType, signInSchema } from "../schemas/user.schema";
-import useAuthContext from "../authContext/useAuthContext";
-import { emailSignInRequest } from "../apiRequests/auth";
-import { useNavigate } from "react-router-dom";
+import { signInSchema } from "../schemas/user.schema";
 import useForm from "../hooks/useForm";
 import Section from "../components/Section";
 import OAuthButton from "../components/OAuthButton/OAuthButton";
 import Button from "../components/Button";
 import Error from "../components/Error/Error";
-import getParamFromUrl from "../utils/getParamFromUrl";
+import useSignInPage from "../hooks/useSignInPage";
 
 const SignInPage = () => {
-  const navigate = useNavigate();
-  const [oauthError, setOAuthError] = useState("");
-
   const { register, formState, reset, handleSubmit } = useForm({
     payload: { email: "", password: "" },
     zodSchema: signInSchema,
   });
 
-  const { dispatchAuth } = useAuthContext();
-
-  const submit = async (formData: SignInSchemaType) => {
-    const { success, data } = await emailSignInRequest(formData);
-    if (success && data) {
-      reset();
-      dispatchAuth({ type: "LOGIN", payload: data });
-      navigate("/");
-    }
-  };
-
-  useEffect(() => {
-    const oauthError = getParamFromUrl("error");
-    if (oauthError) {
-      setOAuthError(oauthError);
-      setTimeout(() => {
-        setOAuthError("");
-      }, 5000);
-    }
-  }, []);
+  const { submit, oauthError } = useSignInPage({ resetForm: reset });
 
   return (
     <main className="flex w-full flex-col px-2">
