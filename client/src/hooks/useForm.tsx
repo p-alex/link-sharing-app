@@ -8,7 +8,8 @@ type ErrorsType<TPayload> = {
 
 function useForm<
   TPayload extends { [key: string]: string | number | readonly string[] | undefined },
->({ payload, zodSchema }: { payload: TPayload; zodSchema: ZodSchema }) {
+  TSchema extends ZodSchema,
+>({ payload, zodSchema }: { payload: TPayload; zodSchema: TSchema }) {
   const [data, setData] = useState<TPayload>(payload);
   const [responseError, setResponseError] = useState("");
 
