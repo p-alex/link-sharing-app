@@ -31,19 +31,19 @@ const ResetPasswordPage = () => {
           />
         </Link>
 
-        {step === "token-confirmation-step" && (
+        {step === "token_confirmation_step" && (
           <Section>
             <p>Varifying...</p>
           </Section>
         )}
 
-        {step === "token-confirmation-error-step" && (
+        {step === "token_confirmation_error_step" && (
           <Section>
             <Error message={confirmationError} />
           </Section>
         )}
 
-        {step === "reset-password-step" && (
+        {step === "reset_password_step" && (
           <Section title={"Reset password"} description="Please provide your new password">
             <form onSubmit={(event) => handleSubmit(event, submit)}>
               {formState.responseError && (
@@ -103,7 +103,7 @@ const ResetPasswordPage = () => {
           </Section>
         )}
 
-        {step === "success-step" && (
+        {step === "success_step" && (
           <Section>
             <div className="flex flex-col gap-6 text-center">
               <SuccessIcon width={80} height={80} className="mx-auto text-green-500" />

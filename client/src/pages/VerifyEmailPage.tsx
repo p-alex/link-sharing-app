@@ -21,19 +21,19 @@ const VerifyEmailPage = () => {
           />
         </Link>
 
-        {step === "confirm-token-step" && (
+        {step === "confirm_token_step" && (
           <Section>
             <p>Verifying...</p>
           </Section>
         )}
 
-        {step === "error-step" && (
+        {step === "error_step" && (
           <Section>
             <Error message={error} />
           </Section>
         )}
 
-        {step === "success-step" && (
+        {step === "success_step" && (
           <Section>
             <div className="flex flex-col gap-6 text-center">
               <SuccessIcon width={80} height={80} className="mx-auto text-green-500" />

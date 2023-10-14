@@ -1,4 +1,4 @@
-import { IDefaultResponse, axiosPrivate, axiosPublic } from "..";
+import { IDefaultResponse, axiosPublic } from "..";
 import { EmailSignInType, VerifyEmailType } from "../../schemas/auth.schema";
 
 export const emailSignInRequest = async (
@@ -11,15 +11,9 @@ export const emailSignInRequest = async (
 };
 
 export const verifyEmailRequest = async (body: VerifyEmailType) => {
-  await axiosPublic.post("/auth/verify-email/" + body.token, {});
-  return { success: true };
-};
-
-export const logoutRequest = async (access_token: string): Promise<null> => {
-  await axiosPrivate.post(
-    "/auth/logout",
+  const result = await axiosPublic.post<IDefaultResponse<null>>(
+    "/auth/verify-email/" + body.token,
     {},
-    { headers: { Authorization: `Bearer ${access_token}` } },
   );
-  return null;
+  return result.data;
 };
