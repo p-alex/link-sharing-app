@@ -5,9 +5,9 @@ export default {
     extend: {
       colors: {
         darkGray: "#333333",
-        gray: "#737373",
+        grey: "#737373",
         primary: "#633CFF",
-        primaryHover: "#BEADFF",
+        lightPurple: "#EFEBFF",
         siteBg: "#FAFAFA",
         lightGray: "#FAFAFA",
         error: "#FF3939",

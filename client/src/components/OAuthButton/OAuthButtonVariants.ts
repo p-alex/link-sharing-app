@@ -3,9 +3,10 @@ export const OAUTH_BUTTON_VARIANTS = {
     icon: "/images/github-icon.svg",
     bg: "bg-github",
     text: "text-white",
-    href: `https://github.com/login/oauth/authorize?scope=user:email&client_id=${
-      import.meta.env.VITE_GITHUB_CLIENT_ID
-    }`,
+    href:
+      "https://github.com/login/oauth/authorize" +
+      "?scope=user:email" +
+      `&client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}`,
   },
   google: {
     icon: "/images/google-icon.svg",

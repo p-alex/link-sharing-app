@@ -2,8 +2,9 @@ import { useNavigate } from "react-router-dom";
 import useAuthContext from "../authContext/useAuthContext";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { IDefaultResponse } from "../apiRequests";
+import Layout from "../layout";
 
-const HomePage = () => {
+const LinksPage = () => {
   const navigate = useNavigate();
   const { authState, dispatchAuth } = useAuthContext();
   const axiosPrivate = useAxiosPrivate();
@@ -19,11 +20,13 @@ const HomePage = () => {
   };
 
   return (
-    <div>
-      <h1>Hello {authState.email}</h1>
-      <button onClick={handleLogout}>Logout</button>
-    </div>
+    <Layout>
+      <div>
+        <h1>Hello {authState.email}</h1>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+    </Layout>
   );
 };
 
-export default HomePage;
+export default LinksPage;

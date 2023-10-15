@@ -16,7 +16,7 @@ const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
     if (success && data) {
       resetForm();
       dispatchAuth({ type: "LOGIN", payload: data });
-      navigate("/");
+      navigate("/links");
     }
   };
 

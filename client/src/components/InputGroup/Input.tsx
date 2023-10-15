@@ -10,8 +10,8 @@ const Input = forwardRef(({ icon, ...inputProps }: Props, ref: LegacyRef<HTMLInp
   return (
     <div className="group relative flex w-full flex-col gap-1">
       <div
-        className={`group-focus-within:shadow-inputFocus flex h-[48px] w-full items-center gap-[12px] rounded-lg border bg-white p-4 transition-shadow ${
-          isError ? "border-error" : "border-gray"
+        className={`flex h-[48px] w-full items-center gap-[12px] rounded-lg border bg-white p-4 transition-shadow group-focus-within:shadow-inputFocus ${
+          isError ? "border-error" : "border-grey"
         } group-focus-within:border-purple`}
       >
         {icon && icon}

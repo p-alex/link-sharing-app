@@ -10,7 +10,7 @@ const Section = ({ title, description, children, ...sectionProps }: Props) => {
       {title && (
         <div className="mb-10 flex flex-col gap-2">
           <h1>{title}</h1>
-          {description && <p className="text-base text-gray">{description}</p>}
+          {description && <p className="text-grey text-base">{description}</p>}
         </div>
       )}
       {children}

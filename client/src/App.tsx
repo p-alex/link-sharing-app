@@ -5,9 +5,10 @@ import ProtectedRoute from "./ProtectedRoute";
 import RefreshTokenRoute from "./RefreshTokenRoute";
 import RedirectIfSignedIn from "./RedirectIfSignedIn";
 import VerifyEmail from "./pages/VerifyEmailPage";
-import HomePage from "./pages/HomePage";
+import LinksPage from "./pages/LinksPage";
 import ForgetPasswordPage from "./pages/ForgetPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import RedirectToHomePage from "./RedirectToHomePage";
 
 function App() {
   return (
@@ -23,15 +24,17 @@ function App() {
             <Route path="/sign-up" element={<SignUp />}></Route>
             <Route path="/sign-in" element={<SignIn />}></Route>
           </Route>
+          <Route path="/" element={<RedirectToHomePage />}></Route>
           <Route
-            path="/"
+            path="/links"
             element={
               <ProtectedRoute>
-                <HomePage />
+                <LinksPage />
               </ProtectedRoute>
             }
           ></Route>
         </Route>
+        <Route path="*" element={"Page does not exist"}></Route>
       </Routes>
     </>
   );

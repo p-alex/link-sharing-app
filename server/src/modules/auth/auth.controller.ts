@@ -47,7 +47,7 @@ class AuthController {
 
     setRefreshTokenCookie(res, refreshToken!, refreshTokenExpireInMs!);
 
-    return res.redirect(config.CLIENT_BASE_URL);
+    return res.redirect(config.CLIENT_BASE_URL + "/links");
   }
 
   @httpGet("/discord-sign-in", validateResource(oauthSignInSchema))
@@ -59,7 +59,7 @@ class AuthController {
 
     setRefreshTokenCookie(res, refreshToken!, refreshTokenExpireInMs!);
 
-    return res.redirect(config.CLIENT_BASE_URL);
+    return res.redirect(config.CLIENT_BASE_URL + "/links");
   }
 
   @httpGet("/linkedin-sign-in", validateResource(oauthSignInSchema))
@@ -71,7 +71,7 @@ class AuthController {
 
     setRefreshTokenCookie(res, refreshToken!, refreshTokenExpireInMs!);
 
-    return res.redirect(config.CLIENT_BASE_URL);
+    return res.redirect(config.CLIENT_BASE_URL + "/links");
   }
 
   @httpGet("/github-sign-in", validateResource(oauthSignInSchema))
@@ -83,7 +83,7 @@ class AuthController {
 
     setRefreshTokenCookie(res, refreshToken!, refreshTokenExpireInMs!);
 
-    return res.redirect(config.CLIENT_BASE_URL);
+    return res.redirect(config.CLIENT_BASE_URL + "/links");
   }
 
   @httpPost("/verify-email/:token", veryHighRateLimit, validateResource(verifyEmailSchema))
