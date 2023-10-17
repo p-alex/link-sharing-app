@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { SignUpSchemaType } from "../schemas/user.schema";
 import { createUser } from "../apiRequests/users";
+import useCaptcha from "./useCaptcha";
 
 const useSignUpPage = ({ formReset }: { formReset: () => void }) => {
   const [successMessage, setSuccessMessage] = useState("");
-  const submit = async (data: SignUpSchemaType) => {
-    const { success } = await createUser(data);
+
+  const { captchaRef, getCaptchaToken } = useCaptcha();
+
+  const submit = async (formData: SignUpSchemaType) => {
+    const captchaToken = await getCaptchaToken();
+    const { success } = await createUser({ ...formData, captchaToken });
     if (success) {
       formReset();
       setSuccessMessage(
@@ -13,7 +18,8 @@ const useSignUpPage = ({ formReset }: { formReset: () => void }) => {
       );
     }
   };
-  return { successMessage, submit };
+
+  return { successMessage, submit, captchaRef };
 };
 
 export default useSignUpPage;

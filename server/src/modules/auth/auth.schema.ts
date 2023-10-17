@@ -1,11 +1,12 @@
 import { z } from "zod";
 import { emailSchema } from "../user/user.schema";
-import { jwtSchema } from "../../commonSchemas";
+import { captchaTokenSchema, jwtSchema } from "../../commonSchemas";
 
 export const emailSignInSchema = z
   .object({
     email: emailSchema,
     password: z.string({ required_error: "Password is required" }),
+    captchaToken: captchaTokenSchema,
   })
   .strip();
 

@@ -7,6 +7,7 @@ import OAuthButton from "../components/OAuthButton/OAuthButton";
 import Button from "../components/Button";
 import Error from "../components/Error/Error";
 import useSignInPage from "../hooks/useSignInPage";
+import ReCaptcha from "react-google-recaptcha";
 
 const SignInPage = () => {
   const { register, formState, reset, handleSubmit } = useForm({
@@ -14,7 +15,9 @@ const SignInPage = () => {
     zodSchema: signInSchema,
   });
 
-  const { submit, oauthError } = useSignInPage({ resetForm: reset });
+  const { submit, oauthError, captchaRef } = useSignInPage({
+    resetForm: reset,
+  });
 
   return (
     <main className="flex w-full flex-col px-2">
@@ -68,6 +71,7 @@ const SignInPage = () => {
                   ) : null
                 }
               />
+
               <div className="flex flex-col">
                 <Button type="submit" disabled={formState.isLoading || !formState.isValid}>
                   {formState.isLoading ? "Loading..." : "Login"}
@@ -96,6 +100,12 @@ const SignInPage = () => {
           </form>
         </Section>
       </div>
+
+      <ReCaptcha
+        size="invisible"
+        sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY}
+        ref={captchaRef}
+      />
     </main>
   );
 };

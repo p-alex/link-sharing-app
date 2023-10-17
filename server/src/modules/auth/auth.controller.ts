@@ -18,12 +18,13 @@ import { config } from "../../config";
 import setRefreshTokenCookie, {
   REFRESH_TOKEN_COOKIE_NAME,
 } from "../../utils/setRefreshTokenCookie";
+import { validateCaptcha } from "../../middleware/validateCaptcha";
 
 @controller("/auth")
 class AuthController {
   constructor(private readonly _authService: AuthService) {}
 
-  @httpPost("/email-sign-in", highRateLimit, validateResource(emailSignInSchema))
+  @httpPost("/email-sign-in", highRateLimit, validateResource(emailSignInSchema), validateCaptcha)
   async emailSignIn(req: Request<object, object, EmailSignInInput>, res: Response) {
     const { id, email, accessToken, refreshToken, refreshTokenExpireInMs, auth_provider } =
       await this._authService.emailSignIn(req.body);

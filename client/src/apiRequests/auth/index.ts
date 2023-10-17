@@ -2,7 +2,7 @@ import { IDefaultResponse, axiosPublic } from "..";
 import { EmailSignInType, VerifyEmailType } from "../../schemas/auth.schema";
 
 export const emailSignInRequest = async (
-  body: EmailSignInType,
+  body: EmailSignInType & { captchaToken: string },
 ): Promise<IDefaultResponse<{ id: string; email: string; accessToken: string }>> => {
   const result = await axiosPublic.post<
     IDefaultResponse<{ id: string; email: string; accessToken: string }>

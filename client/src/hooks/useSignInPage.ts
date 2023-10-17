@@ -4,6 +4,7 @@ import { SignInSchemaType } from "../schemas/user.schema";
 import { emailSignInRequest } from "../apiRequests/auth";
 import useAuthContext from "../authContext/useAuthContext";
 import getParamFromUrl from "../utils/getParamFromUrl";
+import useCaptcha from "./useCaptcha";
 
 const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
   const navigate = useNavigate();
@@ -11,8 +12,16 @@ const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
 
   const { dispatchAuth } = useAuthContext();
 
+  const { captchaRef, getCaptchaToken } = useCaptcha();
+
   const submit = async (formData: SignInSchemaType) => {
-    const { success, data } = await emailSignInRequest(formData);
+    const captchaToken = await getCaptchaToken();
+
+    const { success, data } = await emailSignInRequest({
+      ...formData,
+      captchaToken,
+    });
+
     if (success && data) {
       resetForm();
       dispatchAuth({ type: "LOGIN", payload: data });
@@ -30,7 +39,7 @@ const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
     }
   }, []);
 
-  return { oauthError, submit };
+  return { oauthError, submit, captchaRef };
 };
 
 export default useSignInPage;

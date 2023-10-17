@@ -8,12 +8,14 @@ interface IDefaultResponse<TData> {
   data: TData | null;
 }
 
-export const createUser = async (body: Omit<SignUpSchemaType, "confirmPassword">) => {
+export const createUser = async (
+  body: Omit<SignUpSchemaType, "confirmPassword"> & { captchaToken: string },
+) => {
   const response = await axiosPublic.post<IDefaultResponse<{ id: string }>>("/users", body);
   return response.data;
 };
 
-export const forgetPassword = async (body: { email: string }) => {
+export const forgetPassword = async (body: { email: string; captchaToken: string }) => {
   const response = await axiosPublic.post<IDefaultResponse<null>>("/users/forget-password", body);
   return response.data;
 };

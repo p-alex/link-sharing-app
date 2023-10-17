@@ -20,12 +20,13 @@ import { HttpResponse } from "../../utils/httpResponse";
 import requireAuth from "../../middleware/requireAuth";
 import { highRateLimit, mediumRateLimit, veryHighRateLimit } from "../../middleware/rateLimiting";
 import { CustomRequest } from "../../server";
+import { validateCaptcha } from "../../middleware/validateCaptcha";
 
 @controller("/users")
 export class UserController {
   constructor(private readonly _userService: UserService) {}
 
-  @httpPost("/", highRateLimit, validateResource(createUserSchema))
+  @httpPost("/", highRateLimit, validateResource(createUserSchema), validateCaptcha)
   async create(req: CustomRequest<object, object, CreateUserInput>, res: Response) {
     const result = await this._userService.create(req.body);
     return HttpResponse.success(res, result, 201);
@@ -43,7 +44,12 @@ export class UserController {
     return HttpResponse.success(res);
   }
 
-  @httpPost("/forget-password", veryHighRateLimit, validateResource(forgetPasswordSchema))
+  @httpPost(
+    "/forget-password",
+    veryHighRateLimit,
+    validateResource(forgetPasswordSchema),
+    validateCaptcha,
+  )
   async forgetPassword(req: CustomRequest<object, object, ForgetPasswordInput>, res: Response) {
     await this._userService.forgetPassword(req.body.email);
     return HttpResponse.success(res, null, 200);

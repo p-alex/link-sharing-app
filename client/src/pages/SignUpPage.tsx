@@ -8,6 +8,7 @@ import Button from "../components/Button";
 import SuccessIcon from "../svgs/SuccessIcon";
 import Error from "../components/Error/Error";
 import useSignUpPage from "../hooks/useSignUpPage";
+import ReCaptcha from "react-google-recaptcha";
 
 const SignUpPage = () => {
   const { register, handleSubmit, formState, reset } = useForm({
@@ -15,7 +16,7 @@ const SignUpPage = () => {
     zodSchema: signUpSchema,
   });
 
-  const { successMessage, submit } = useSignUpPage({ formReset: reset });
+  const { successMessage, submit, captchaRef } = useSignUpPage({ formReset: reset });
 
   return (
     <main className="flex w-full flex-col px-2">
@@ -114,6 +115,7 @@ const SignUpPage = () => {
                     ) : null
                   }
                 />
+
                 <div className="flex flex-col">
                   <Button type="submit" disabled={formState.isLoading || !formState.isValid}>
                     {formState.isLoading ? "Loading..." : "Create new account"}
@@ -137,6 +139,12 @@ const SignUpPage = () => {
           )}
         </Section>
       </div>
+
+      <ReCaptcha
+        size="invisible"
+        sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY}
+        ref={captchaRef}
+      />
     </main>
   );
 };

@@ -6,6 +6,7 @@ import Error from "../components/Error/Error";
 import InputGroup from "../components/InputGroup";
 import Button from "../components/Button";
 import useForgetPasswordPage from "../hooks/useForgetPasswordPage";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const ForgetPasswordPage = () => {
   const { formState, reset, register, handleSubmit } = useForm({
@@ -13,7 +14,7 @@ const ForgetPasswordPage = () => {
     zodSchema: forgetPasswordSchema,
   });
 
-  const { success, submit } = useForgetPasswordPage({ formReset: reset });
+  const { success, submit, captchaRef } = useForgetPasswordPage({ formReset: reset });
 
   return (
     <main className="flex w-full flex-col px-2">
@@ -70,6 +71,12 @@ const ForgetPasswordPage = () => {
           )}
         </Section>
       </div>
+
+      <ReCAPTCHA
+        size="invisible"
+        sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY}
+        ref={captchaRef}
+      />
     </main>
   );
 };

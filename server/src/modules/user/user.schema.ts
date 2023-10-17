@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { idSchema, jwtSchema } from "../../commonSchemas";
+import { captchaTokenSchema, idSchema, jwtSchema } from "../../commonSchemas";
 
 export const EMAIL_MAX_LENGTH = 64;
 export const PASSWORD_MIN_LENGTH = 8;
@@ -20,6 +20,7 @@ export const createUserSchema = z
   .object({
     email: emailSchema,
     password: passwordSchema,
+    captchaToken: captchaTokenSchema,
   })
   .strip();
 
@@ -37,7 +38,9 @@ export const deleteUserSchema = z
   })
   .strip();
 
-export const forgetPasswordSchema = z.object({ email: emailSchema }).strip();
+export const forgetPasswordSchema = z
+  .object({ email: emailSchema, captchaToken: captchaTokenSchema })
+  .strip();
 
 export const resetPasswordConfirmationSchema = z.object({ token: jwtSchema }).strip();
 

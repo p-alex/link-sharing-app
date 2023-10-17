@@ -21,6 +21,7 @@ const Logo = () => {
       window.removeEventListener("resize", handleWindowSize);
     };
   }, []);
+
   return (
     <Link to="/links">
       {isSmallLogo ? (
