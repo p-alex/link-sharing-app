@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import useAuthContext from "../authContext/useAuthContext";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { IDefaultResponse } from "../apiRequests";
 import Layout from "../layout";
+import useAuth from "../hooks/useAuth";
 
 const LinksPage = () => {
   const navigate = useNavigate();
-  const { authState, dispatchAuth } = useAuthContext();
+  const { authState, dispatchAuth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
 
   const handleLogout = async () => {

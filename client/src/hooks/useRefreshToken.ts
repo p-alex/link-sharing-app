@@ -1,8 +1,8 @@
 import { refreshSessionRequest } from "../apiRequests/sessions";
-import useAuthContext from "../authContext/useAuthContext";
+import useAuth from "./useAuth";
 
 const useRefreshToken = () => {
-  const { dispatchAuth } = useAuthContext();
+  const { dispatchAuth } = useAuth();
   const handleRefreshToken = async () => {
     try {
       const result = await refreshSessionRequest();

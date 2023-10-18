@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SignInSchemaType } from "../schemas/user.schema";
 import { emailSignInRequest } from "../apiRequests/auth";
-import useAuthContext from "../authContext/useAuthContext";
 import getParamFromUrl from "../utils/getParamFromUrl";
 import useCaptcha from "./useCaptcha";
+import useAuth from "./useAuth";
 
 const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
   const navigate = useNavigate();
   const [oauthError, setOAuthError] = useState("");
 
-  const { dispatchAuth } = useAuthContext();
+  const { dispatchAuth } = useAuth();
 
   const { captchaRef, getCaptchaToken } = useCaptcha();
 
