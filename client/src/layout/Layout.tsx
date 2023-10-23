@@ -7,9 +7,9 @@ interface Props {
 
 const Layout = ({ children }: Props) => {
   return (
-    <div className="mx-auto max-w-[1352px]">
+    <div className={`mx-auto max-w-[1352px]`}>
       <NavBar />
-      <main className="mx-auto max-w-[1352px] max-[1376px]:mx-6">{children}</main>
+      <main className={"mx-auto max-[1376px]:mx-6"}>{children}</main>
     </div>
   );
 };

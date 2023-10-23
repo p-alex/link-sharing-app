@@ -4,15 +4,18 @@ const ProfileDetailsHeaderIcon = ({ ...svgProps }: Props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
-      fill="currentColor"
-      viewBox="0 0 20 20"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth="2"
+      stroke="currentColor"
+      width="1rem"
+      height="1rem"
       {...svgProps}
     >
       <path
-        fill="currentColor"
-        d="M10.5 1.563A8.437 8.437 0 1 0 18.938 10 8.447 8.447 0 0 0 10.5 1.562ZM6.716 15.357a4.688 4.688 0 0 1 7.568 0 6.54 6.54 0 0 1-7.568 0Zm1.596-5.982a2.188 2.188 0 1 1 4.376 0 2.188 2.188 0 0 1-4.376 0Zm7.344 4.683a6.523 6.523 0 0 0-2.265-1.83 4.062 4.062 0 1 0-5.782 0 6.522 6.522 0 0 0-2.265 1.83 6.562 6.562 0 1 1 10.304 0h.008Z"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
       />
     </svg>
   );

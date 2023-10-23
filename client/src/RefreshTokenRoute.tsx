@@ -22,7 +22,7 @@ const RefreshTokenRoute = () => {
       })();
       effectRan.current = true;
     }
-  }, []);
+  }, [refresh]);
 
   return isLoading ? null : <Outlet />;
 };

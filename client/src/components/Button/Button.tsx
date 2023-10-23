@@ -1,18 +1,23 @@
 import { ButtonHTMLAttributes } from "react";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "fill" | "outline";
-  children: string;
+  variant?: keyof typeof variantOptions;
+  icon?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
-const Button = ({ variant = "fill", children, ...buttonProps }: Props) => {
-  const btnBg = variant === "fill" ? "bg-primary" : "bg-transparent";
+const variantOptions = {
+  fill: "bg-primary text-white",
+  outline: "bg-transparent hover:bg-lightPurple text-primary",
+};
+
+const Button = ({ variant = "fill", icon, children, ...buttonProps }: Props) => {
   return (
     <button
       {...buttonProps}
-      className={`px-[27px] py-[11px] ${btnBg} rounded-lg font-semibold text-white shadow transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50`}
+      className={`flex items-center justify-center gap-2 border border-primary px-[27px] py-[11px] ${variantOptions[variant]} rounded-lg font-semibold shadow transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50`}
     >
-      {children}
+      {icon} {children}
     </button>
   );
 };

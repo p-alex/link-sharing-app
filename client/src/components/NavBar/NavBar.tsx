@@ -1,32 +1,57 @@
-import LinkIcon from "../../svgs/LinkIcon";
-import ProfileDetailsHeaderIcon from "../../svgs/ProfileDetailsHeaderIcon";
-import PreviewHeaderIcon from "../../svgs/PreviewHeaderIcon";
-import Logo from "../Logo";
-import NavBarLink from "./NavBarLink";
+import { Link, NavLink } from "react-router-dom";
+import { EditIcon, LinkIcon } from "../../svgs";
+import NavProfile from "./NavProfile";
 
 const NavBar = () => {
   return (
-    <nav className="mt-6 flex w-full items-center justify-between rounded-lg bg-white px-6 py-4 max-[800px]:mt-0 max-[800px]:rounded-none">
-      <Logo />
-      <ul className="flex items-center gap-4 max-[800px]:gap-0">
+    <nav className="relative mt-6 flex w-full items-center justify-between rounded-lg bg-white px-6 py-4 max-[800px]:mt-0 max-[800px]:rounded-none max-[800px]:px-4">
+      <Link to="/links" aria-label="devlinks">
+        <img
+          src="/images/logo-devlinks-large.svg"
+          className="block max-[800px]:hidden"
+          width={146}
+          height={32}
+          alt=""
+        />
+        <img
+          src="/images/logo-devlinks-small.svg"
+          className="hidden max-[800px]:block"
+          width={32}
+          height={32}
+          alt=""
+        />
+      </Link>
+      <ul className="flex items-center gap-2">
         <li>
-          <NavBarLink to="/links" title="links" icon={<LinkIcon width={20} height={20} />}>
-            Links
-          </NavBarLink>
+          <NavLink
+            to="/links"
+            className={({ isActive }) =>
+              `${
+                isActive ? "bg-lightPurple text-primary" : ""
+              } flex items-center gap-2 rounded-lg px-6 py-3 font-semibold text-grey transition-colors hover:text-primary max-[800px]:px-3`
+            }
+            title="links"
+          >
+            <LinkIcon width={20} height={20} />
+            <span className="block max-sm:hidden">Links</span>
+          </NavLink>
         </li>
         <li>
-          <NavBarLink
+          <NavLink
             to="/profile-details"
+            className={({ isActive }) =>
+              `${
+                isActive ? "bg-lightPurple text-primary" : ""
+              } flex items-center gap-2 rounded-lg px-6 py-3 font-semibold text-grey transition-colors hover:text-primary max-[800px]:px-3`
+            }
             title="profile details"
-            icon={<ProfileDetailsHeaderIcon width={20} height={20} />}
           >
-            Profile Details
-          </NavBarLink>
+            <EditIcon width={20} height={20} />
+            <span className="block max-sm:hidden">Profile Details</span>
+          </NavLink>
         </li>
       </ul>
-      <NavBarLink to="/preview" title="preview" icon={<PreviewHeaderIcon width={20} height={20} />}>
-        Preview
-      </NavBarLink>
+      <NavProfile />
     </nav>
   );
 };

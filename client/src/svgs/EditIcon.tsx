@@ -1,24 +1,26 @@
+import React from "react";
+
 interface Props extends React.SVGAttributes<SVGElement> {}
 
-const LinkIcon = ({ ...svgProps }: Props) => {
+const EditIcon = ({ ...svgProps }: Props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      strokeWidth="2"
       stroke="currentColor"
-      width="1rem"
-      height="1rem"
+      strokeWidth="2"
+      width={"1rem"}
+      height={"1rem"}
       {...svgProps}
     >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"
+        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
       />
     </svg>
   );
 };
 
-export default LinkIcon;
+export default EditIcon;

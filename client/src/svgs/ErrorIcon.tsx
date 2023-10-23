@@ -5,17 +5,20 @@ interface Props extends React.SVGAttributes<SVGElement> {}
 const ErrorIcon = ({ ...svgProps }: Props) => {
   return (
     <svg
-      stroke="currentColor"
-      fill="currentColor"
-      strokeWidth="0"
-      viewBox="0 0 24 24"
-      height="16px"
-      width="16px"
       xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth="2"
+      stroke="currentColor"
+      width={"1rem"}
+      height={"1rem"}
       {...svgProps}
     >
-      <path d="M11.953 2C6.465 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.493 2 11.953 2zM12 20c-4.411 0-8-3.589-8-8s3.567-8 7.953-8C16.391 4 20 7.589 20 12s-3.589 8-8 8z"></path>
-      <path d="M11 7h2v7h-2zm0 8h2v2h-2z"></path>
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+      />
     </svg>
   );
 };
