@@ -41,12 +41,12 @@ class SessionRepository extends Repository<Session> {
     return true;
   }
 
-  async deleteById(id: string): Promise<boolean> {
+  async deleteById(session: Partial<Session>): Promise<boolean> {
     await this._database.client
       .createQueryBuilder()
       .delete()
       .from(Session)
-      .where("id = :id", { id })
+      .where("id = :id", { id: session.id })
       .execute();
     return true;
   }

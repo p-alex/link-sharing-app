@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import Session from "../session/session.entity";
+import Link from "../link/link.entity";
 
 const AUTH_PROVIDERS = ["github", "google", "linkedin", "discord"] as const;
 
@@ -19,6 +20,9 @@ class User {
   @OneToMany(() => Session, (session) => session.user)
   public readonly sessions: Session[];
 
+  @OneToMany(() => Link, (link) => link.user)
+  public readonly links: Link[];
+
   @Column("bigint", { default: Date.now(), nullable: false })
   public created_at: number;
 
@@ -36,6 +40,7 @@ class User {
     email: string,
     password: string,
     sessions: Session[],
+    links: Link[],
     created_at: number,
     modified_at: number,
     auth_provider: OAuthProvidersType,
@@ -45,6 +50,7 @@ class User {
     this.email = email;
     this.password = password;
     this.sessions = sessions;
+    this.links = links;
     this.created_at = created_at;
     this.modified_at = modified_at;
     this.auth_provider = auth_provider;

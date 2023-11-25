@@ -11,7 +11,7 @@ const Input = forwardRef(({ icon, ...inputProps }: Props, ref: LegacyRef<HTMLInp
     <div className="group relative flex w-full flex-col gap-1">
       <div
         className={`flex h-[48px] w-full items-center gap-[12px] rounded-lg border bg-white p-4 transition-shadow group-focus-within:shadow-inputFocus ${
-          isError ? "border-error" : "border-grey"
+          isError ? "border-error" : "border-mediumGrey"
         } group-focus-within:border-purple`}
       >
         {icon && icon}

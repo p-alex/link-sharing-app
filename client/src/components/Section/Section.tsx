@@ -6,11 +6,11 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 
 const Section = ({ title, description, children, ...sectionProps }: Props) => {
   return (
-    <section {...sectionProps} className="rounded-[12px] bg-white p-5 sm:p-10">
+    <section {...sectionProps} className="w-full rounded-[12px] bg-white p-5 sm:p-10">
       {title && (
         <div className="mb-10 flex flex-col gap-2">
           <h1>{title}</h1>
-          {description && <p className="text-grey text-base">{description}</p>}
+          {description && <p className="text-base text-grey">{description}</p>}
         </div>
       )}
       {children}

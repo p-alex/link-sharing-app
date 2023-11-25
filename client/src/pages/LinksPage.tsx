@@ -1,9 +1,10 @@
 import Layout from "../layout";
+import LinkCustomizer from "../components/LinkCustomizer";
 
 const LinksPage = () => {
   return (
     <Layout>
-      <div></div>
+      <LinkCustomizer />
     </Layout>
   );
 };
