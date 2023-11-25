@@ -11,7 +11,7 @@ const NavProfile = () => {
         onClick={handleToggleDropdown}
         className={`${
           isActive ? "bg-lightPurple text-primary" : ""
-        } flex items-center gap-2 rounded-lg p-3 font-semibold text-grey transition-colors hover:text-primary max-[800px]:px-3`}
+        } flex items-center gap-2 rounded-lg p-3 font-semibold text-mediumGrey transition-colors hover:text-primary max-[800px]:px-3`}
         title="account"
       >
         <ProfileDetailsHeaderIcon width={24} height={24} />{" "}
@@ -24,13 +24,13 @@ const NavProfile = () => {
             </p>
             <Link
               to="/settings"
-              className="flex items-center justify-center gap-2 rounded-lg px-6 py-3 font-semibold text-grey transition-colors hover:bg-lightPurple hover:text-primary max-[800px]:px-3"
+              className="flex items-center justify-center gap-2 rounded-lg px-6 py-3 font-semibold text-mediumGrey transition-colors hover:bg-lightPurple hover:text-primary max-[800px]:px-3"
             >
               <SettingsIcon width={20} height={20} /> Settings
             </Link>
             <button
               onClick={handleLogout}
-              className="flex items-center justify-center gap-2 rounded-lg px-6 py-3 font-semibold text-grey transition-colors hover:bg-red-100 hover:text-error max-[800px]:px-3"
+              className="flex items-center justify-center gap-2 rounded-lg px-6 py-3 font-semibold text-mediumGrey transition-colors hover:bg-red-100 hover:text-error max-[800px]:px-3"
             >
               <LogoutIcon width={20} height={20} /> Logout
             </button>

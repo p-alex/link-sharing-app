@@ -20,6 +20,8 @@ import CodeGenerator from "./utils/codeGenerator";
 import VerificationTokenRepository from "./modules/verificationToken/verificationToken.repository";
 import ForgetPasswordVerificationTemplate from "./emailTemplates/ResetPasswordVerificationTemplate";
 import VerificationTokenVerifier from "./utils/verificationTokenVerifier";
+import LinkRepository from "./modules/link/link.repository";
+import LinkService from "./modules/link/link.service";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -33,6 +35,9 @@ container.bind(UserRepository).toSelf();
 container.bind(SessionController).toSelf();
 container.bind(SessionService).toSelf();
 container.bind(SessionRepository).toSelf();
+
+container.bind(LinkService).toSelf();
+container.bind(LinkRepository).toSelf();
 
 container.bind(VerificationTokenRepository).toSelf();
 

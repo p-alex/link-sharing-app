@@ -20,6 +20,7 @@ export interface CustomRequest<
 import "./modules/user/user.controller";
 import "./modules/auth/auth.controller";
 import "./modules/session/session.controller";
+import "./modules/link/link.controller";
 
 class Server {
   setup() {
@@ -30,16 +31,13 @@ class Server {
     });
 
     server.setConfig((app) => {
-      app.use(helmet());
       app.use(
         cors({
           credentials: true,
-          origin:
-            config.NODE_ENV === "development"
-              ? ["http://localhost:5173", "http://localhost:4173"]
-              : [""],
+          origin: config.CLIENT_BASE_URL,
         }),
       );
+      app.use(helmet());
       app.use(express.json());
       app.use(express.urlencoded({ extended: true }));
       app.use(cookieParser());

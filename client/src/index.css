@@ -32,9 +32,10 @@ body {
 }
 
 p {
-  @apply text-grey text-base;
+  @apply text-mediumGrey text-base;
 }
 
-h1 {
+h1,
+h2 {
   @apply text-[32px] font-bold leading-[48px] text-darkGray;
 }

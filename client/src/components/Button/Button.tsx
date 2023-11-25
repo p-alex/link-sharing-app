@@ -1,4 +1,5 @@
 import { ButtonHTMLAttributes } from "react";
+import { twMerge } from "tailwind-merge";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: keyof typeof variantOptions;
@@ -15,7 +16,10 @@ const Button = ({ variant = "fill", icon, children, ...buttonProps }: Props) => 
   return (
     <button
       {...buttonProps}
-      className={`flex items-center justify-center gap-2 border border-primary px-[27px] py-[11px] ${variantOptions[variant]} rounded-lg font-semibold shadow transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50`}
+      className={twMerge(
+        `flex items-center justify-center gap-2 border border-primary px-[27px] py-[11px] ${variantOptions[variant]} rounded-lg font-semibold shadow transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50`,
+        buttonProps.className,
+      )}
     >
       {icon} {children}
     </button>

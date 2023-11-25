@@ -5,7 +5,8 @@ export default {
     extend: {
       colors: {
         darkGray: "#333333",
-        grey: "#737373",
+        mediumGrey: "#737373",
+        borderColor: "#D9D9D9",
         primary: "#633CFF",
         lightPurple: "#EFEBFF",
         siteBg: "#FAFAFA",
