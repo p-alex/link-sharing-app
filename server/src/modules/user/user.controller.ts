@@ -40,7 +40,7 @@ export class UserController {
 
   @httpDelete("/:id", mediumRateLimit, requireAuth, validateResource(deleteUserSchema))
   async delete(req: CustomRequest<object, object, DeleteUserInput>, res: Response) {
-    await this._userService.delete(req.body.id);
+    await this._userService.delete(req.body);
     return HttpResponse.success(res);
   }
 

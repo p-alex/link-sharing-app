@@ -12,7 +12,7 @@ class LinkService {
   }
 
   async delete(link: Partial<Link>) {
-    const result = await this._unitOfWork.link.deleteById(link);
+    const result = await this._unitOfWork.link.deleteById(link.id!);
     return result;
   }
 

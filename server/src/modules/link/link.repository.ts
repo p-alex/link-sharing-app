@@ -41,12 +41,12 @@ class LinkRepository extends Repository<Link> {
       .execute();
     return true;
   }
-  async deleteById(entity: Partial<Link>): Promise<boolean> {
+  async deleteById(id: string): Promise<boolean> {
     await this._database.manager
       .createQueryBuilder()
       .delete()
       .from(Link)
-      .where("id = :id", { id: entity.id })
+      .where("id = :id", { id })
       .execute();
     return true;
   }

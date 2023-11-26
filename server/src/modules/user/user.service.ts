@@ -55,8 +55,8 @@ class UserService {
     return true;
   }
 
-  async delete(id: string) {
-    await this._unitOfWork.user.deleteById(id);
+  async delete(user: Partial<User>) {
+    await this._unitOfWork.user.deleteById(user.id!);
     return true;
   }
 

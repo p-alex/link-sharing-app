@@ -6,7 +6,7 @@ abstract class Repository<TEntity> {
   abstract findOneById(id: string): Promise<TEntity | null>;
   abstract create(entity: Partial<TEntity>): Promise<Partial<TEntity>>;
   abstract update(entity: Partial<TEntity>): Promise<boolean>;
-  abstract deleteById(entity: Partial<TEntity>): Promise<boolean>;
+  abstract deleteById(id: string): Promise<boolean>;
 }
 
 export default Repository;

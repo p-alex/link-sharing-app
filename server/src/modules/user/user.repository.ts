@@ -39,8 +39,8 @@ class UserRepository extends Repository<User> {
     return true;
   }
 
-  async deleteById(user: Partial<User>): Promise<boolean> {
-    await this._database.manager.delete(User, { id: user.id });
+  async deleteById(id: string): Promise<boolean> {
+    await this._database.manager.delete(User, { id });
     return true;
   }
 }
