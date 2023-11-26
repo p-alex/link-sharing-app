@@ -7,7 +7,7 @@ const LinkCustomizer = () => {
   const {
     links,
     fieldErrors,
-    isModified,
+    isLinkListModified,
     handleAddLink,
     handleRemoveLink,
     handleChangeLinkPlatform,
@@ -61,7 +61,7 @@ const LinkCustomizer = () => {
                 >
                   {links.map((link, index) => {
                     return (
-                      <Draggable key={link.id} draggableId={link.id!} index={index}>
+                      <Draggable key={link.id} draggableId={link.id} index={index}>
                         {(provided) => (
                           <li {...provided.draggableProps} ref={provided.innerRef}>
                             <LinkItem
@@ -86,7 +86,11 @@ const LinkCustomizer = () => {
         )}
         {links.length > 0 && (
           <div className="border-grey mt-4 flex justify-end border-t pt-6">
-            <Button variant="fill" type="submit" disabled={links.length === 0 || !isModified}>
+            <Button
+              variant="fill"
+              type="submit"
+              disabled={links.length === 0 || !isLinkListModified}
+            >
               {isLoading ? "Loading..." : "Save"}
             </Button>
           </div>

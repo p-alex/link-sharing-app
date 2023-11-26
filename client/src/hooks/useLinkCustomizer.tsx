@@ -1,33 +1,49 @@
 import { useState, useCallback, useEffect } from "react";
-import { Link, PlatformType, linksSchema } from "../schemas/link.schema";
+import { LinkType, PlatformType, linksSchema } from "../schemas/link.schema";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { IDefaultResponse } from "../apiRequests";
 import { v4 as uuidV4 } from "uuid";
 import { ZodError } from "zod";
 import { DropResult } from "react-beautiful-dnd";
 import suportedLinkPlatforms from "../static/supported-link-platforms";
+import { useDispatch } from "react-redux";
+import {
+  addLinkAction,
+  removeLinkAction,
+  reorderLinksAction,
+  saveLinksAction,
+  setLinkHrefAction,
+  setLinkPlatformAction,
+  setLinksAction,
+} from "../redux/features/links/linksSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/app/store";
 
 export type LinkCustomizerFieldErrorType = { [key: number]: { path: string; message: string }[] };
 
 const useLinkCustomizer = () => {
   const axiosPrivate = useAxiosPrivate();
+
+  const dispatch = useDispatch();
+
+  const links = useSelector((state: RootState) => state.links.links);
+  const isLinkListModified = useSelector((state: RootState) => state.links.isLinkListModified);
+
   const [isLoading, setIsLoading] = useState(true);
-  const [links, setLinks] = useState<Partial<Link>[]>([]);
   const [responseError, setResponseError] = useState<string>("");
   const [fieldErrors, setFieldErrors] = useState<LinkCustomizerFieldErrorType | null>(null);
-  const [isModified, setIsModified] = useState(false);
+  const [isFetchedOnce, setIsFetchedOnce] = useState(false);
 
   const handleGetLinks = useCallback(async () => {
     try {
       setIsLoading(true);
-      const result = await axiosPrivate.get<IDefaultResponse<{ links: Link[] }>>("/links");
+      const result = await axiosPrivate.get<IDefaultResponse<{ links: LinkType[] }>>("/links");
       const data = result.data;
       if (data.success && data.data) {
-        setLinks(
-          data.data.links
-            .map((link) => ({ ...link, isSaved: true }))
-            .sort((a, b) => (a.index > b.index ? 1 : -1)),
-        );
+        const links = data.data.links
+          .map((link) => ({ ...link, isSaved: true }))
+          .sort((a, b) => (a.index > b.index ? 1 : -1));
+        dispatch(setLinksAction(links));
       }
     } catch (error) {
       setResponseError(
@@ -35,28 +51,23 @@ const useLinkCustomizer = () => {
       );
     } finally {
       setIsLoading(false);
+      setIsFetchedOnce(true);
     }
-  }, [axiosPrivate]);
+  }, [axiosPrivate, dispatch]);
 
   useEffect(() => {
+    if (isFetchedOnce) return;
     handleGetLinks();
-  }, [handleGetLinks]);
+  }, [isFetchedOnce, handleGetLinks]);
 
-  const handleRemoveLink = async (linkToBeDeleted: Partial<Link>) => {
+  const handleRemoveLink = async (linkToBeDeleted: LinkType) => {
     try {
       setIsLoading(true);
-      setIsModified(true);
       handleResetFieldErrors();
-      let newLinks = links.filter((link) => link.id !== linkToBeDeleted.id);
-      if (newLinks.length > 0) {
-        newLinks = handleRefreshLinkIndexes(newLinks);
-      }
-      setLinks(newLinks);
+      dispatch(removeLinkAction({ linkId: linkToBeDeleted.id }));
       if (linkToBeDeleted.isSaved) {
         await axiosPrivate.delete("/links", { data: { link: linkToBeDeleted } });
-        if (newLinks.length > 0) {
-          await handleSaveLinks(newLinks);
-        }
+        dispatch(saveLinksAction());
       }
     } catch (error) {
       setResponseError("Something went wrong while trying to remove the link. Try again later.");
@@ -65,17 +76,12 @@ const useLinkCustomizer = () => {
     }
   };
 
-  const handleSaveLinks = async (links: Partial<Link>[]) => {
+  const handleSaveLinks = async (links: Partial<LinkType>[]) => {
     try {
       setIsLoading(true);
-      setIsModified(false);
       const isValid = handleValidate();
       if (!isValid) return;
-      const newLinks = links.map((link) => {
-        link.isSaved = true;
-        return link;
-      });
-      setLinks(newLinks);
+      dispatch(saveLinksAction());
       await axiosPrivate.put<IDefaultResponse<null>>("/links", { links });
     } catch (error) {
       setResponseError("Something went wrong while trying to save links. Try again later.");
@@ -92,14 +98,14 @@ const useLinkCustomizer = () => {
 
   const handleAddLink = async () => {
     if (links.length + 1 > Object.keys(suportedLinkPlatforms).length) return;
-    const newLink: Partial<Link> = {
+    const newLink: LinkType = {
       id: uuidV4(),
       index: links.length,
       platform: "github",
       link: "",
       isSaved: false,
     };
-    setLinks((prevState) => [...prevState, newLink]);
+    dispatch(addLinkAction({ link: newLink }));
   };
 
   const handleResetFieldErrors = () => {
@@ -107,36 +113,11 @@ const useLinkCustomizer = () => {
   };
 
   const handleChangeLinkPlatform = (linkId: string, platform: PlatformType) => {
-    setIsModified(true);
-    setLinks((prevState) =>
-      prevState.map((link) => {
-        if (link.id === linkId) {
-          link.platform = platform;
-          return link;
-        }
-        return link;
-      }),
-    );
+    dispatch(setLinkPlatformAction({ linkId, platform }));
   };
 
   const handleChangeLinkHref = (linkId: string, href: string) => {
-    setIsModified(true);
-    setLinks((prevState) =>
-      prevState.map((link) => {
-        if (link.id === linkId) {
-          link.link = href;
-          return link;
-        }
-        return link;
-      }),
-    );
-  };
-
-  const handleRefreshLinkIndexes = (links: Partial<Link>[]) => {
-    return links.map((link, index) => {
-      link.index = index;
-      return link;
-    });
+    dispatch(setLinkHrefAction({ linkId, href }));
   };
 
   const handleValidate = () => {
@@ -167,13 +148,10 @@ const useLinkCustomizer = () => {
   const handleReorderLinks = (result: DropResult) => {
     const { destination, source } = result;
     if (!destination || !source) return;
-    const newLinks = Array.from(links);
-    const temp = newLinks[destination.index];
-    newLinks[destination.index] = newLinks[source.index];
-    newLinks[source.index] = temp;
-    setLinks(handleRefreshLinkIndexes(newLinks));
+    dispatch(
+      reorderLinksAction({ sourceIndex: source.index, destinationIndex: destination.index }),
+    );
     handleReorderFieldErrors(source.index, destination.index);
-    setIsModified(true);
   };
 
   const handleReorderFieldErrors = (sourceIndex: number, destinationIndex: number) => {
@@ -200,7 +178,7 @@ const useLinkCustomizer = () => {
     links,
     fieldErrors,
     responseError,
-    isModified,
+    isLinkListModified,
     isLoading,
     handleAddLink,
     handleRemoveLink,

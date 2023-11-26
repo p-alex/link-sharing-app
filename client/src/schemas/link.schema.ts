@@ -25,6 +25,7 @@ export const linksSchema = z.array(
       platform: z.enum(PLATFORMS_LIST),
       link: z.string().min(1, "Can't be blank").url(),
       index: z.number().min(0),
+      isSaved: z.boolean(),
     })
     .superRefine((val, ctx) => {
       function addIssue(platform: typeof val.platform) {
@@ -95,10 +96,8 @@ export const linksSchema = z.array(
           if (!val.link.match(/https:\/\/(www\.)?(twitch.tv\/)[a-zA-Z\-@_0-9]+/g)?.[0])
             addIssue(val.platform);
           break;
-        default:
-          break;
       }
     }),
 );
 
-export type Link = z.infer<typeof linksSchema>["0"] & { isSaved: boolean };
+export type LinkType = z.infer<typeof linksSchema>["0"];
