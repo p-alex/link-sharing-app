@@ -4,13 +4,13 @@ import { SignInSchemaType } from "../schemas/user.schema";
 import { emailSignInRequest } from "../apiRequests/auth";
 import getParamFromUrl from "../utils/getParamFromUrl";
 import useCaptcha from "./useCaptcha";
-import useAuth from "./useAuth";
+import { useDispatch } from "react-redux";
+import { loginAction } from "../redux/features/auth/authSlice";
 
 const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
   const navigate = useNavigate();
   const [oauthError, setOAuthError] = useState("");
-
-  const { dispatchAuth } = useAuth();
+  const dispatch = useDispatch();
 
   const { captchaRef, getCaptchaToken } = useCaptcha();
 
@@ -24,7 +24,7 @@ const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
 
     if (success && data) {
       resetForm();
-      dispatchAuth({ type: "LOGIN", payload: data });
+      dispatch(loginAction({ id: data.id, email: data.email, accessToken: data.accessToken }));
       navigate("/links");
     }
   };

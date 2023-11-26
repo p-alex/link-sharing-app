@@ -1,9 +1,9 @@
-import { useContext } from "react";
-import { AuthContext } from "../authContext/AuthContextProvider";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/app/store";
 
 const useAuth = () => {
-  const { authState, dispatchAuth } = useContext(AuthContext);
-  return { isAuth: authState?.accessToken !== "", authState, dispatchAuth };
+  const authState = useSelector((state: RootState) => state.auth);
+  return { isAuth: authState.accessToken !== "", authState };
 };
 
 export default useAuth;

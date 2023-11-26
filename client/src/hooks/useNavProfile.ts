@@ -3,10 +3,13 @@ import useAuth from "./useAuth";
 import { useEffect, useState } from "react";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { IDefaultResponse } from "../apiRequests";
+import { useDispatch } from "react-redux";
+import { logoutAction } from "../redux/features/auth/authSlice";
 
 const useNavProfile = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { authState, dispatchAuth } = useAuth();
+  const { authState } = useAuth();
   const [isActive, setIsActive] = useState(false);
   const axiosPrivate = useAxiosPrivate();
 
@@ -20,7 +23,7 @@ const useNavProfile = () => {
         { withCredentials: true },
       );
       if (result.data.success) {
-        dispatchAuth({ type: "LOGOUT", payload: null });
+        dispatch(logoutAction());
         navigate("/sign-in");
       }
     } catch (error) {
