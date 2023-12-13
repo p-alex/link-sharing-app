@@ -85,7 +85,7 @@ class AuthService {
       });
     }
 
-    if (userWithEmail?.auth_provider !== type)
+    if (userWithEmail && userWithEmail?.auth_provider !== type)
       return {
         success: false,
         message: "Account does not exist",
