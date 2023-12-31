@@ -1,13 +1,13 @@
 import { Routes, Route } from "react-router-dom";
-import SignUp from "./pages/SignUpPage";
-import SignIn from "./pages/SignInPage";
+import SignUp from "./pages/SignUpPage/SignUpPage";
+import SignIn from "./pages/SignInPage/SignInPage";
 import ProtectedRoute from "./ProtectedRoute";
 import RefreshTokenRoute from "./RefreshTokenRoute";
 import RedirectIfSignedIn from "./RedirectIfSignedIn";
-import VerifyEmail from "./pages/VerifyEmailPage";
-import LinksPage from "./pages/LinksPage";
-import ForgetPasswordPage from "./pages/ForgetPasswordPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
+import VerifyEmail from "./pages/VerifyEmailPage/VerifyEmailPage";
+import LinksPage from "./pages/LinksPage/LinksPage";
+import ForgetPasswordPage from "./pages/ForgetPasswordPage/ForgetPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 import RedirectToHomePage from "./RedirectToHomePage";
 
 function App() {

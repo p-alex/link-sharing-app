@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { SignUpSchemaType } from "../schemas/user.schema";
-import { createUser } from "../apiRequests/users";
-import useCaptcha from "./useCaptcha";
+import { SignUpSchemaType } from "../../schemas/user.schema";
+import { createUser } from "../../apiRequests/users";
+import useCaptcha from "../../hooks/useCaptcha";
 
 const useSignUpPage = ({ formReset }: { formReset: () => void }) => {
   const [successMessage, setSuccessMessage] = useState("");

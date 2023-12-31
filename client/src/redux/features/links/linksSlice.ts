@@ -1,6 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { LinkType, PlatformType } from "../../../schemas/link.schema";
 import swapItemInArray from "../../../utils/swapItemInArray";
+import { v4 as uuidV4 } from "uuid";
+import { refreshLinksIndexes } from "../../../utils/refreshLinksIndexes";
 
 interface ILinksState {
   isLinkListModified: boolean;
@@ -12,13 +14,6 @@ const initialState: ILinksState = {
   links: [],
 };
 
-const refreshLinksIndexes = (links: LinkType[]) => {
-  return links.map((link, index) => {
-    link.index = index;
-    return link;
-  });
-};
-
 const linksSlice = createSlice({
   name: "links",
   initialState,
@@ -27,10 +22,25 @@ const linksSlice = createSlice({
       state.links = action.payload;
       return state;
     },
-    addLinkAction: (state, action: PayloadAction<{ link: LinkType }>) => {
-      state.isLinkListModified = true;
-      state.links = [...state.links, action.payload.link];
-      return state;
+    addLinkAction: {
+      reducer: (state, action: PayloadAction<{ link: LinkType }>) => {
+        state.isLinkListModified = true;
+        state.links = [...state.links, action.payload.link];
+        return state;
+      },
+      prepare: ({ index }: { index: number }) => {
+        return {
+          payload: {
+            link: {
+              id: uuidV4(),
+              index,
+              platform: "github" as PlatformType,
+              link: "",
+              isSaved: false,
+            },
+          },
+        };
+      },
     },
     removeLinkAction: (state, action: PayloadAction<{ linkId: string }>) => {
       state.isLinkListModified = false;
@@ -39,10 +49,11 @@ const linksSlice = createSlice({
       );
       return state;
     },
-    saveLinksAction: (state) => {
+    setLinksAsSavedAction: (state) => {
       state.isLinkListModified = false;
-      state.links = state.links.map((link) => {
+      state.links = state.links.map((link, index) => {
         link.isSaved = true;
+        link.index = index;
         return link;
       });
       return state;
@@ -52,8 +63,6 @@ const linksSlice = createSlice({
       action: PayloadAction<{ sourceIndex: number; destinationIndex: number }>,
     ) => {
       state.isLinkListModified = true;
-      state.links[action.payload.sourceIndex].isSaved = false;
-      state.links[action.payload.destinationIndex].isSaved = false;
       state.links = refreshLinksIndexes(
         swapItemInArray(state.links, action.payload.sourceIndex, action.payload.destinationIndex),
       );
@@ -93,7 +102,7 @@ export const {
   setLinksAction,
   addLinkAction,
   removeLinkAction,
-  saveLinksAction,
+  setLinksAsSavedAction,
   reorderLinksAction,
   setLinkPlatformAction,
   setLinkHrefAction,

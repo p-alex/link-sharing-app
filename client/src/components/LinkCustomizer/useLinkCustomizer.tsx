@@ -1,23 +1,24 @@
 import { useState, useCallback, useEffect } from "react";
-import { LinkType, PlatformType, linksSchema } from "../schemas/link.schema";
-import useAxiosPrivate from "./useAxiosPrivate";
-import { IDefaultResponse } from "../apiRequests";
-import { v4 as uuidV4 } from "uuid";
+import { LinkType, PlatformType, linksSchema } from "../../schemas/link.schema";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { IDefaultResponse } from "../../apiRequests";
 import { ZodError } from "zod";
 import { DropResult } from "react-beautiful-dnd";
-import suportedLinkPlatforms from "../static/supported-link-platforms";
+import suportedLinkPlatforms from "../../static/supported-link-platforms";
 import { useDispatch } from "react-redux";
 import {
   addLinkAction,
   removeLinkAction,
   reorderLinksAction,
-  saveLinksAction,
   setLinkHrefAction,
   setLinkPlatformAction,
   setLinksAction,
-} from "../redux/features/links/linksSlice";
+  setLinksAsSavedAction,
+} from "../../redux/features/links/linksSlice";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/app/store";
+import { RootState } from "../../redux/app/store";
+import { addPopupAction } from "../../redux/features/globalPopupsSlice/globalPopupsSlice";
+import { refreshLinksIndexes } from "../../utils/refreshLinksIndexes";
 
 export type LinkCustomizerFieldErrorType = { [key: number]: { path: string; message: string }[] };
 
@@ -30,7 +31,6 @@ const useLinkCustomizer = () => {
   const isLinkListModified = useSelector((state: RootState) => state.links.isLinkListModified);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [responseError, setResponseError] = useState<string>("");
   const [fieldErrors, setFieldErrors] = useState<LinkCustomizerFieldErrorType | null>(null);
   const [isFetchedOnce, setIsFetchedOnce] = useState(false);
 
@@ -46,8 +46,11 @@ const useLinkCustomizer = () => {
         dispatch(setLinksAction(links));
       }
     } catch (error) {
-      setResponseError(
-        "Something went wrong while trying to fetch your social links. Try again later.",
+      dispatch(
+        addPopupAction({
+          message: "Something went wrong while trying to fetch your social links. Try again later.",
+          type: "error",
+        }),
       );
     } finally {
       setIsLoading(false);
@@ -61,30 +64,50 @@ const useLinkCustomizer = () => {
   }, [isFetchedOnce, handleGetLinks]);
 
   const handleRemoveLink = async (linkToBeDeleted: LinkType) => {
+    if (!linkToBeDeleted.isSaved) {
+      dispatch(removeLinkAction({ linkId: linkToBeDeleted.id }));
+      return;
+    }
     try {
       setIsLoading(true);
       handleResetFieldErrors();
-      dispatch(removeLinkAction({ linkId: linkToBeDeleted.id }));
       if (linkToBeDeleted.isSaved) {
         await axiosPrivate.delete("/links", { data: { link: linkToBeDeleted } });
-        dispatch(saveLinksAction());
+        dispatch(removeLinkAction({ linkId: linkToBeDeleted.id }));
+        const newLinks = refreshLinksIndexes(
+          links.filter((link) => link.id !== linkToBeDeleted.id),
+        );
+        if (newLinks.length > 0) {
+          await handleSaveLinks(newLinks);
+        }
       }
     } catch (error) {
-      setResponseError("Something went wrong while trying to remove the link. Try again later.");
+      dispatch(
+        addPopupAction({
+          message: "Error occured while trying to remove the link. Try again later.",
+          type: "error",
+        }),
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSaveLinks = async (links: Partial<LinkType>[]) => {
+  const handleSaveLinks = async (links: LinkType[]) => {
     try {
       setIsLoading(true);
       const isValid = handleValidate();
       if (!isValid) return;
-      dispatch(saveLinksAction());
       await axiosPrivate.put<IDefaultResponse<null>>("/links", { links });
+      dispatch(setLinksAsSavedAction());
+      dispatch(addPopupAction({ message: "Links saved successfully!", type: "info" }));
     } catch (error) {
-      setResponseError("Something went wrong while trying to save links. Try again later.");
+      dispatch(
+        addPopupAction({
+          message: "Something went wrong while trying to save links. Try again later.",
+          type: "error",
+        }),
+      );
     } finally {
       setIsLoading(false);
     }
@@ -93,19 +116,12 @@ const useLinkCustomizer = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     handleResetFieldErrors();
-    handleSaveLinks(links);
+    await handleSaveLinks(links);
   };
 
   const handleAddLink = async () => {
     if (links.length + 1 > Object.keys(suportedLinkPlatforms).length) return;
-    const newLink: LinkType = {
-      id: uuidV4(),
-      index: links.length,
-      platform: "github",
-      link: "",
-      isSaved: false,
-    };
-    dispatch(addLinkAction({ link: newLink }));
+    dispatch(addLinkAction({ index: links.length }));
   };
 
   const handleResetFieldErrors = () => {
@@ -163,21 +179,9 @@ const useLinkCustomizer = () => {
     setFieldErrors(newFieldError);
   };
 
-  const handleSetResponseError = (message: string) => {
-    setResponseError(message);
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => handleSetResponseError(""), 5000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [responseError]);
-
   return {
     links,
     fieldErrors,
-    responseError,
     isLinkListModified,
     isLoading,
     handleAddLink,

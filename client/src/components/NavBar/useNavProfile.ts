@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import useAuth from "./useAuth";
+import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
-import useAxiosPrivate from "./useAxiosPrivate";
-import { IDefaultResponse } from "../apiRequests";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { IDefaultResponse } from "../../apiRequests";
 import { useDispatch } from "react-redux";
-import { logoutAction } from "../redux/features/auth/authSlice";
+import { logoutAction } from "../../redux/features/auth/authSlice";
 
 const useNavProfile = () => {
   const dispatch = useDispatch();

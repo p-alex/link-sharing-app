@@ -1,12 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
-import Section from "../components/Section";
-import useForm from "../hooks/useForm";
-import { resetPasswordSchema } from "../schemas/user.schema";
-import Error from "../components/Error/Error";
-import InputGroup from "../components/InputGroup";
-import Button from "../components/Button";
-import SuccessIcon from "../svgs/SuccessIcon";
-import useResetPasswordPage from "../hooks/useResetPasswordPage";
+import Section from "../../components/Section";
+import useForm from "../../hooks/useForm";
+import { resetPasswordSchema } from "../../schemas/user.schema";
+import Error from "../../components/Error/Error";
+import InputGroup from "../../components/InputGroup";
+import Button from "../../components/Button";
+import SuccessIcon from "../../svgs/SuccessIcon";
+import useResetPasswordPage from "./useResetPasswordPage";
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate();

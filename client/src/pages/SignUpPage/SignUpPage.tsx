@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
-import InputGroup from "../components/InputGroup";
-import { signUpSchema } from "../schemas/user.schema";
-import useForm from "../hooks/useForm";
-import Section from "../components/Section";
-import OAuthButton from "../components/OAuthButton/OAuthButton";
-import Button from "../components/Button";
-import SuccessIcon from "../svgs/SuccessIcon";
-import Error from "../components/Error/Error";
-import useSignUpPage from "../hooks/useSignUpPage";
+import InputGroup from "../../components/InputGroup";
+import { signUpSchema } from "../../schemas/user.schema";
+import useForm from "../../hooks/useForm";
+import Section from "../../components/Section";
+import Button from "../../components/Button";
+import SuccessIcon from "../../svgs/SuccessIcon";
+import Error from "../../components/Error/Error";
+import useSignUpPage from "./useSignUpPage";
 import ReCaptcha from "react-google-recaptcha";
+import OAuthButton from "../../components/OAuthButton/OAuthButton";
 
 const SignUpPage = () => {
   const { register, handleSubmit, formState, reset } = useForm({

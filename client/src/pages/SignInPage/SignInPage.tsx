@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
-import InputGroup from "../components/InputGroup";
-import { signInSchema } from "../schemas/user.schema";
-import useForm from "../hooks/useForm";
-import Section from "../components/Section";
-import OAuthButton from "../components/OAuthButton/OAuthButton";
-import Button from "../components/Button";
-import Error from "../components/Error/Error";
-import useSignInPage from "../hooks/useSignInPage";
+import InputGroup from "../../components/InputGroup";
+import { signInSchema } from "../../schemas/user.schema";
+import useForm from "../../hooks/useForm";
+import Section from "../../components/Section";
+import Button from "../../components/Button";
+import Error from "../../components/Error/Error";
+import useSignInPage from "./useSignInPage";
 import ReCaptcha from "react-google-recaptcha";
+import OAuthButton from "../../components/OAuthButton/OAuthButton";
 
 const SignInPage = () => {
   const { register, formState, reset, handleSubmit } = useForm({

@@ -1,5 +1,5 @@
-import Layout from "../layout";
-import LinkCustomizer from "../components/LinkCustomizer";
+import Layout from "../../layout";
+import LinkCustomizer from "../../components/LinkCustomizer";
 
 const LinksPage = () => {
   return (

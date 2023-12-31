@@ -1,4 +1,4 @@
-import React, { HtmlHTMLAttributes, useEffect, useState } from "react";
+import React, { HtmlHTMLAttributes, useEffect, useState, useRef } from "react";
 import { useInputGroupContext } from "./InputGroupContext";
 import { v4 as uuidv4 } from "uuid";
 import { ChevronDownIcon, ChevronUpIcon } from "../../svgs";
@@ -7,7 +7,7 @@ interface Props extends HtmlHTMLAttributes<HTMLDivElement> {
   linkId: string;
   selectedOption: { icon: React.ReactNode; value: string };
   options: { icon: React.ReactNode; value: string }[];
-  handleOnChange?: (value: unknown) => void;
+  handleOnChange: (value: unknown) => void;
 }
 
 function SelectContainer({
@@ -18,7 +18,6 @@ function SelectContainer({
   ...divProps
 }: Props) {
   const [selectedOption, setSelectedOption] = useState<(typeof options)[number]>(selected);
-
   const [isActive, setIsActive] = useState(false);
 
   useInputGroupContext();
@@ -28,8 +27,16 @@ function SelectContainer({
     setIsActive((prevState) => !prevState);
   };
 
+  const loadCount = useRef<number>(0);
+
   useEffect(() => {
-    if (handleOnChange) handleOnChange(selectedOption.value);
+    if (loadCount.current !== 0) {
+      handleOnChange(selectedOption.value);
+    }
+
+    return () => {
+      loadCount.current = 1;
+    };
   }, [selectedOption]);
 
   return (

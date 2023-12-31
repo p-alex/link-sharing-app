@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { resetPassword, resetPasswordConfirmation } from "../apiRequests/users";
-import getParamFromUrl from "../utils/getParamFromUrl";
-import { ResetPasswordType } from "../schemas/user.schema";
-import useVerificationTokenConfirmation from "./useVerificationTokenConfirmation";
+import { resetPassword, resetPasswordConfirmation } from "../../apiRequests/users";
+import getParamFromUrl from "../../utils/getParamFromUrl";
+import { ResetPasswordType } from "../../schemas/user.schema";
+import useVerificationTokenConfirmation from "../../hooks/useVerificationTokenConfirmation";
 
 const useResetPasswordPage = ({ resetForm }: { resetForm: () => void }) => {
   const [step, setStep] = useState<

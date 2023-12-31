@@ -1,5 +1,5 @@
 import Button from "../Button";
-import useLinkCustomizer from "../../hooks/useLinkCustomizer";
+import useLinkCustomizer from "./useLinkCustomizer";
 import LinkItem from "./LinkItem";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -15,7 +15,6 @@ const LinkCustomizer = () => {
     handleSubmit,
     handleReorderLinks,
     isLoading,
-    responseError,
   } = useLinkCustomizer();
 
   if (isLoading) <p>Loading...</p>;
@@ -26,11 +25,6 @@ const LinkCustomizer = () => {
         <h1>Customize your links</h1>
         <p>Add/edit/remove links below and then share all your profiles with the world!</p>
       </header>
-      {responseError && (
-        <p className="w-max rounded-lg bg-error px-4 py-2 font-semibold text-white">
-          {responseError}
-        </p>
-      )}
       <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
         <Button variant="outline" type="button" onClick={handleAddLink}>
           + Add new link

@@ -22,6 +22,8 @@ import TwitterIcon from "./TwitterIcon";
 import YoutubeIcon from "./YoutubeIcon";
 import ChevronDownIcon from "./ChevronDownIcon";
 import ChevronUpIcon from "./ChevronUpIcon";
+import CloseIcon from "./CloseIcon";
+import InfoIcon from "./InfoIcon";
 
 export {
   ErrorIcon,
@@ -48,4 +50,6 @@ export {
   YoutubeIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  CloseIcon,
+  InfoIcon,
 };

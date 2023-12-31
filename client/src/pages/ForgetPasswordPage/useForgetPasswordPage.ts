@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { ForgetPasswordType } from "../schemas/user.schema";
-import { forgetPassword } from "../apiRequests/users";
-import useCaptcha from "./useCaptcha";
+import { ForgetPasswordType } from "../../schemas/user.schema";
+import { forgetPassword } from "../../apiRequests/users";
+import useCaptcha from "../../hooks/useCaptcha";
 
 const useForgetPasswordPage = ({ formReset }: { formReset: () => void }) => {
   const [success, setSuccess] = useState(false);

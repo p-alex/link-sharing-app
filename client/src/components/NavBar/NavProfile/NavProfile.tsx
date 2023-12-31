@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { LogoutIcon, ProfileDetailsHeaderIcon, SettingsIcon } from "../../../svgs";
-import useNavProfile from "../../../hooks/useNavProfile";
+import useNavProfile from "../useNavProfile";
 
 const NavProfile = () => {
   const { authState, handleLogout, handleToggleDropdown, isActive } = useNavProfile();

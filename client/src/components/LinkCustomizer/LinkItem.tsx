@@ -1,7 +1,7 @@
 import { GrabIcon, LinkIcon } from "../../svgs";
 import { LinkType, PlatformType } from "../../schemas/link.schema";
 import InputGroup from "../InputGroup";
-import { LinkCustomizerFieldErrorType } from "../../hooks/useLinkCustomizer";
+import { LinkCustomizerFieldErrorType } from "./useLinkCustomizer";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import SUPPORTED_LINK_PLATFORMS from "../../static/supported-link-platforms";
 

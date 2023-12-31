@@ -32,7 +32,7 @@ body {
 }
 
 p {
-  @apply text-mediumGrey text-base;
+  @apply text-base text-mediumGrey;
 }
 
 h1,

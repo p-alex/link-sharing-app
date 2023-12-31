@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { verifyEmailRequest } from "../apiRequests/auth";
-import useVerificationTokenConfirmation from "./useVerificationTokenConfirmation";
+import { verifyEmailRequest } from "../../apiRequests/auth";
+import useVerificationTokenConfirmation from "../../hooks/useVerificationTokenConfirmation";
 
 const useVerifyEmailPage = () => {
   const [error, setError] = useState("");

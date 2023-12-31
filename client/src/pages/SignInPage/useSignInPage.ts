@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { SignInSchemaType } from "../schemas/user.schema";
-import { emailSignInRequest } from "../apiRequests/auth";
-import getParamFromUrl from "../utils/getParamFromUrl";
-import useCaptcha from "./useCaptcha";
+import { SignInSchemaType } from "../../schemas/user.schema";
+import { emailSignInRequest } from "../../apiRequests/auth";
+import getParamFromUrl from "../../utils/getParamFromUrl";
+import useCaptcha from "../../hooks/useCaptcha";
 import { useDispatch } from "react-redux";
-import { loginAction } from "../redux/features/auth/authSlice";
+import { loginAction } from "../../redux/features/auth/authSlice";
 
 const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
   const navigate = useNavigate();
