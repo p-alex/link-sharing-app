@@ -7,13 +7,14 @@ import InputGroup from "../../components/InputGroup";
 import Button from "../../components/Button";
 import useForgetPasswordPage from "./useForgetPasswordPage";
 import ReCAPTCHA from "react-google-recaptcha";
+import useRedirectIfSignedIn from "../../hooks/useRedirectIfSignedIn";
 
 const ForgetPasswordPage = () => {
   const { formState, reset, register, handleSubmit } = useForm({
     payload: { email: "" },
     zodSchema: forgetPasswordSchema,
   });
-
+  useRedirectIfSignedIn({});
   const { success, submit, captchaRef } = useForgetPasswordPage({ formReset: reset });
 
   return (

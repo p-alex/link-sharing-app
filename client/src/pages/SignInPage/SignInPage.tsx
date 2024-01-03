@@ -8,13 +8,14 @@ import Error from "../../components/Error/Error";
 import useSignInPage from "./useSignInPage";
 import ReCaptcha from "react-google-recaptcha";
 import OAuthButton from "../../components/OAuthButton/OAuthButton";
+import useRedirectIfSignedIn from "../../hooks/useRedirectIfSignedIn";
 
 const SignInPage = () => {
   const { register, formState, reset, handleSubmit } = useForm({
     payload: { email: "", password: "" },
     zodSchema: signInSchema,
   });
-
+  useRedirectIfSignedIn({});
   const { submit, oauthError, captchaRef } = useSignInPage({
     resetForm: reset,
   });

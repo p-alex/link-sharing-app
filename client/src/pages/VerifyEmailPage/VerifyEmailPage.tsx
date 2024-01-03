@@ -4,10 +4,11 @@ import Section from "../../components/Section";
 import SuccessIcon from "../../svgs/SuccessIcon";
 import Error from "../../components/Error/Error";
 import useVerifyEmailPage from "./useVerifyEmailPage";
+import useRedirectIfSignedIn from "../../hooks/useRedirectIfSignedIn";
 
 const VerifyEmailPage = () => {
   const { error, step } = useVerifyEmailPage();
-
+  useRedirectIfSignedIn({});
   return (
     <main className="flex w-full flex-col">
       <div className="relative mx-auto mt-20 w-full max-w-[476px]">

@@ -1,9 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-import SignUp from "./pages/SignUpPage/SignUpPage";
-import SignIn from "./pages/SignInPage/SignInPage";
+import SignUpPage from "./pages/SignUpPage/SignUpPage";
+import SignInPage from "./pages/SignInPage/SignInPage";
 import ProtectedRoute from "./ProtectedRoute";
 import RefreshTokenRoute from "./RefreshTokenRoute";
-import RedirectIfSignedIn from "./RedirectIfSignedIn";
 import VerifyEmail from "./pages/VerifyEmailPage/VerifyEmailPage";
 import LinksPage from "./pages/LinksPage/LinksPage";
 import ForgetPasswordPage from "./pages/ForgetPasswordPage/ForgetPasswordPage";
@@ -14,16 +13,12 @@ function App() {
   return (
     <>
       <Routes>
-        <Route element={<RedirectIfSignedIn />}>
-          <Route path="/verify-email" element={<VerifyEmail />}></Route>
-          <Route path="/forget-password" element={<ForgetPasswordPage />}></Route>
-          <Route path="/reset-password" element={<ResetPasswordPage />}></Route>
-        </Route>
+        <Route path="/verify-email" element={<VerifyEmail />}></Route>
+        <Route path="/forget-password" element={<ForgetPasswordPage />}></Route>
+        <Route path="/reset-password" element={<ResetPasswordPage />}></Route>
         <Route element={<RefreshTokenRoute />}>
-          <Route element={<RedirectIfSignedIn />}>
-            <Route path="/sign-up" element={<SignUp />}></Route>
-            <Route path="/sign-in" element={<SignIn />}></Route>
-          </Route>
+          <Route path="/sign-up" element={<SignUpPage />}></Route>
+          <Route path="/sign-in" element={<SignInPage />}></Route>
           <Route path="/" element={<RedirectToHomePage />}></Route>
           <Route
             path="/links"

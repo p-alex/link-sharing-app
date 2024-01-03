@@ -7,10 +7,11 @@ import InputGroup from "../../components/InputGroup";
 import Button from "../../components/Button";
 import SuccessIcon from "../../svgs/SuccessIcon";
 import useResetPasswordPage from "./useResetPasswordPage";
+import useRedirectIfSignedIn from "../../hooks/useRedirectIfSignedIn";
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate();
-
+  useRedirectIfSignedIn({});
   const { formState, reset, register, handleSubmit } = useForm({
     payload: { password: "", confirmPassword: "" },
     zodSchema: resetPasswordSchema,

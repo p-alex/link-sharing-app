@@ -9,13 +9,14 @@ import Error from "../../components/Error/Error";
 import useSignUpPage from "./useSignUpPage";
 import ReCaptcha from "react-google-recaptcha";
 import OAuthButton from "../../components/OAuthButton/OAuthButton";
+import useRedirectIfSignedIn from "../../hooks/useRedirectIfSignedIn";
 
 const SignUpPage = () => {
   const { register, handleSubmit, formState, reset } = useForm({
     payload: { email: "", password: "", confirmPassword: "" },
     zodSchema: signUpSchema,
   });
-
+  useRedirectIfSignedIn({});
   const { successMessage, submit, captchaRef } = useSignUpPage({ formReset: reset });
 
   return (
