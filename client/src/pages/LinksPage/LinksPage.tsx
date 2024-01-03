@@ -1,10 +1,14 @@
+import { Suspense, lazy } from "react";
 import Layout from "../../layout";
-import LinkCustomizer from "../../components/LinkCustomizer";
+
+const LinkCustomizer = lazy(() => import("../../components/LinkCustomizer"));
 
 const LinksPage = () => {
   return (
     <Layout>
-      <LinkCustomizer />
+      <Suspense>
+        <LinkCustomizer />
+      </Suspense>
     </Layout>
   );
 };
