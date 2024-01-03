@@ -16,7 +16,6 @@ const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
 
   const submit = async (formData: SignInSchemaType) => {
     const captchaToken = await getCaptchaToken();
-
     const { success, data } = await emailSignInRequest({
       ...formData,
       captchaToken,

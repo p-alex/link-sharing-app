@@ -6,8 +6,9 @@ import Error from "../../components/Error/Error";
 import InputGroup from "../../components/InputGroup";
 import Button from "../../components/Button";
 import useForgetPasswordPage from "./useForgetPasswordPage";
-import ReCAPTCHA from "react-google-recaptcha";
 import useRedirectIfSignedIn from "../../hooks/useRedirectIfSignedIn";
+import Captcha from "../../components/Captcha";
+import CaptchaPrivacyAndTerms from "../../components/Captcha/CaptchaPrivacyAndTerms/CaptchaPrivacyAndTerms";
 
 const ForgetPasswordPage = () => {
   const { formState, reset, register, handleSubmit } = useForm({
@@ -59,6 +60,8 @@ const ForgetPasswordPage = () => {
                   }
                 />
 
+                <Captcha captchaRef={captchaRef} />
+
                 <div className="flex flex-col">
                   <Button type="submit" disabled={formState.isLoading || !formState.isValid}>
                     {formState.isLoading ? "Loading..." : "Send confirmation email"}
@@ -71,13 +74,8 @@ const ForgetPasswordPage = () => {
             <p>We sent you a confirmation email if this email address exists. Check your inbox.</p>
           )}
         </Section>
+        <CaptchaPrivacyAndTerms />
       </div>
-
-      <ReCAPTCHA
-        size="invisible"
-        sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY}
-        ref={captchaRef}
-      />
     </main>
   );
 };

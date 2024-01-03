@@ -7,9 +7,10 @@ import Button from "../../components/Button";
 import SuccessIcon from "../../svgs/SuccessIcon";
 import Error from "../../components/Error/Error";
 import useSignUpPage from "./useSignUpPage";
-import ReCaptcha from "react-google-recaptcha";
 import OAuthButton from "../../components/OAuthButton/OAuthButton";
 import useRedirectIfSignedIn from "../../hooks/useRedirectIfSignedIn";
+import Captcha from "../../components/Captcha";
+import CaptchaPrivacyAndTerms from "../../components/Captcha/CaptchaPrivacyAndTerms/CaptchaPrivacyAndTerms";
 
 const SignUpPage = () => {
   const { register, handleSubmit, formState, reset } = useForm({
@@ -117,6 +118,8 @@ const SignUpPage = () => {
                   }
                 />
 
+                <Captcha captchaRef={captchaRef} />
+
                 <div className="flex flex-col">
                   <Button type="submit" disabled={formState.isLoading || !formState.isValid}>
                     {formState.isLoading ? "Loading..." : "Create new account"}
@@ -139,13 +142,8 @@ const SignUpPage = () => {
             </form>
           )}
         </Section>
+        <CaptchaPrivacyAndTerms />
       </div>
-
-      <ReCaptcha
-        size="invisible"
-        sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY}
-        ref={captchaRef}
-      />
     </main>
   );
 };

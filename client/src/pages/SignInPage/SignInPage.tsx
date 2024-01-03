@@ -6,16 +6,19 @@ import Section from "../../components/Section";
 import Button from "../../components/Button";
 import Error from "../../components/Error/Error";
 import useSignInPage from "./useSignInPage";
-import ReCaptcha from "react-google-recaptcha";
 import OAuthButton from "../../components/OAuthButton/OAuthButton";
 import useRedirectIfSignedIn from "../../hooks/useRedirectIfSignedIn";
+import Captcha from "../../components/Captcha";
+import CaptchaPrivacyAndTerms from "../../components/Captcha/CaptchaPrivacyAndTerms/CaptchaPrivacyAndTerms";
 
 const SignInPage = () => {
   const { register, formState, reset, handleSubmit } = useForm({
     payload: { email: "", password: "" },
     zodSchema: signInSchema,
   });
+
   useRedirectIfSignedIn({});
+
   const { submit, oauthError, captchaRef } = useSignInPage({
     resetForm: reset,
   });
@@ -73,6 +76,8 @@ const SignInPage = () => {
                 }
               />
 
+              <Captcha captchaRef={captchaRef} />
+
               <div className="flex flex-col">
                 <Button type="submit" disabled={formState.isLoading || !formState.isValid}>
                   {formState.isLoading ? "Loading..." : "Login"}
@@ -100,13 +105,9 @@ const SignInPage = () => {
             </div>
           </form>
         </Section>
-      </div>
 
-      <ReCaptcha
-        size="invisible"
-        sitekey={import.meta.env.VITE_CAPTCHA_SITE_KEY}
-        ref={captchaRef}
-      />
+        <CaptchaPrivacyAndTerms />
+      </div>
     </main>
   );
 };
