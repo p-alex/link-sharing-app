@@ -22,6 +22,7 @@ import ForgetPasswordVerificationTemplate from "./emailTemplates/ResetPasswordVe
 import VerificationTokenVerifier from "./utils/verificationTokenVerifier";
 import LinkRepository from "./modules/link/link.repository";
 import LinkService from "./modules/link/link.service";
+import RandomIdentifier from "./utils/randomIdentifier";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -51,6 +52,7 @@ container.bind(Jwt).toSelf();
 container.bind(TimeConverter).toSelf();
 container.bind(SecurePasswordGenerator).toSelf();
 container.bind(CodeGenerator).toSelf();
+container.bind(RandomIdentifier).toSelf();
 
 container.bind(Mailer).toSelf();
 container.bind(EmailVerificationTemplate).toSelf();
