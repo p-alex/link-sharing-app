@@ -2,7 +2,7 @@ import axios from "axios";
 import { config } from "../../config";
 import { injectable } from "inversify";
 import objectUrlEncode from "../../utils/objectUrlEncode";
-import { OAuthProvidersType } from "../user/user.entity";
+import { OAuthProvidersType } from "../identity/identity.entity";
 
 @injectable()
 class OAuthStrategy {

@@ -6,9 +6,11 @@ import { EmailSignInInput } from "./auth.schema";
 import { TimeConverter } from "../../utils/timeConverter";
 import InvalidCredentialsException from "../../exceptions/InvalidCredentialsException";
 import SecurePasswordGenerator from "../../utils/securePasswordGenerator";
-import User, { OAuthProvidersType } from "../user/user.entity";
+import User from "../user/user.entity";
 import OAuthStrategy from "./oauth.strategy";
 import ValidationTokenVerifier from "../../utils/verificationTokenVerifier";
+import RandomIdentifier from "../../utils/randomIdentifier";
+import { OAuthProvidersType } from "../identity/identity.entity";
 
 @injectable()
 class AuthService {
@@ -20,6 +22,7 @@ class AuthService {
     private readonly _securePasswordGenerator: SecurePasswordGenerator,
     private readonly _oauthStrategy: OAuthStrategy,
     private readonly _validationTokenVerifier: ValidationTokenVerifier,
+    private readonly _randomIdentifier: RandomIdentifier,
   ) {}
 
   async emailSignIn(credentials: EmailSignInInput) {
@@ -61,7 +64,6 @@ class AuthService {
       accessToken,
       refreshToken,
       refreshTokenExpireInMs,
-      auth_provider: userWithEmail.auth_provider,
     };
   }
 
@@ -80,20 +82,31 @@ class AuthService {
       createdUser = await this._unitOfWork.user.create({
         email,
         password: hashedPassword,
-        auth_provider: type,
         is_email_verified: true,
+      });
+
+      await this._unitOfWork.identity.create({
+        id: this._randomIdentifier.createUUID(),
+        provider: type,
+        user: createdUser,
+        created_at: new Date(Date.now()),
       });
     }
 
-    if (userWithEmail && userWithEmail?.auth_provider !== type)
+    const user = userWithEmail !== null ? userWithEmail : createdUser!;
+
+    const hasProviderIdentity = await this._unitOfWork.identity.findOneByUserIdAndProvider(
+      user,
+      type,
+    );
+
+    if (hasProviderIdentity === null)
       return {
         success: false,
         message: "Account does not exist",
         refreshToken: null,
         refreshTokenExpireInMs: null,
       };
-
-    const user = userWithEmail !== null ? userWithEmail : createdUser!;
 
     const refreshTokenExpireInMs = this._timeConverter.toMs(14, "day");
 

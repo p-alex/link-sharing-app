@@ -23,6 +23,7 @@ import VerificationTokenVerifier from "./utils/verificationTokenVerifier";
 import LinkRepository from "./modules/link/link.repository";
 import LinkService from "./modules/link/link.service";
 import RandomIdentifier from "./utils/randomIdentifier";
+import IdentityRepository from "./modules/identity/identity.repository";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -46,6 +47,8 @@ container.bind(AuthController).toSelf();
 container.bind(AuthService).toSelf();
 
 container.bind(OAuthStrategy).toSelf();
+
+container.bind(IdentityRepository).toSelf();
 
 container.bind(Hash).toSelf();
 container.bind(Jwt).toSelf();

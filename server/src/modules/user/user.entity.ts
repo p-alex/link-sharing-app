@@ -1,10 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import Session from "../session/session.entity";
 import Link from "../link/link.entity";
-
-const AUTH_PROVIDERS = ["github", "google", "linkedin", "discord"] as const;
-
-export type OAuthProvidersType = (typeof AUTH_PROVIDERS)[number];
+import Identity from "../identity/identity.entity";
 
 @Entity("users")
 class User {
@@ -23,14 +20,14 @@ class User {
   @OneToMany(() => Link, (link) => link.user)
   public readonly links: Link[];
 
+  @OneToMany(() => Identity, (identity) => identity.user)
+  public readonly identities: Identity[];
+
   @Column("bigint", { default: Date.now(), nullable: false })
   public created_at: number;
 
   @Column("bigint", { default: Date.now(), nullable: false })
   public modified_at: number;
-
-  @Column("enum", { enum: AUTH_PROVIDERS, nullable: true })
-  public readonly auth_provider: OAuthProvidersType;
 
   @Column("bool", { default: false })
   public readonly is_email_verified: boolean;
@@ -41,9 +38,9 @@ class User {
     password: string,
     sessions: Session[],
     links: Link[],
+    identities: Identity[],
     created_at: number,
     modified_at: number,
-    auth_provider: OAuthProvidersType,
     is_email_verified: boolean,
   ) {
     this.id = id;
@@ -51,9 +48,9 @@ class User {
     this.password = password;
     this.sessions = sessions;
     this.links = links;
+    this.identities = identities;
     this.created_at = created_at;
     this.modified_at = modified_at;
-    this.auth_provider = auth_provider;
     this.is_email_verified = is_email_verified;
   }
 }

@@ -5,6 +5,7 @@ import { config } from "./config";
 import Session from "./modules/session/session.entity";
 import VerificationToken from "./modules/verificationToken/verificationToken.entity";
 import Link from "./modules/link/link.entity";
+import Identity from "./modules/identity/identity.entity";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -15,7 +16,7 @@ export const AppDataSource = new DataSource({
   database: config.DB_NAME,
   synchronize: true,
   logging: false,
-  entities: [User, Session, VerificationToken, Link],
+  entities: [User, Session, VerificationToken, Link, Identity],
   migrations: [],
   subscribers: [],
 });
