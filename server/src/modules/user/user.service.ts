@@ -116,6 +116,8 @@ class UserService {
 
     await this._unitOfWork.verificationToken.deleteByToken(hashedToken);
 
+    await this._unitOfWork.session.deleteAllByUserId(user.id);
+
     return true;
   }
 }
