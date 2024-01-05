@@ -1,6 +1,10 @@
+import { GithubIcon, LinkedInIcon } from "../../svgs";
+import DiscordIcon from "../../svgs/DiscordIcon";
+import GoogleIcon from "../../svgs/GoogleIcon";
+
 export const OAUTH_BUTTON_VARIANTS = {
   github: {
-    icon: "/images/github-icon.svg",
+    icon: <GithubIcon width={"1.125rem"} height={"1.125rem"} />,
     bg: "bg-github",
     text: "text-white",
     href:
@@ -9,7 +13,7 @@ export const OAUTH_BUTTON_VARIANTS = {
       `&client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}`,
   },
   google: {
-    icon: "/images/google-icon.svg",
+    icon: <GoogleIcon width={"1.125rem"} height={"1.125rem"} />,
     bg: "bg-google",
     text: "text-white",
     href:
@@ -21,7 +25,7 @@ export const OAUTH_BUTTON_VARIANTS = {
       "&access_type=offline",
   },
   linkedin: {
-    icon: "/images/linkedin-icon.svg",
+    icon: <LinkedInIcon width={"1.125rem"} height={"1.125rem"} />,
     bg: "bg-linkedin",
     text: "text-white",
     href:
@@ -32,7 +36,7 @@ export const OAUTH_BUTTON_VARIANTS = {
       "&scope=openid email",
   },
   discord: {
-    icon: "/images/discord-icon.svg",
+    icon: <DiscordIcon width={"1.125rem"} height={"1.125rem"} />,
     bg: "bg-discord",
     text: "text-white",
     href:

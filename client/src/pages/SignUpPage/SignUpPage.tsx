@@ -131,13 +131,47 @@ const SignUpPage = () => {
                     Login
                   </Link>
                 </p>
-                <ul className="mt-5 flex flex-col gap-2 border-t-2 border-zinc-100 pt-5">
-                  <li>
-                    <OAuthButton variant="github" disabled={formState.isLoading} onMouseUp={reset}>
-                      Sign up with Github
-                    </OAuthButton>
-                  </li>
-                </ul>
+
+                <div className="border-t-2 pt-4">
+                  <p className="mb-4 text-center">Or sign up with</p>
+                  <ul
+                    style={{ gridTemplateColumns: "repeat(auto-fill, minmax(90px, 1fr))" }}
+                    className="grid gap-2"
+                  >
+                    <li>
+                      <OAuthButton
+                        variant="github"
+                        title="sign up with github"
+                        disabled={formState.isLoading}
+                        onMouseUp={reset}
+                      />
+                    </li>
+                    <li>
+                      <OAuthButton
+                        variant="discord"
+                        title="sign up with discord"
+                        disabled={formState.isLoading}
+                        onMouseUp={reset}
+                      />
+                    </li>
+                    <li>
+                      <OAuthButton
+                        variant="linkedin"
+                        title="sign up with linkedin"
+                        disabled={formState.isLoading}
+                        onMouseUp={reset}
+                      />
+                    </li>
+                    <li>
+                      <OAuthButton
+                        variant="google"
+                        title="sign up with google"
+                        disabled={formState.isLoading}
+                        onMouseUp={reset}
+                      />
+                    </li>
+                  </ul>
+                </div>
               </div>
             </form>
           )}

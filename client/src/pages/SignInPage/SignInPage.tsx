@@ -75,9 +75,7 @@ const SignInPage = () => {
                   ) : null
                 }
               />
-
               <Captcha captchaRef={captchaRef} />
-
               <div className="flex flex-col">
                 <Button type="submit" disabled={formState.isLoading || !formState.isValid}>
                   {formState.isLoading ? "Loading..." : "Login"}
@@ -95,17 +93,49 @@ const SignInPage = () => {
                 </Link>
               </div>
 
-              <ul className="mt-5 flex flex-col gap-2 border-t-2 border-zinc-100 pt-5">
-                <li>
-                  <OAuthButton variant="github" disabled={formState.isLoading} onMouseUp={reset}>
-                    Log In with Github
-                  </OAuthButton>
-                </li>
-              </ul>
+              <div className="border-t-2 pt-4">
+                <p className="mb-4 text-center">Or sign in with</p>
+                <ul
+                  style={{ gridTemplateColumns: "repeat(auto-fill, minmax(90px, 1fr))" }}
+                  className="grid gap-2"
+                >
+                  <li>
+                    <OAuthButton
+                      variant="github"
+                      title="sign in with github"
+                      disabled={formState.isLoading}
+                      onMouseUp={reset}
+                    />
+                  </li>
+                  <li>
+                    <OAuthButton
+                      variant="discord"
+                      title="sign in with discord"
+                      disabled={formState.isLoading}
+                      onMouseUp={reset}
+                    />
+                  </li>
+                  <li>
+                    <OAuthButton
+                      variant="linkedin"
+                      title="sign in with linkedin"
+                      disabled={formState.isLoading}
+                      onMouseUp={reset}
+                    />
+                  </li>
+                  <li>
+                    <OAuthButton
+                      variant="google"
+                      title="sign in with google"
+                      disabled={formState.isLoading}
+                      onMouseUp={reset}
+                    />
+                  </li>
+                </ul>
+              </div>
             </div>
           </form>
         </Section>
-
         <CaptchaPrivacyAndTerms />
       </div>
     </main>

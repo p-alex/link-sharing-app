@@ -1,12 +1,13 @@
 import { ButtonHTMLAttributes, memo, useState } from "react";
 import { OAUTH_BUTTON_VARIANTS } from "./OAuthButtonVariants";
+import Button from "../Button";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant: keyof typeof OAUTH_BUTTON_VARIANTS;
-  children: string;
+  title: string;
 }
 
-const OAuthButton = memo(({ variant, children, ...buttonProps }: Props) => {
+const OAuthButton = memo(({ variant, title }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleButton = () => {
@@ -15,27 +16,18 @@ const OAuthButton = memo(({ variant, children, ...buttonProps }: Props) => {
   };
 
   return (
-    <button
-      type="button"
-      {...buttonProps}
-      className={`flex w-full items-center gap-2 px-[27px] py-[11px] shadow ${OAUTH_BUTTON_VARIANTS[variant].bg} ${OAUTH_BUTTON_VARIANTS[variant].text} justify-center rounded-lg font-semibold transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50`}
+    <Button
       onClick={handleButton}
-      title={children}
+      title={title}
       disabled={isLoading}
+      variant="outline"
+      className="w-full"
     >
-      {
-        <img
-          src={OAUTH_BUTTON_VARIANTS[variant].icon}
-          width={25}
-          height={25}
-          alt=""
-          className="shrink-0"
-        />
-      }
-      <span className={`${isLoading ? "w-auto" : "w-[155px]"} text-left max-[360px]:w-[70px]`}>
+      {OAUTH_BUTTON_VARIANTS[variant].icon}
+      {/* <span className={`${isLoading ? "w-auto" : "w-[155px]"} text-left max-[360px]:w-[70px]`}>
         {isLoading ? "Loading..." : children}
-      </span>
-    </button>
+      </span> */}
+    </Button>
   );
 });
 
