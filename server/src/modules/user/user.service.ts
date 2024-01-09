@@ -40,7 +40,7 @@ class UserService {
 
     await this._unitOfWork.verificationToken.create({
       token: this._hash.fastHash(verificationToken),
-      expires_at: verificationTokenExpireMs + Date.now(),
+      expires_at: new Date(Date.now() + verificationTokenExpireMs),
     });
 
     await this._mailer.send(
@@ -75,7 +75,7 @@ class UserService {
 
     await this._unitOfWork.verificationToken.create({
       token: this._hash.fastHash(verificationToken),
-      expires_at: Date.now() + verificationTokenExpireMs,
+      expires_at: new Date(Date.now() + verificationTokenExpireMs),
     });
 
     await this._mailer.send(
@@ -111,7 +111,6 @@ class UserService {
     await this._unitOfWork.user.update({
       ...user,
       password: hashedPassword,
-      modified_at: Date.now(),
     });
 
     await this._unitOfWork.verificationToken.deleteByToken(hashedToken);

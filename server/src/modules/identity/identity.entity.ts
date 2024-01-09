@@ -15,7 +15,7 @@ class Identity {
   @Column("enum", { enum: OAUTH_PROVIDERS })
   public readonly provider: OAuthProvidersType;
 
-  @CreateDateColumn()
+  @CreateDateColumn({ type: "timestamptz" })
   public readonly created_at: Date;
 
   constructor(id: string, user: User, provider: OAuthProvidersType, created_at: Date) {

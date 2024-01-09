@@ -1,4 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import Session from "../session/session.entity";
 import Link from "../link/link.entity";
 import Identity from "../identity/identity.entity";
@@ -23,11 +30,11 @@ class User {
   @OneToMany(() => Identity, (identity) => identity.user)
   public readonly identities: Identity[];
 
-  @Column("bigint", { default: Date.now(), nullable: false })
-  public created_at: number;
+  @CreateDateColumn({ type: "timestamptz", nullable: false })
+  public created_at: Date;
 
-  @Column("bigint", { default: Date.now(), nullable: false })
-  public modified_at: number;
+  @UpdateDateColumn({ nullable: false })
+  public modified_at: Date;
 
   @Column("bool", { default: false })
   public readonly is_email_verified: boolean;
@@ -39,8 +46,8 @@ class User {
     sessions: Session[],
     links: Link[],
     identities: Identity[],
-    created_at: number,
-    modified_at: number,
+    created_at: Date,
+    modified_at: Date,
     is_email_verified: boolean,
   ) {
     this.id = id;

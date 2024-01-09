@@ -71,7 +71,7 @@ class SessionRepository extends Repository<Session> {
     return true;
   }
 
-  async deleteAllExpiredSessions(userId: string, currentDate: number): Promise<boolean> {
+  async deleteAllExpiredSessions(userId: string, currentDate: Date): Promise<boolean> {
     await this._database.client
       .createQueryBuilder()
       .delete()

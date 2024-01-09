@@ -5,10 +5,10 @@ class VerificationToken {
   @PrimaryColumn("varchar", { length: 32, nullable: false })
   public readonly token: string;
 
-  @Column("bigint", { nullable: false })
-  public readonly expires_at: number;
+  @Column({ type: "timestamptz", nullable: false })
+  public readonly expires_at: Date;
 
-  constructor(token: string, expires_at: number) {
+  constructor(token: string, expires_at: Date) {
     this.token = token;
     this.expires_at = expires_at;
   }

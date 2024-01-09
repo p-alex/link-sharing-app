@@ -54,7 +54,7 @@ class AuthService {
 
     await this._unitOfWork.session.create({
       session: this._hash.fastHash(refreshToken),
-      expires_at: Date.now() + refreshTokenExpireInMs,
+      expires_at: new Date(Date.now() + refreshTokenExpireInMs),
       user: userWithEmail,
     });
 
@@ -67,8 +67,8 @@ class AuthService {
     };
   }
 
-  async oauthSignIn(code: string, type: OAuthProvidersType) {
-    const { email } = await this._oauthStrategy[type](code);
+  async oauthSignIn(code: string, provider: OAuthProvidersType) {
+    const { email } = await this._oauthStrategy[provider](code);
 
     const userWithEmail = await this._unitOfWork.user.findOneByEmail(email);
 
@@ -86,27 +86,26 @@ class AuthService {
       });
 
       await this._unitOfWork.identity.create({
-        id: this._randomIdentifier.createUUID(),
-        provider: type,
+        provider,
         user: createdUser,
-        created_at: new Date(Date.now()),
       });
     }
 
     const user = userWithEmail !== null ? userWithEmail : createdUser!;
 
     const hasProviderIdentity = await this._unitOfWork.identity.findOneByUserIdAndProvider(
-      user,
-      type,
+      user.id,
+      provider,
     );
 
-    if (hasProviderIdentity === null)
+    if (hasProviderIdentity === null) {
       return {
         success: false,
         message: "Account does not exist",
         refreshToken: null,
         refreshTokenExpireInMs: null,
       };
+    }
 
     const refreshTokenExpireInMs = this._timeConverter.toMs(14, "day");
 
@@ -118,7 +117,7 @@ class AuthService {
 
     await this._unitOfWork.session.create({
       session: this._hash.fastHash(refreshToken),
-      expires_at: Date.now() + refreshTokenExpireInMs,
+      expires_at: new Date(Date.now() + refreshTokenExpireInMs),
       user,
     });
 
@@ -143,7 +142,6 @@ class AuthService {
 
     await this._unitOfWork.user.update({
       id: user.id,
-      modified_at: Date.now(),
       is_email_verified: true,
     });
 
@@ -168,7 +166,10 @@ class AuthService {
       this._hash.fastHash(refreshToken),
     );
 
-    await this._unitOfWork.session.deleteAllExpiredSessions(refreshTokenPayload.id, Date.now());
+    await this._unitOfWork.session.deleteAllExpiredSessions(
+      refreshTokenPayload.id,
+      new Date(Date.now()),
+    );
 
     return true;
   }

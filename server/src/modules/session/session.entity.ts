@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import User from "../user/user.entity";
 
 @Entity("sessions")
@@ -12,13 +12,13 @@ class Session {
   @Column("varchar", { length: 32, unique: true, nullable: false })
   public session: string;
 
-  @Column("bigint", { nullable: false })
-  public readonly expires_at: number;
+  @Column({ type: "timestamptz" })
+  public readonly expires_at: Date;
 
-  @Column("bigint", { default: Date.now(), nullable: false })
-  public readonly created_at: number;
+  @CreateDateColumn({ type: "timestamptz" })
+  public readonly created_at: Date;
 
-  constructor(id: string, user: User, session: string, created_at: number, expires_at: number) {
+  constructor(id: string, user: User, session: string, created_at: Date, expires_at: Date) {
     this.id = id;
     this.user = user;
     this.session = session;

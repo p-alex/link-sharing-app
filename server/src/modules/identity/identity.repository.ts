@@ -22,10 +22,18 @@ class IdentityRepository extends Repository<Identity> {
     return result;
   }
   async findOneByUserIdAndProvider(
-    user: Partial<User>,
+    userId: string,
     provider: OAuthProvidersType,
   ): Promise<Identity | null> {
-    const result = await this._database.client.manager.findOneBy(Identity, { user, provider });
+    const result = await this._database.client
+      .createQueryBuilder()
+      .select()
+      .from(Identity, "identities")
+      .where("identities.userId = :userId AND identities.provider = :provider", {
+        userId,
+        provider,
+      })
+      .execute();
     return result;
   }
   async create(entity: Partial<Identity>): Promise<Partial<Identity>> {

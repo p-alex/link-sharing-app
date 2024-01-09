@@ -30,7 +30,6 @@ class SessionService {
     if (!user) throw new Error("User does not exist anymore");
 
     const session = await this._unitOfWork.session.findBySession(this._hash.fastHash(refreshToken));
-
     if (!session) throw new Error("Session doesn't exist");
 
     const newAccessToken = this._jwt.signJwt(
@@ -42,7 +41,7 @@ class SessionService {
     const newRefreshToken = this._jwt.signJwt(
       { id: user.id },
       "REFRESH_TOKEN_SECRET",
-      this._timeConverter.toSeconds(session.expires_at - Date.now(), "milisecond"),
+      this._timeConverter.toSeconds(session.expires_at.getTime() - Date.now(), "milisecond"),
     );
 
     const newHashedRefreshToken = this._hash.fastHash(newRefreshToken);
@@ -56,7 +55,7 @@ class SessionService {
       email: user.email,
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
-      refreshTokenExpireInMs: session.expires_at - Date.now(),
+      refreshTokenExpireInMs: session.expires_at.getTime() - Date.now(),
     };
   }
 }
