@@ -24,6 +24,7 @@ import ChevronDownIcon from "./ChevronDownIcon";
 import ChevronUpIcon from "./ChevronUpIcon";
 import CloseIcon from "./CloseIcon";
 import InfoIcon from "./InfoIcon";
+import LockIcon from "./LockIcon";
 
 export {
   ErrorIcon,
@@ -52,4 +53,5 @@ export {
   ChevronUpIcon,
   CloseIcon,
   InfoIcon,
+  LockIcon,
 };

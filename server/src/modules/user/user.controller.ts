@@ -3,12 +3,14 @@ import UserService from "./user.service";
 import { Response } from "express";
 import { validateResource } from "../../middleware/validateResource";
 import {
+  ChangePasswordInput,
   CreateUserInput,
   DeleteUserInput,
   ForgetPasswordInput,
   ResetPasswordConfirmationInput,
   ResetPasswordInput,
   UpdateUserInput,
+  changePasswordSchema,
   createUserSchema,
   deleteUserSchema,
   forgetPasswordSchema,
@@ -30,18 +32,6 @@ export class UserController {
   async create(req: CustomRequest<object, object, CreateUserInput>, res: Response) {
     const result = await this._userService.create(req.body);
     return HttpResponse.success(res, result, 201);
-  }
-
-  @httpPatch("/:id", mediumRateLimit, requireAuth, validateResource(updateUserSchema))
-  async update(req: CustomRequest<object, object, UpdateUserInput>, res: Response) {
-    await this._userService.update(req.body);
-    return HttpResponse.success(res);
-  }
-
-  @httpDelete("/:id", mediumRateLimit, requireAuth, validateResource(deleteUserSchema))
-  async delete(req: CustomRequest<object, object, DeleteUserInput>, res: Response) {
-    await this._userService.delete(req.body);
-    return HttpResponse.success(res);
   }
 
   @httpPost(
@@ -72,5 +62,24 @@ export class UserController {
   async resetPassword(req: CustomRequest<object, object, ResetPasswordInput>, res: Response) {
     await this._userService.resetPassword(req.body.password, req.body.token);
     return HttpResponse.success(res, null, 200);
+  }
+
+  @httpPatch("/change-password", highRateLimit, requireAuth, validateResource(changePasswordSchema))
+  async changePassword(req: CustomRequest<object, object, ChangePasswordInput>, res: Response) {
+    const { oldPassword, newPassword } = req.body;
+    await this._userService.changePassword(req.user.id, oldPassword, newPassword);
+    return HttpResponse.success(res);
+  }
+
+  @httpPatch("/:id", mediumRateLimit, requireAuth, validateResource(updateUserSchema))
+  async update(req: CustomRequest<object, object, UpdateUserInput>, res: Response) {
+    await this._userService.update(req.body);
+    return HttpResponse.success(res);
+  }
+
+  @httpDelete("/:id", mediumRateLimit, requireAuth, validateResource(deleteUserSchema))
+  async delete(req: CustomRequest<object, object, DeleteUserInput>, res: Response) {
+    await this._userService.delete(req.body);
+    return HttpResponse.success(res);
   }
 }

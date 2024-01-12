@@ -46,9 +46,22 @@ export const resetPasswordConfirmationSchema = z.object({ token: jwtSchema }).st
 
 export const resetPasswordSchema = z.object({ password: passwordSchema, token: jwtSchema }).strip();
 
+export const changePasswordSchema = z
+  .object({
+    oldPassword: z.string().min(1, "Can't be empty"),
+    newPassword: passwordSchema,
+    confirmNewPassword: z.string(),
+  })
+  .strip()
+  .refine((current) => current.newPassword === current.confirmNewPassword, {
+    path: ["confirmNewPassword"],
+    message: "Passwords must match",
+  });
+
 export type CreateUserInput = z.TypeOf<typeof createUserSchema>;
 export type UpdateUserInput = z.TypeOf<typeof updateUserSchema>;
 export type DeleteUserInput = z.TypeOf<typeof deleteUserSchema>;
 export type ForgetPasswordInput = z.TypeOf<typeof forgetPasswordSchema>;
 export type ResetPasswordConfirmationInput = z.TypeOf<typeof resetPasswordConfirmationSchema>;
 export type ResetPasswordInput = z.TypeOf<typeof resetPasswordSchema>;
+export type ChangePasswordInput = z.TypeOf<typeof changePasswordSchema>;

@@ -8,6 +8,7 @@ import LinksPage from "./pages/LinksPage/LinksPage";
 import ForgetPasswordPage from "./pages/ForgetPasswordPage/ForgetPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 import RedirectToHomePage from "./RedirectToHomePage";
+import SettingsPage from "./pages/SettingsPage/SettingsPage";
 
 function App() {
   return (
@@ -25,6 +26,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <LinksPage />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <SettingsPage />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/settings/:tab"
+            element={
+              <ProtectedRoute>
+                <SettingsPage />
               </ProtectedRoute>
             }
           ></Route>

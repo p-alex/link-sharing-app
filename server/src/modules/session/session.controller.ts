@@ -18,7 +18,7 @@ class SessionController {
 
     if (!currentRefreshToken) return HttpResponse.error(res, 403, ["You have to be logged in!"]);
 
-    const { id, email, accessToken, refreshToken, refreshTokenExpireInMs } =
+    const { id, email, sessionId, accessToken, refreshToken, refreshTokenExpireInMs } =
       await this._sessionService.refreshSession(currentRefreshToken);
 
     setRefreshTokenCookie(res, refreshToken, refreshTokenExpireInMs);
@@ -26,6 +26,7 @@ class SessionController {
     return HttpResponse.success(res, {
       id,
       email,
+      sessionId,
       accessToken,
     });
   }

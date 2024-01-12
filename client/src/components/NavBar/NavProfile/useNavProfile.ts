@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import { useEffect, useState } from "react";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { IDefaultResponse } from "../../apiRequests";
+import useAuth from "../../../hooks/useAuth";
+import { useState } from "react";
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import { IDefaultResponse } from "../../../apiRequests";
 import { useDispatch } from "react-redux";
-import { logoutAction } from "../../redux/features/auth/authSlice";
+import { logoutAction } from "../../../redux/features/auth/authSlice";
+import useHideWhenClickOutside from "../../../hooks/useHideWhenClickOutside";
 
 const useNavProfile = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,8 @@ const useNavProfile = () => {
   const { authState } = useAuth();
   const [isActive, setIsActive] = useState(false);
   const axiosPrivate = useAxiosPrivate();
+
+  useHideWhenClickOutside({ containerId: "nav-profile", hideFunc: () => setIsActive(false) });
 
   const handleToggleDropdown = () => setIsActive((prevState) => !prevState);
 
@@ -31,19 +34,6 @@ const useNavProfile = () => {
       return null;
     }
   };
-
-  const handleCloseWhenClickOutside = (navProfile: HTMLDivElement) => (event: MouseEvent) => {
-    if (!navProfile) return;
-    if (!navProfile.contains(event.target as HTMLElement)) setIsActive(false);
-  };
-
-  useEffect(() => {
-    const navProfile = document.getElementById("nav-profile") as HTMLDivElement;
-    document.addEventListener("click", handleCloseWhenClickOutside(navProfile));
-    return () => {
-      document.removeEventListener("click", handleCloseWhenClickOutside(navProfile));
-    };
-  }, []);
 
   return { authState, isActive, handleLogout, handleToggleDropdown };
 };

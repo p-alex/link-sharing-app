@@ -52,7 +52,7 @@ class AuthService {
       this._timeConverter.toSeconds(refreshTokenExpireInMs, "milisecond"),
     );
 
-    await this._unitOfWork.session.create({
+    const session = await this._unitOfWork.session.create({
       session: this._hash.fastHash(refreshToken),
       expires_at: new Date(Date.now() + refreshTokenExpireInMs),
       user: userWithEmail,
@@ -61,6 +61,7 @@ class AuthService {
     return {
       id: userWithEmail.id,
       email: userWithEmail.email,
+      sessionId: session.id,
       accessToken,
       refreshToken,
       refreshTokenExpireInMs,

@@ -26,7 +26,7 @@ class AuthController {
 
   @httpPost("/email-sign-in", highRateLimit, validateResource(emailSignInSchema), validateCaptcha)
   async emailSignIn(req: Request<object, object, EmailSignInInput>, res: Response) {
-    const { id, email, accessToken, refreshToken, refreshTokenExpireInMs } =
+    const { id, email, sessionId, accessToken, refreshToken, refreshTokenExpireInMs } =
       await this._authService.emailSignIn(req.body);
 
     setRefreshTokenCookie(res, refreshToken, refreshTokenExpireInMs);
@@ -34,6 +34,7 @@ class AuthController {
     return HttpResponse.success(res, {
       id,
       email,
+      sessionId,
       accessToken,
     });
   }

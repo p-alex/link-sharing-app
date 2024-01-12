@@ -119,6 +119,17 @@ class UserService {
 
     return true;
   }
+
+  async changePassword(userId: string, oldPassword: string, newPassword: string) {
+    const user = await this._unitOfWork.user.findOneById(userId);
+    if (!user) throw new Error("User does not exist");
+    const isValidUserPassword = await this._hash.verifySlowHash(oldPassword, user.password);
+    if (!isValidUserPassword) throw new Error("Password is incorrect");
+    const newHashedPassword = await this._hash.slowHash(newPassword);
+    const newUser = { ...user, password: newHashedPassword };
+    await this._unitOfWork.user.update(newUser);
+    return true;
+  }
 }
 
 export default UserService;

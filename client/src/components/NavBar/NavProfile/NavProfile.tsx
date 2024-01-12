@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { LogoutIcon, ProfileDetailsHeaderIcon, SettingsIcon } from "../../../svgs";
-import useNavProfile from "../useNavProfile";
+import useNavProfile from "./useNavProfile";
 
 const NavProfile = () => {
   const { authState, handleLogout, handleToggleDropdown, isActive } = useNavProfile();
@@ -17,7 +17,7 @@ const NavProfile = () => {
         <ProfileDetailsHeaderIcon width={24} height={24} />{" "}
       </button>
       {isActive && (
-        <div className="absolute bottom-0 right-0 w-[300px] translate-y-[100%] pt-2">
+        <div className="absolute bottom-0 right-0 z-50 w-[300px] translate-y-[100%] pt-2">
           <div className=" flex  flex-col gap-2 rounded-lg bg-white p-4 text-center shadow-lg">
             <p className="mb-1 border-b-2 border-gray-100 pb-3 font-semibold text-primary">
               {authState.email}

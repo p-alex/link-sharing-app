@@ -54,6 +54,7 @@ class SessionService {
       id: user.id,
       email: user.email,
       accessToken: newAccessToken,
+      sessionId: session.id,
       refreshToken: newRefreshToken,
       refreshTokenExpireInMs: session.expires_at.getTime() - Date.now(),
     };

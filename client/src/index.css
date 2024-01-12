@@ -34,8 +34,13 @@ body {
 p {
   @apply text-base text-mediumGrey;
 }
-
+h1 {
+  @apply text-[32px];
+}
+h2 {
+  @apply text-[26px];
+}
 h1,
 h2 {
-  @apply text-[32px] font-bold leading-[48px] text-darkGray;
+  @apply font-bold leading-[48px] text-darkGray;
 }

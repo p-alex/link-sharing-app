@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { ZodSchema, ZodError } from "zod";
 import { AxiosError } from "axios";
+import { useDispatch } from "react-redux";
+import { addPopupAction } from "../redux/features/globalPopupsSlice/globalPopupsSlice";
 
 type ErrorsType<TPayload> = {
   [Property in keyof TPayload]: string;
@@ -10,6 +12,7 @@ function useForm<
   TPayload extends { [key: string]: string | number | readonly string[] | undefined },
   TSchema extends ZodSchema,
 >({ payload, zodSchema }: { payload: TPayload; zodSchema: TSchema }) {
+  const dispatch = useDispatch();
   const [data, setData] = useState<TPayload>(payload);
   const [responseError, setResponseError] = useState("");
 
@@ -91,7 +94,15 @@ function useForm<
       await submitFunc(data);
     } catch (error) {
       if (error instanceof AxiosError) {
-        setResponseError(error.response?.data.errors[0]);
+        if (error.response?.status === 500) {
+          dispatch(
+            addPopupAction({ type: "error", message: "Something went wrong. Try again later." }),
+          );
+          return;
+        }
+        const errorMessages = error.response?.data.errors;
+        setResponseError(errorMessages[0]);
+        dispatch(addPopupAction({ type: "error", message: errorMessages[0] }));
       }
     } finally {
       setIsLoading(false);
