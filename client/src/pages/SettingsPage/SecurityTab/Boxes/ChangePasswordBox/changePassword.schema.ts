@@ -12,7 +12,7 @@ const changePasswordSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["newPassword"],
-        message: "New password cannot be the same as new password",
+        message: "New password cannot be the same as the old password",
       });
     }
     if (current.newPassword !== current.confirmNewPassword) {
