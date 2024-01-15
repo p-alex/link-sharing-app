@@ -5,7 +5,7 @@ import { emailSignInRequest } from "../../apiRequests/auth";
 import getParamFromUrl from "../../utils/getParamFromUrl";
 import useCaptcha from "../../hooks/useCaptcha";
 import { useDispatch } from "react-redux";
-import { loginAction } from "../../redux/features/auth/authSlice";
+import { auth_loginAction } from "../../redux/features/auth/authSlice";
 
 const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
   const navigate = useNavigate();
@@ -23,7 +23,8 @@ const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
 
     if (success && data) {
       resetForm();
-      dispatch(loginAction({ id: data.id, email: data.email, accessToken: data.accessToken }));
+
+      dispatch(auth_loginAction({ id: data.id, email: data.email, accessToken: data.accessToken }));
       navigate("/links");
     }
   };

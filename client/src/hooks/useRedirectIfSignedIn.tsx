@@ -1,14 +1,21 @@
 import { useEffect } from "react";
 import useAuth from "./useAuth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const useRedirectIfSignedIn = ({ path = "/links" }: { path?: string }) => {
+const useRedirectIfSignedIn = ({
+  defaultRedirectPath = "/links",
+}: {
+  defaultRedirectPath?: string;
+}) => {
   const { authState } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const redirectPath = location.state?.path || defaultRedirectPath;
 
   useEffect(() => {
     if (!authState.accessToken) return;
-    navigate(path);
+    navigate({ pathname: redirectPath });
   }, []);
 
   return null;

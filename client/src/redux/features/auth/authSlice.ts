@@ -12,25 +12,27 @@ const initialState: IAuth = {
   accessToken: "",
 };
 
+const authSliceName = "auth";
+
 export const authSlice = createSlice({
-  name: "auth",
+  name: authSliceName,
   initialState,
   reducers: {
-    loginAction: (state, action: PayloadAction<IAuth>) => {
+    [`${authSliceName}_loginAction`]: (state, action: PayloadAction<IAuth>) => {
       state = action.payload;
       return state;
     },
-    refreshSessionAction: (state, action: PayloadAction<IAuth>) => {
+    [`${authSliceName}_refreshSessionAction`]: (state, action: PayloadAction<IAuth>) => {
       state = action.payload;
       return state;
     },
-    logoutAction: (state) => {
-      state = { id: "", email: "", accessToken: "" };
+    [`${authSliceName}_logoutAction`]: (state) => {
+      state = initialState;
       return state;
     },
   },
 });
 
-export const { loginAction, refreshSessionAction, logoutAction } = authSlice.actions;
+export const { auth_loginAction, auth_refreshSessionAction, auth_logoutAction } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

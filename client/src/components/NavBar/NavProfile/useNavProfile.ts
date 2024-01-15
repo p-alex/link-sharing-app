@@ -4,7 +4,7 @@ import { useState } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import { IDefaultResponse } from "../../../apiRequests";
 import { useDispatch } from "react-redux";
-import { logoutAction } from "../../../redux/features/auth/authSlice";
+import { auth_logoutAction } from "../../../redux/features/auth/authSlice";
 import useHideWhenClickOutside from "../../../hooks/useHideWhenClickOutside";
 
 const useNavProfile = () => {
@@ -26,7 +26,7 @@ const useNavProfile = () => {
         { withCredentials: true },
       );
       if (result.data.success) {
-        dispatch(logoutAction());
+        dispatch(auth_logoutAction());
         navigate("/sign-in");
       }
     } catch (error) {

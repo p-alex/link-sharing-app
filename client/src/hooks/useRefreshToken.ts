@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { refreshSessionRequest } from "../apiRequests/sessions";
-import { refreshSessionAction } from "../redux/features/auth/authSlice";
+import { auth_refreshSessionAction } from "../redux/features/auth/authSlice";
 
 const useRefreshToken = () => {
   const dispatch = useDispatch();
@@ -8,7 +8,7 @@ const useRefreshToken = () => {
     try {
       const result = await refreshSessionRequest();
       if (result.success && result.data) {
-        dispatch(refreshSessionAction(result.data));
+        dispatch(auth_refreshSessionAction(result.data));
         return result.data.accessToken;
       }
     } catch (error) {
