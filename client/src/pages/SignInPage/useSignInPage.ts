@@ -23,8 +23,7 @@ const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
 
     if (success && data) {
       resetForm();
-
-      dispatch(auth_loginAction({ id: data.id, email: data.email, accessToken: data.accessToken }));
+      dispatch(auth_loginAction(data));
       navigate("/links");
     }
   };

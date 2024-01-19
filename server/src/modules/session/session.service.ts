@@ -3,6 +3,7 @@ import Jwt from "../../utils/jwt";
 import Hash from "../../utils/hash";
 import UnitOfWork from "../../unitOfWork";
 import { TimeConverter } from "../../utils/timeConverter";
+import { IClientAuth } from "../auth/auth.interfaces";
 
 @injectable()
 class SessionService {
@@ -13,7 +14,7 @@ class SessionService {
     private readonly _timeConverter: TimeConverter,
   ) {}
 
-  async refreshSession(refreshToken: string) {
+  async refreshSession(refreshToken: string): Promise<IClientAuth> {
     let userIdFromRefreshToken = "";
 
     try {
@@ -51,10 +52,12 @@ class SessionService {
     await this._unitOfWork.session.update(session);
 
     return {
-      id: user.id,
-      email: user.email,
-      accessToken: newAccessToken,
-      sessionId: session.id,
+      clientAuthData: {
+        id: user.id,
+        email: user.email,
+        accessToken: newAccessToken,
+        sessionId: session.id,
+      },
       refreshToken: newRefreshToken,
       refreshTokenExpireInMs: session.expires_at.getTime() - Date.now(),
     };

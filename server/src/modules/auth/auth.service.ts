@@ -9,8 +9,8 @@ import SecurePasswordGenerator from "../../utils/securePasswordGenerator";
 import User from "../user/user.entity";
 import OAuthStrategy from "./oauth.strategy";
 import ValidationTokenVerifier from "../../utils/verificationTokenVerifier";
-import RandomIdentifier from "../../utils/randomIdentifier";
 import { OAuthProvidersType } from "../identity/identity.entity";
+import { IClientAuth } from "./auth.interfaces";
 
 @injectable()
 class AuthService {
@@ -22,10 +22,9 @@ class AuthService {
     private readonly _securePasswordGenerator: SecurePasswordGenerator,
     private readonly _oauthStrategy: OAuthStrategy,
     private readonly _validationTokenVerifier: ValidationTokenVerifier,
-    private readonly _randomIdentifier: RandomIdentifier,
   ) {}
 
-  async emailSignIn(credentials: EmailSignInInput) {
+  async emailSignIn(credentials: EmailSignInInput): Promise<IClientAuth> {
     const userWithEmail = await this._unitOfWork.user.findOneByEmail(credentials.email);
     if (!userWithEmail) throw new InvalidCredentialsException("Invalid email or password");
 
@@ -59,10 +58,12 @@ class AuthService {
     });
 
     return {
-      id: userWithEmail.id,
-      email: userWithEmail.email,
-      sessionId: session.id,
-      accessToken,
+      clientAuthData: {
+        id: userWithEmail.id,
+        email: userWithEmail.email,
+        accessToken,
+        sessionId: session.id,
+      },
       refreshToken,
       refreshTokenExpireInMs,
     };

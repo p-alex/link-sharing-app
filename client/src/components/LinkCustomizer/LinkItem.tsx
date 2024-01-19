@@ -5,7 +5,7 @@ import { LinkCustomizerFieldErrorType } from "./useLinkCustomizer";
 import { DraggableProvidedDragHandleProps } from "react-beautiful-dnd";
 import SUPPORTED_LINK_PLATFORMS from "../../static/supported-link-platforms";
 
-interface Props extends React.HTMLAttributes<HTMLLIElement> {
+interface Props {
   link: LinkType;
   links: LinkType[];
   handleRemoveLink: (link: LinkType) => Promise<void>;

@@ -1,12 +1,13 @@
 import { IDefaultResponse, axiosPublic } from "..";
+import { IAuth } from "../../redux/features/auth/authSlice";
 import { EmailSignInType, VerifyEmailType } from "../../schemas/auth.schema";
 
 export const emailSignInRequest = async (
   body: EmailSignInType & { captchaToken: string },
-): Promise<IDefaultResponse<{ id: string; email: string; accessToken: string }>> => {
-  const result = await axiosPublic.post<
-    IDefaultResponse<{ id: string; email: string; accessToken: string }>
-  >("/auth/email-sign-in", body, { withCredentials: true });
+): Promise<IDefaultResponse<IAuth>> => {
+  const result = await axiosPublic.post<IDefaultResponse<IAuth>>("/auth/email-sign-in", body, {
+    withCredentials: true,
+  });
   return result.data;
 };
 

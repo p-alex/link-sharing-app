@@ -4,12 +4,14 @@ export interface IAuth {
   id: string;
   email: string;
   accessToken: string;
+  sessionId: string;
 }
 
 const initialState: IAuth = {
   id: "",
   email: "",
   accessToken: "",
+  sessionId: "",
 };
 
 const authSliceName = "auth";

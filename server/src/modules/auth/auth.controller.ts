@@ -26,17 +26,12 @@ class AuthController {
 
   @httpPost("/email-sign-in", highRateLimit, validateResource(emailSignInSchema), validateCaptcha)
   async emailSignIn(req: Request<object, object, EmailSignInInput>, res: Response) {
-    const { id, email, sessionId, accessToken, refreshToken, refreshTokenExpireInMs } =
+    const { clientAuthData, refreshToken, refreshTokenExpireInMs } =
       await this._authService.emailSignIn(req.body);
 
     setRefreshTokenCookie(res, refreshToken, refreshTokenExpireInMs);
 
-    return HttpResponse.success(res, {
-      id,
-      email,
-      sessionId,
-      accessToken,
-    });
+    return HttpResponse.success(res, clientAuthData);
   }
 
   @httpGet("/google-sign-in", validateResource(oauthSignInSchema))
