@@ -71,6 +71,19 @@ class SessionRepository extends Repository<Session> {
     return true;
   }
 
+  async deleteAllOtherSessions(userId: string, currentSessionId: string): Promise<boolean> {
+    await this._database.client
+      .createQueryBuilder()
+      .delete()
+      .from(Session)
+      .where("userId = :userId AND id != :currentSessionId", {
+        userId,
+        currentSessionId,
+      })
+      .execute();
+    return true;
+  }
+
   async deleteAllExpiredSessions(userId: string, currentDate: Date): Promise<boolean> {
     await this._database.client
       .createQueryBuilder()

@@ -67,7 +67,12 @@ export class UserController {
   @httpPatch("/change-password", highRateLimit, requireAuth, validateResource(changePasswordSchema))
   async changePassword(req: CustomRequest<object, object, ChangePasswordInput>, res: Response) {
     const { oldPassword, newPassword } = req.body;
-    await this._userService.changePassword(req.user.id, oldPassword, newPassword);
+    await this._userService.changePassword(
+      req.user.id,
+      req.user.sessionId,
+      oldPassword,
+      newPassword,
+    );
     return HttpResponse.success(res);
   }
 

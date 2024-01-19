@@ -11,6 +11,7 @@ import OAuthStrategy from "./oauth.strategy";
 import ValidationTokenVerifier from "../../utils/verificationTokenVerifier";
 import { OAuthProvidersType } from "../identity/identity.entity";
 import { IClientAuth } from "./auth.interfaces";
+import RandomIdentifier from "../../utils/randomIdentifier";
 
 @injectable()
 class AuthService {
@@ -22,6 +23,7 @@ class AuthService {
     private readonly _securePasswordGenerator: SecurePasswordGenerator,
     private readonly _oauthStrategy: OAuthStrategy,
     private readonly _validationTokenVerifier: ValidationTokenVerifier,
+    private readonly _randomIdentifier: RandomIdentifier,
   ) {}
 
   async emailSignIn(credentials: EmailSignInInput): Promise<IClientAuth> {
@@ -37,21 +39,20 @@ class AuthService {
 
     if (!isValidPassword) throw new InvalidCredentialsException("Invalid email or password");
 
-    const accessToken = this._jwt.signJwt(
-      { id: userWithEmail.id, email: userWithEmail.email },
-      "ACCESS_TOKEN_SECRET",
-      this._timeConverter.toSeconds(5, "minute"),
-    );
+    const sessionId = this._randomIdentifier.createUUID();
 
-    const refreshTokenExpireInMs = this._timeConverter.toMs(14, "day");
+    const accessToken = this._jwt.signAccessToken({
+      id: userWithEmail.id,
+      email: userWithEmail.email,
+      sessionId,
+    });
 
-    const refreshToken = this._jwt.signJwt(
-      { id: userWithEmail.id },
-      "REFRESH_TOKEN_SECRET",
-      this._timeConverter.toSeconds(refreshTokenExpireInMs, "milisecond"),
-    );
+    const { refreshToken, refreshTokenExpireInMs } = this._jwt.signRefreshToken({
+      id: userWithEmail.id,
+    });
 
     const session = await this._unitOfWork.session.create({
+      id: sessionId,
       session: this._hash.fastHash(refreshToken),
       expires_at: new Date(Date.now() + refreshTokenExpireInMs),
       user: userWithEmail,
@@ -109,13 +110,7 @@ class AuthService {
       };
     }
 
-    const refreshTokenExpireInMs = this._timeConverter.toMs(14, "day");
-
-    const refreshToken = this._jwt.signJwt(
-      { id: user.id },
-      "REFRESH_TOKEN_SECRET",
-      this._timeConverter.toSeconds(refreshTokenExpireInMs, "milisecond"),
-    );
+    const { refreshToken, refreshTokenExpireInMs } = this._jwt.signRefreshToken({ id: user.id });
 
     await this._unitOfWork.session.create({
       session: this._hash.fastHash(refreshToken),

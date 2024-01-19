@@ -7,6 +7,7 @@ import { config } from "./config";
 import { Database } from "./database";
 import cookieParser from "cookie-parser";
 import { exceptionHandler } from "./middleware/exceptionHandler";
+import { IAccessTokenPayload } from "./utils/jwt";
 
 export interface CustomRequest<
   TParams = undefined,
@@ -14,7 +15,7 @@ export interface CustomRequest<
   TReqBody = undefined,
   TQuery = undefined,
 > extends Request<TParams, TResBody, TReqBody, TQuery> {
-  user: { id: string; email: string };
+  user: IAccessTokenPayload;
 }
 
 import "./modules/user/user.controller";
