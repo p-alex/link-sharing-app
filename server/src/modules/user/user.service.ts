@@ -3,7 +3,7 @@ import User from "./user.entity";
 import AlreadyExistsException from "../../exceptions/AlreadyExistsException";
 import { CreateUserInput } from "./user.schema";
 import UnitOfWork from "../../unitOfWork";
-import Hash from "../../utils/hash";
+import Cryptography from "../../utils/cryptography";
 import Mailer from "../../utils/mailer";
 import EmailVerificationTemplate from "../../emailTemplates/EmailVerificationTemplate";
 import { TimeConverter } from "../../utils/timeConverter";
@@ -16,7 +16,7 @@ import InvalidCredentialsException from "../../exceptions/InvalidCredentialsExce
 class UserService {
   constructor(
     private readonly _unitOfWork: UnitOfWork,
-    private readonly _hash: Hash,
+    private readonly _cryptography: Cryptography,
     private readonly _mailer: Mailer,
     private readonly _emailVerificationTemplate: EmailVerificationTemplate,
     private readonly _resetPasswordVerificationTemplate: ResetPasswordVerificationTemplate,
@@ -28,7 +28,7 @@ class UserService {
   async create(userInput: CreateUserInput): Promise<{ id: string }> {
     const userWithEmail = await this._unitOfWork.user.findOneByEmail(userInput.email);
     if (userWithEmail) throw new AlreadyExistsException("A user with that email already exists");
-    const hashedPassword = await this._hash.slowHash(userInput.password);
+    const hashedPassword = await this._cryptography.slowHash(userInput.password);
     const newUser = await this._unitOfWork.user.create({ ...userInput, password: hashedPassword });
 
     const verificationTokenExpireMs = this._timeConverter.toMs(24, "hour");
@@ -40,7 +40,7 @@ class UserService {
     );
 
     await this._unitOfWork.verificationToken.create({
-      token: this._hash.fastHash(verificationToken),
+      token: this._cryptography.fastHash(verificationToken),
       expires_at: new Date(Date.now() + verificationTokenExpireMs),
     });
 
@@ -75,7 +75,7 @@ class UserService {
     );
 
     await this._unitOfWork.verificationToken.create({
-      token: this._hash.fastHash(verificationToken),
+      token: this._cryptography.fastHash(verificationToken),
       expires_at: new Date(Date.now() + verificationTokenExpireMs),
     });
 
@@ -107,7 +107,7 @@ class UserService {
 
     if (!user) throw new Error("User does not exist");
 
-    const hashedPassword = await this._hash.slowHash(newPassword);
+    const hashedPassword = await this._cryptography.slowHash(newPassword);
 
     await this._unitOfWork.user.update({
       ...user,
@@ -129,9 +129,9 @@ class UserService {
   ) {
     const user = await this._unitOfWork.user.findOneById(userId);
     if (!user) throw new Error("User does not exist");
-    const isValidUserPassword = await this._hash.verifySlowHash(oldPassword, user.password);
+    const isValidUserPassword = await this._cryptography.verifySlowHash(oldPassword, user.password);
     if (!isValidUserPassword) throw new InvalidCredentialsException("Password is incorrect");
-    const newHashedPassword = await this._hash.slowHash(newPassword);
+    const newHashedPassword = await this._cryptography.slowHash(newPassword);
     const newUser = { ...user, password: newHashedPassword };
     await this._unitOfWork.user.update(newUser);
     await this._unitOfWork.session.deleteAllOtherSessions(userId, sessionId);

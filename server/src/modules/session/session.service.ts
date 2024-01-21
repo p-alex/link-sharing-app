@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import Jwt from "../../utils/jwt";
-import Hash from "../../utils/hash";
+import Cryptography from "../../utils/cryptography";
 import UnitOfWork from "../../unitOfWork";
 import { IClientAuth } from "../auth/auth.interfaces";
 
@@ -9,15 +9,19 @@ class SessionService {
   constructor(
     private readonly _unitOfWork: UnitOfWork,
     private readonly _jwt: Jwt,
-    private readonly _hash: Hash,
+    private readonly _cryptography: Cryptography,
   ) {}
 
-  async refreshSession(refreshToken: string): Promise<IClientAuth> {
+  async refreshSession(encryptedRefreshToken: string): Promise<IClientAuth> {
+    const decryptedRefreshToken = this._cryptography.decipher(
+      encryptedRefreshToken,
+      "REFRESH_TOKEN_CIPHER_KEY",
+    );
     let userIdFromRefreshToken = "";
 
     try {
       userIdFromRefreshToken = this._jwt.verifyJwt<{ id: string }>(
-        refreshToken,
+        decryptedRefreshToken,
         "REFRESH_TOKEN_SECRET",
       ).id;
     } catch (_) {
@@ -28,7 +32,9 @@ class SessionService {
 
     if (!user) throw new Error("User does not exist anymore");
 
-    const session = await this._unitOfWork.session.findBySession(this._hash.fastHash(refreshToken));
+    const session = await this._unitOfWork.session.findBySession(
+      this._cryptography.fastHash(decryptedRefreshToken),
+    );
     if (!session) throw new Error("Session doesn't exist");
 
     const newAccessToken = this._jwt.signAccessToken({
@@ -37,9 +43,19 @@ class SessionService {
       sessionId: session.id,
     });
 
+    const newEncryptedAccessToken = this._cryptography.cipher(
+      newAccessToken,
+      "ACCESS_TOKEN_CIPHER_KEY",
+    );
+
     const { refreshToken: newRefreshToken } = this._jwt.signRefreshToken({ id: user.id });
 
-    const newHashedRefreshToken = this._hash.fastHash(newRefreshToken);
+    const newHashedRefreshToken = this._cryptography.fastHash(newRefreshToken);
+
+    const newEncryptedRefreshToken = this._cryptography.cipher(
+      newRefreshToken,
+      "REFRESH_TOKEN_CIPHER_KEY",
+    );
 
     const newSession = { ...session, session: newHashedRefreshToken };
 
@@ -49,10 +65,10 @@ class SessionService {
       clientAuthData: {
         id: user.id,
         email: user.email,
-        accessToken: newAccessToken,
+        accessToken: newEncryptedAccessToken,
         sessionId: session.id,
       },
-      refreshToken: newRefreshToken,
+      refreshToken: newEncryptedRefreshToken,
       refreshTokenExpireInMs: session.expires_at.getTime() - Date.now(),
     };
   }

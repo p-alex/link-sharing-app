@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import UnitOfWork from "../../unitOfWork";
-import Hash from "../../utils/hash";
+import Cryptography from "../../utils/cryptography";
 import Jwt from "../../utils/jwt";
 import { EmailSignInInput } from "./auth.schema";
 import { TimeConverter } from "../../utils/timeConverter";
@@ -17,7 +17,7 @@ import RandomIdentifier from "../../utils/randomIdentifier";
 class AuthService {
   constructor(
     private readonly _unitOfWork: UnitOfWork,
-    private readonly _hash: Hash,
+    private readonly _cryptography: Cryptography,
     private readonly _jwt: Jwt,
     private readonly _timeConverter: TimeConverter,
     private readonly _securePasswordGenerator: SecurePasswordGenerator,
@@ -32,7 +32,7 @@ class AuthService {
 
     if (!userWithEmail.is_email_verified) throw new Error("Account's email is not verified.");
 
-    const isValidPassword = await this._hash.verifySlowHash(
+    const isValidPassword = await this._cryptography.verifySlowHash(
       credentials.password,
       userWithEmail.password,
     );
@@ -47,13 +47,20 @@ class AuthService {
       sessionId,
     });
 
+    const encryptedAccessToken = this._cryptography.cipher(accessToken, "ACCESS_TOKEN_CIPHER_KEY");
+
     const { refreshToken, refreshTokenExpireInMs } = this._jwt.signRefreshToken({
       id: userWithEmail.id,
     });
 
+    const encryptedRefreshToken = this._cryptography.cipher(
+      refreshToken,
+      "REFRESH_TOKEN_CIPHER_KEY",
+    );
+
     const session = await this._unitOfWork.session.create({
       id: sessionId,
-      session: this._hash.fastHash(refreshToken),
+      session: this._cryptography.fastHash(refreshToken),
       expires_at: new Date(Date.now() + refreshTokenExpireInMs),
       user: userWithEmail,
     });
@@ -62,10 +69,10 @@ class AuthService {
       clientAuthData: {
         id: userWithEmail.id,
         email: userWithEmail.email,
-        accessToken,
+        accessToken: encryptedAccessToken,
         sessionId: session.id,
       },
-      refreshToken,
+      refreshToken: encryptedRefreshToken,
       refreshTokenExpireInMs,
     };
   }
@@ -80,7 +87,7 @@ class AuthService {
     if (!userWithEmail) {
       const newPassword = this._securePasswordGenerator.generate();
 
-      const hashedPassword = await this._hash.slowHash(newPassword);
+      const hashedPassword = await this._cryptography.slowHash(newPassword);
 
       createdUser = await this._unitOfWork.user.create({
         email,
@@ -112,8 +119,13 @@ class AuthService {
 
     const { refreshToken, refreshTokenExpireInMs } = this._jwt.signRefreshToken({ id: user.id });
 
+    const encryptedRefreshToken = this._cryptography.cipher(
+      refreshToken,
+      "REFRESH_TOKEN_CIPHER_KEY",
+    );
+
     await this._unitOfWork.session.create({
-      session: this._hash.fastHash(refreshToken),
+      session: this._cryptography.fastHash(refreshToken),
       expires_at: new Date(Date.now() + refreshTokenExpireInMs),
       user,
     });
@@ -121,7 +133,7 @@ class AuthService {
     return {
       success: true,
       message: "success",
-      refreshToken,
+      refreshToken: encryptedRefreshToken,
       refreshTokenExpireInMs,
     };
   }
@@ -147,12 +159,17 @@ class AuthService {
     return true;
   }
 
-  async logout(refreshToken: string) {
-    let refreshTokenPayload = { id: "" };
+  async logout(encryptedRefreshToken: string) {
+    const decryptedRefreshToken = this._cryptography.decipher(
+      encryptedRefreshToken,
+      "REFRESH_TOKEN_CIPHER_KEY",
+    );
+
+    let refreshTokenPayload: { id: string };
 
     try {
       refreshTokenPayload = {
-        ...this._jwt.verifyJwt<{ id: string }>(refreshToken, "REFRESH_TOKEN_SECRET"),
+        ...this._jwt.verifyJwt<{ id: string }>(decryptedRefreshToken, "REFRESH_TOKEN_SECRET"),
       };
     } catch (error) {
       throw new Error("You must be logged in");
@@ -160,7 +177,7 @@ class AuthService {
 
     await this._unitOfWork.session.deleteBySession(
       refreshTokenPayload.id,
-      this._hash.fastHash(refreshToken),
+      this._cryptography.fastHash(decryptedRefreshToken),
     );
 
     await this._unitOfWork.session.deleteAllExpiredSessions(

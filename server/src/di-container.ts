@@ -4,7 +4,7 @@ import UserRepository from "./modules/user/user.repository";
 import { Database } from "./database";
 import { UserController } from "./modules/user/user.controller";
 import UnitOfWork from "./unitOfWork";
-import Hash from "./utils/hash";
+import Cryptography from "./utils/cryptography";
 import Jwt from "./utils/jwt";
 import { TimeConverter } from "./utils/timeConverter";
 import AuthController from "./modules/auth/auth.controller";
@@ -50,7 +50,7 @@ container.bind(OAuthStrategy).toSelf();
 
 container.bind(IdentityRepository).toSelf();
 
-container.bind(Hash).toSelf();
+container.bind(Cryptography).toSelf();
 container.bind(Jwt).toSelf();
 container.bind(TimeConverter).toSelf();
 container.bind(SecurePasswordGenerator).toSelf();

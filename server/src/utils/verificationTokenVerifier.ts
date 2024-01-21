@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import UnitOfWork from "../unitOfWork";
-import Hash from "./hash";
+import Cryptography from "./cryptography";
 import Jwt from "./jwt";
 import { config } from "../config";
 
@@ -8,14 +8,14 @@ import { config } from "../config";
 class VerificationTokenVerifier {
   constructor(
     private readonly _unitOfWork: UnitOfWork,
-    private readonly _hash: Hash,
+    private readonly _cryptography: Cryptography,
     private readonly _jwt: Jwt,
   ) {}
   async verify<TPayload>(
     token: string,
     secret: keyof typeof config.jwtSecrets,
   ): Promise<{ tokenPayload: TPayload; hashedToken: string }> {
-    const hashedToken = this._hash.fastHash(token);
+    const hashedToken = this._cryptography.fastHash(token);
 
     const isToken = await this._unitOfWork.verificationToken.findOneByToken(hashedToken);
 

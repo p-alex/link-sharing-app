@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity("verificationTokens")
 class VerificationToken {
-  @PrimaryColumn("varchar", { length: 32, nullable: false })
+  @PrimaryColumn("varchar", { length: 64, unique: true, nullable: false })
   public readonly token: string;
 
   @Column({ type: "timestamptz", nullable: false })
