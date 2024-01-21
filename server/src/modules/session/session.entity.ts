@@ -9,7 +9,7 @@ class Session {
   @ManyToOne(() => User, (user) => user.sessions, { onDelete: "CASCADE" })
   public readonly user: User;
 
-  @Column("varchar", { length: 32, unique: true, nullable: false })
+  @Column("varchar", { length: 64, unique: true, nullable: false })
   public session: string;
 
   @Column({ type: "timestamptz" })
