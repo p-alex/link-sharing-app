@@ -9,10 +9,10 @@ const Error = ({ message, ...divProps }: Props) => {
   return (
     <div
       {...divProps}
-      className={twMerge("text-red flex w-max items-center gap-2", divProps.className)}
+      className={twMerge("text-red relative flex w-full items-center gap-2", divProps.className)}
     >
       <ErrorIcon className="shrink-0 text-error" />
-      <p className="text-error">{message}</p>
+      <p className="block w-full text-wrap text-error">{message}</p>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import getParamFromUrl from "../../utils/getParamFromUrl";
 import useCaptcha from "../../hooks/useCaptcha";
 import { useDispatch } from "react-redux";
 import { auth_loginAction } from "../../redux/features/auth/authSlice";
+import { addPopupAction } from "../../redux/features/globalPopupsSlice/globalPopupsSlice";
 
 const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
   const navigate = useNavigate();
@@ -16,10 +17,15 @@ const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
 
   const submit = async (formData: SignInSchemaType) => {
     const captchaToken = await getCaptchaToken();
-    const { success, data } = await emailSignInRequest({
+    const { success, data, errors } = await emailSignInRequest({
       ...formData,
       captchaToken,
     });
+
+    if (errors) {
+      dispatch(addPopupAction({ message: errors[0], type: "error" }));
+      return;
+    }
 
     if (success && data) {
       resetForm();

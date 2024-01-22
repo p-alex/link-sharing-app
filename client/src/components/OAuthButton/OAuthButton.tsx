@@ -24,9 +24,6 @@ const OAuthButton = memo(({ variant, title }: Props) => {
       className="w-full"
     >
       {OAUTH_BUTTON_VARIANTS[variant].icon}
-      {/* <span className={`${isLoading ? "w-auto" : "w-[155px]"} text-left max-[360px]:w-[70px]`}>
-        {isLoading ? "Loading..." : children}
-      </span> */}
     </Button>
   );
 });

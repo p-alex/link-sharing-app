@@ -2,15 +2,24 @@ import { useState } from "react";
 import { SignUpSchemaType } from "../../schemas/user.schema";
 import { createUser } from "../../apiRequests/users";
 import useCaptcha from "../../hooks/useCaptcha";
+import { useDispatch } from "react-redux";
+import { addPopupAction } from "../../redux/features/globalPopupsSlice/globalPopupsSlice";
 
 const useSignUpPage = ({ formReset }: { formReset: () => void }) => {
+  const dispatch = useDispatch();
   const [successMessage, setSuccessMessage] = useState("");
 
   const { captchaRef, getCaptchaToken } = useCaptcha();
 
   const submit = async (formData: SignUpSchemaType) => {
     const captchaToken = await getCaptchaToken();
-    const { success } = await createUser({ ...formData, captchaToken });
+    const { success, errors } = await createUser({ ...formData, captchaToken });
+
+    if (errors) {
+      dispatch(addPopupAction({ message: errors[0], type: "error" }));
+      return;
+    }
+
     if (success) {
       formReset();
       setSuccessMessage(
