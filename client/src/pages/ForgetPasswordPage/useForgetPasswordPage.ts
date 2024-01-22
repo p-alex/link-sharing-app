@@ -10,7 +10,7 @@ const useForgetPasswordPage = ({ formReset }: { formReset: () => void }) => {
 
   const submit = async (data: ForgetPasswordType) => {
     const captchaToken = await getCaptchaToken();
-    const result = await forgetPassword({ ...data, captchaToken });
+    const result = await forgetPassword({ email: data.email.toLowerCase().trim(), captchaToken });
     if (result.success) {
       formReset();
       setSuccess(true);

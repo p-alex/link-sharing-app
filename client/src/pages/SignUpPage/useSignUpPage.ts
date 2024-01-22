@@ -13,7 +13,11 @@ const useSignUpPage = ({ formReset }: { formReset: () => void }) => {
 
   const submit = async (formData: SignUpSchemaType) => {
     const captchaToken = await getCaptchaToken();
-    const { success, errors } = await createUser({ ...formData, captchaToken });
+    const { success, errors } = await createUser({
+      ...formData,
+      email: formData.email.toLowerCase().trim(),
+      captchaToken,
+    });
 
     if (errors) {
       dispatch(addPopupAction({ message: errors[0], type: "error" }));

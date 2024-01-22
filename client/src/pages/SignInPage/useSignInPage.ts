@@ -19,6 +19,7 @@ const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
     const captchaToken = await getCaptchaToken();
     const { success, data, errors } = await emailSignInRequest({
       ...formData,
+      email: formData.email.toLowerCase().trim(),
       captchaToken,
     });
 
