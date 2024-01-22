@@ -5,7 +5,6 @@ import { TimeConverter } from "./timeConverter";
 
 export interface IAccessTokenPayload {
   id: string;
-  email: string;
   sessionId: string;
 }
 
@@ -28,10 +27,10 @@ class Jwt {
     secret: keyof typeof config.jwtSecrets,
     expiryInSeconds: number,
   ) {
-    return jwt.sign({ ...payload }, secret, { expiresIn: expiryInSeconds, algorithm: "HS512" });
+    return jwt.sign({ ...payload }, secret, { expiresIn: expiryInSeconds, algorithm: "HS256" });
   }
   verifyJwt<TPayload>(token: string, secret: keyof typeof config.jwtSecrets) {
-    return jwt.verify(token, secret, { algorithms: ["HS512"] }) as TPayload;
+    return jwt.verify(token, secret, { algorithms: ["HS256"] }) as TPayload;
   }
 }
 

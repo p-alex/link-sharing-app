@@ -39,7 +39,6 @@ class SessionService {
 
     const newAccessToken = this._jwt.signAccessToken({
       id: user.id,
-      email: user.email,
       sessionId: session.id,
     });
 

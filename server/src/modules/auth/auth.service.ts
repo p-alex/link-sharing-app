@@ -3,7 +3,6 @@ import UnitOfWork from "../../unitOfWork";
 import Cryptography from "../../utils/cryptography";
 import Jwt from "../../utils/jwt";
 import { EmailSignInInput } from "./auth.schema";
-import { TimeConverter } from "../../utils/timeConverter";
 import InvalidCredentialsException from "../../exceptions/InvalidCredentialsException";
 import SecurePasswordGenerator from "../../utils/securePasswordGenerator";
 import User from "../user/user.entity";
@@ -19,7 +18,6 @@ class AuthService {
     private readonly _unitOfWork: UnitOfWork,
     private readonly _cryptography: Cryptography,
     private readonly _jwt: Jwt,
-    private readonly _timeConverter: TimeConverter,
     private readonly _securePasswordGenerator: SecurePasswordGenerator,
     private readonly _oauthStrategy: OAuthStrategy,
     private readonly _validationTokenVerifier: ValidationTokenVerifier,
@@ -43,7 +41,6 @@ class AuthService {
 
     const accessToken = this._jwt.signAccessToken({
       id: userWithEmail.id,
-      email: userWithEmail.email,
       sessionId,
     });
 
@@ -79,6 +76,18 @@ class AuthService {
 
   async oauthSignIn(code: string, provider: OAuthProvidersType) {
     const { email } = await this._oauthStrategy[provider](code);
+
+    if (!email) {
+      return {
+        success: false,
+        message:
+          "There was an error while trying to retrieve the email address from " +
+          provider +
+          ". Please try again later.",
+        refreshToken: null,
+        refreshTokenExpireInMs: 0,
+      };
+    }
 
     const userWithEmail = await this._unitOfWork.user.findOneByEmail(email);
 
