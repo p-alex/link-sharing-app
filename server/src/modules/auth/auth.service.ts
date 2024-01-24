@@ -26,6 +26,7 @@ class AuthService {
 
   async emailSignIn(credentials: EmailSignInInput): Promise<IClientAuth> {
     const userWithEmail = await this._unitOfWork.user.findOneByEmail(credentials.email);
+
     if (!userWithEmail) throw new InvalidCredentialsException("Invalid email or password");
 
     if (!userWithEmail.is_email_verified) throw new Error("Account's email is not verified.");
@@ -44,16 +45,9 @@ class AuthService {
       sessionId,
     });
 
-    const encryptedAccessToken = this._cryptography.cipher(accessToken, "ACCESS_TOKEN_CIPHER_KEY");
-
     const { refreshToken, refreshTokenExpireInMs } = this._jwt.signRefreshToken({
       id: userWithEmail.id,
     });
-
-    const encryptedRefreshToken = this._cryptography.cipher(
-      refreshToken,
-      "REFRESH_TOKEN_CIPHER_KEY",
-    );
 
     const session = await this._unitOfWork.session.create({
       id: sessionId,
@@ -66,10 +60,10 @@ class AuthService {
       clientAuthData: {
         id: userWithEmail.id,
         email: userWithEmail.email,
-        accessToken: encryptedAccessToken,
+        accessToken,
         sessionId: session.id,
       },
-      refreshToken: encryptedRefreshToken,
+      refreshToken,
       refreshTokenExpireInMs,
     };
   }
@@ -128,11 +122,6 @@ class AuthService {
 
     const { refreshToken, refreshTokenExpireInMs } = this._jwt.signRefreshToken({ id: user.id });
 
-    const encryptedRefreshToken = this._cryptography.cipher(
-      refreshToken,
-      "REFRESH_TOKEN_CIPHER_KEY",
-    );
-
     await this._unitOfWork.session.create({
       session: this._cryptography.fastHash(refreshToken),
       expires_at: new Date(Date.now() + refreshTokenExpireInMs),
@@ -142,7 +131,7 @@ class AuthService {
     return {
       success: true,
       message: "success",
-      refreshToken: encryptedRefreshToken,
+      refreshToken,
       refreshTokenExpireInMs,
     };
   }
@@ -168,17 +157,12 @@ class AuthService {
     return true;
   }
 
-  async logout(encryptedRefreshToken: string) {
-    const decryptedRefreshToken = this._cryptography.decipher(
-      encryptedRefreshToken,
-      "REFRESH_TOKEN_CIPHER_KEY",
-    );
-
+  async logout(refreshToken: string) {
     let refreshTokenPayload: { id: string };
 
     try {
       refreshTokenPayload = {
-        ...this._jwt.verifyJwt<{ id: string }>(decryptedRefreshToken, "REFRESH_TOKEN_SECRET"),
+        ...this._jwt.verifyJwt<{ id: string }>(refreshToken, "REFRESH_TOKEN_SECRET"),
       };
     } catch (error) {
       throw new Error("You must be logged in");
@@ -186,7 +170,7 @@ class AuthService {
 
     await this._unitOfWork.session.deleteBySession(
       refreshTokenPayload.id,
-      this._cryptography.fastHash(decryptedRefreshToken),
+      this._cryptography.fastHash(refreshToken),
     );
 
     await this._unitOfWork.session.deleteAllExpiredSessions(

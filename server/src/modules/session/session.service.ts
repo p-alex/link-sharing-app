@@ -12,16 +12,12 @@ class SessionService {
     private readonly _cryptography: Cryptography,
   ) {}
 
-  async refreshSession(encryptedRefreshToken: string): Promise<IClientAuth> {
-    const decryptedRefreshToken = this._cryptography.decipher(
-      encryptedRefreshToken,
-      "REFRESH_TOKEN_CIPHER_KEY",
-    );
+  async refreshSession(refreshToken: string): Promise<IClientAuth> {
     let userIdFromRefreshToken = "";
 
     try {
       userIdFromRefreshToken = this._jwt.verifyJwt<{ id: string }>(
-        decryptedRefreshToken,
+        refreshToken,
         "REFRESH_TOKEN_SECRET",
       ).id;
     } catch (_) {
@@ -33,8 +29,9 @@ class SessionService {
     if (!user) throw new Error("User does not exist anymore");
 
     const session = await this._unitOfWork.session.findBySession(
-      this._cryptography.fastHash(decryptedRefreshToken),
+      this._cryptography.fastHash(refreshToken),
     );
+
     if (!session) throw new Error("Session doesn't exist");
 
     const newAccessToken = this._jwt.signAccessToken({
@@ -42,19 +39,9 @@ class SessionService {
       sessionId: session.id,
     });
 
-    const newEncryptedAccessToken = this._cryptography.cipher(
-      newAccessToken,
-      "ACCESS_TOKEN_CIPHER_KEY",
-    );
-
     const { refreshToken: newRefreshToken } = this._jwt.signRefreshToken({ id: user.id });
 
     const newHashedRefreshToken = this._cryptography.fastHash(newRefreshToken);
-
-    const newEncryptedRefreshToken = this._cryptography.cipher(
-      newRefreshToken,
-      "REFRESH_TOKEN_CIPHER_KEY",
-    );
 
     const newSession = { ...session, session: newHashedRefreshToken };
 
@@ -64,10 +51,10 @@ class SessionService {
       clientAuthData: {
         id: user.id,
         email: user.email,
-        accessToken: newEncryptedAccessToken,
+        accessToken: newAccessToken,
         sessionId: session.id,
       },
-      refreshToken: newEncryptedRefreshToken,
+      refreshToken: newRefreshToken,
       refreshTokenExpireInMs: session.expires_at.getTime() - Date.now(),
     };
   }
