@@ -47,9 +47,6 @@ const SignUpPage = () => {
           )}
           {!successMessage && (
             <form onSubmit={(event) => handleSubmit(event, submit)}>
-              {formState.responseError && (
-                <Error message={formState.responseError} className="mb-4" />
-              )}
               <div className="flex flex-col gap-6">
                 <InputGroup
                   label={

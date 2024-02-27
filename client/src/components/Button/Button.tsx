@@ -10,6 +10,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 const variantOptions = {
   fill: "bg-primary text-white",
   outline: "bg-transparent hover:bg-lightPurple text-primary",
+  error: "bg-error hover:opacity-80 text-white border-none",
 };
 
 const Button = ({ variant = "fill", icon, children, ...buttonProps }: Props) => {
@@ -17,7 +18,7 @@ const Button = ({ variant = "fill", icon, children, ...buttonProps }: Props) => 
     <button
       {...buttonProps}
       className={twMerge(
-        `flex items-center justify-center gap-2 border border-primary px-[27px] py-[11px] ${variantOptions[variant]} rounded-lg font-semibold shadow transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50`,
+        `flex items-center justify-center gap-2 border border-primary px-[27px] py-[11px] ${variantOptions[variant]} min-h-[46px] rounded-lg font-semibold shadow transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50`,
         buttonProps.className,
       )}
     >

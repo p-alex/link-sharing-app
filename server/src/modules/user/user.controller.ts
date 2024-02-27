@@ -4,6 +4,7 @@ import { Response } from "express";
 import { validateResource } from "../../middleware/validateResource";
 import {
   ChangePasswordInput,
+  CheckPasswordInput,
   CreateUserInput,
   DeleteUserInput,
   ForgetPasswordInput,
@@ -11,6 +12,7 @@ import {
   ResetPasswordInput,
   UpdateUserInput,
   changePasswordSchema,
+  checkPasswordSchema,
   createUserSchema,
   deleteUserSchema,
   forgetPasswordSchema,
@@ -20,7 +22,12 @@ import {
 } from "./user.schema";
 import { HttpResponse } from "../../utils/httpResponse";
 import requireAuth from "../../middleware/requireAuth";
-import { highRateLimit, mediumRateLimit, veryHighRateLimit } from "../../middleware/rateLimiting";
+import {
+  highRateLimit,
+  lowRateLimit,
+  mediumRateLimit,
+  veryHighRateLimit,
+} from "../../middleware/rateLimiting";
 import { CustomRequest } from "../../server";
 import { validateCaptcha } from "../../middleware/validateCaptcha";
 
@@ -61,6 +68,14 @@ export class UserController {
   @httpPost("/reset-password", veryHighRateLimit, validateResource(resetPasswordSchema))
   async resetPassword(req: CustomRequest<object, object, ResetPasswordInput>, res: Response) {
     await this._userService.resetPassword(req.body.password, req.body.token);
+    return HttpResponse.success(res, null, 200);
+  }
+
+  @httpPost("/check-password", lowRateLimit, requireAuth, validateResource(checkPasswordSchema))
+  async checkPassword(req: CustomRequest<object, object, CheckPasswordInput>, res: Response) {
+    const password = req.body.password;
+    const userId = req.user.id;
+    await this._userService.checkPassword(userId, password);
     return HttpResponse.success(res, null, 200);
   }
 

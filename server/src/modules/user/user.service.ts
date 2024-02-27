@@ -137,6 +137,14 @@ class UserService {
     await this._unitOfWork.session.deleteAllOtherSessions(userId, sessionId);
     return true;
   }
+
+  async checkPassword(userId: string, password: string) {
+    const user = await this._unitOfWork.user.findOneById(userId);
+    if (!user) throw new Error("User does not exist");
+    const isValidPassword = await this._cryptography.verifySlowHash(password, user.password);
+    if (!isValidPassword) throw new InvalidCredentialsException("Password is incorrect");
+    return true;
+  }
 }
 
 export default UserService;

@@ -1,12 +1,17 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import SecurityTab from "./SecurityTab/SecurityTab";
-import { LockIcon } from "../../svgs";
+import SecurityTab from "./SecurityTab/SecurityTab/SecurityTab";
+import { InfoIcon, LockIcon } from "../../svgs";
+import AccountTab from "./SecurityTab/AccountTab/AccountTab";
 
 const TABS = {
+  account: {
+    tab: <AccountTab />,
+    icon: <InfoIcon width={20} height={20} />,
+  },
   security: {
     tab: <SecurityTab />,
-    icon: <LockIcon />,
+    icon: <LockIcon width={20} height={20} />,
   },
 };
 
@@ -17,7 +22,13 @@ export type SettingsTabsType = {
 const useSettingsPage = () => {
   const navigate = useNavigate();
   const params = useParams<{ tab: keyof SettingsTabsType }>();
-  const activeTab = params.tab;
+  let activeTab = params.tab;
+
+  if (!activeTab || !Object.keys(TABS).includes(activeTab)) {
+    const firstTab = Object.keys(TABS)[0] as keyof SettingsTabsType;
+    activeTab = firstTab;
+    navigate("/settings/" + firstTab);
+  }
 
   useEffect(() => {
     if (!activeTab || !Object.keys(TABS).includes(activeTab)) {

@@ -37,9 +37,6 @@ const SignInPage = () => {
         </Link>
         <Section title="Login" description="Add your details below to get back into the app">
           <form onSubmit={(event) => handleSubmit(event, submit)}>
-            {formState.responseError && (
-              <Error message={formState.responseError} className="mb-4" />
-            )}
             {oauthError && <Error message={oauthError} className="mb-4" />}
             <div className="flex flex-col gap-6">
               <InputGroup

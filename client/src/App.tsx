@@ -9,6 +9,7 @@ import ForgetPasswordPage from "./pages/ForgetPasswordPage/ForgetPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 import RedirectToHomePage from "./RedirectToHomePage";
 import SettingsPage from "./pages/SettingsPage/SettingsPage";
+import ProfileDetails from "./pages/ProfileDetails/ProfileDetailsPage";
 
 function App() {
   return (
@@ -26,6 +27,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <LinksPage />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/profile-details"
+            element={
+              <ProtectedRoute>
+                <ProfileDetails />
               </ProtectedRoute>
             }
           ></Route>

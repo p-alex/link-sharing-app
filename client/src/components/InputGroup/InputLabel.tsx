@@ -8,7 +8,7 @@ interface Props extends LabelHTMLAttributes<HTMLLabelElement> {
 const InputLabel = ({ children, ...labelProps }: Props) => {
   useInputGroupContext();
   return (
-    <label {...labelProps} className="text-darkGray text-xs leading-[18px]">
+    <label {...labelProps} className="text-xs leading-[18px] text-darkGray">
       {children}
     </label>
   );

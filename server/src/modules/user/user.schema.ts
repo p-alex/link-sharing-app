@@ -58,6 +58,12 @@ export const changePasswordSchema = z
     message: "Passwords must match",
   });
 
+export const checkPasswordSchema = z
+  .object({
+    password: passwordSchema,
+  })
+  .strip();
+
 export type CreateUserInput = z.TypeOf<typeof createUserSchema>;
 export type UpdateUserInput = z.TypeOf<typeof updateUserSchema>;
 export type DeleteUserInput = z.TypeOf<typeof deleteUserSchema>;
@@ -65,3 +71,4 @@ export type ForgetPasswordInput = z.TypeOf<typeof forgetPasswordSchema>;
 export type ResetPasswordConfirmationInput = z.TypeOf<typeof resetPasswordConfirmationSchema>;
 export type ResetPasswordInput = z.TypeOf<typeof resetPasswordSchema>;
 export type ChangePasswordInput = z.TypeOf<typeof changePasswordSchema>;
+export type CheckPasswordInput = z.TypeOf<typeof checkPasswordSchema>;

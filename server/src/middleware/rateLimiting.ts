@@ -11,7 +11,6 @@ export const veryHighRateLimit = rateLimit({
     "Too many requests. Please try again in 1 hour.",
   ]),
 });
-
 export const highRateLimit = rateLimit({
   windowMs: timeConverter.toMs(15, "minute"),
   limit: 12,

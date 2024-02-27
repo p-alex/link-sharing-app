@@ -1,8 +1,9 @@
 import { InputHTMLAttributes, forwardRef, LegacyRef } from "react";
 import { useInputGroupContext } from "./InputGroupContext";
+import { twJoin, twMerge } from "tailwind-merge";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
 }
 
 const Input = forwardRef(({ icon, ...inputProps }: Props, ref: LegacyRef<HTMLInputElement>) => {
@@ -10,14 +11,16 @@ const Input = forwardRef(({ icon, ...inputProps }: Props, ref: LegacyRef<HTMLInp
   return (
     <div className="group relative flex w-full flex-col gap-1">
       <div
-        className={`flex h-[48px] w-full items-center gap-[12px] rounded-lg border bg-white p-4 transition-shadow group-focus-within:shadow-inputFocus ${
+        className={`flex h-[46px] w-full items-center gap-[12px] rounded-lg border bg-white p-4 transition-shadow group-focus-within:shadow-inputFocus ${
           isError ? "border-error" : "border-mediumGrey"
         } group-focus-within:border-purple`}
       >
         {icon && icon}
         <input
           {...inputProps}
-          className="w-full outline-none"
+          className={
+            "w-full bg-none outline-none disabled:cursor-not-allowed disabled:bg-none disabled:opacity-60"
+          }
           aria-invalid={isError ? "true" : "false"}
           ref={ref}
         />

@@ -17,7 +17,7 @@ const SettingsSideMenu = ({ tabs, activeTab }: Props) => {
               <Link
                 to={"/settings/" + currentTab}
                 className={`${
-                  currentTab === activeTab ? "bg-lightPurple text-primary" : ""
+                  currentTab === activeTab ? "bg-lightPurple text-primary" : "text-mediumGrey"
                 } flex items-center gap-2 px-6 py-4 font-semibold capitalize hover:bg-lightPurple`}
               >
                 {tabs[currentTab]?.icon && tabs[currentTab]?.icon} {currentTab}

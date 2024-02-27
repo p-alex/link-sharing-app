@@ -1,13 +1,16 @@
-import Button from "../../../../../components/Button";
-import InputGroup from "../../../../../components/InputGroup";
+import Button from "../../../../../../components/Button";
+import InputGroup from "../../../../../../components/InputGroup";
+import SettingBox from "../../../../SettingBox";
 import useChangePasswordBox from "./useChangePasswordBox";
 
 const ChangePasswordBox = () => {
   const { register, handleChangePassword, formState } = useChangePasswordBox();
 
   return (
-    <div className="flex flex-col gap-2">
-      <h2>Change Password</h2>
+    <SettingBox
+      title="Change password"
+      description="For your security, we highly recommend that you choose a unique password that you don't use for any other online account."
+    >
       <form className="flex flex-col gap-4" onSubmit={handleChangePassword}>
         <InputGroup
           label={<InputGroup.InputLabel htmlFor="oldPassword">Old Password</InputGroup.InputLabel>}
@@ -63,11 +66,16 @@ const ChangePasswordBox = () => {
             ) : null
           }
         />
-        <Button variant="fill" type="submit" disabled={formState.isLoading || !formState.isValid}>
+        <Button
+          variant="fill"
+          type="submit"
+          className="w-max"
+          disabled={formState.isLoading || !formState.isValid}
+        >
           Change Password
         </Button>
       </form>
-    </div>
+    </SettingBox>
   );
 };
 
