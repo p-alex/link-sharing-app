@@ -1,5 +1,5 @@
-import Button from "../../../../../../components/Button";
-import SettingBox from "../../../../SettingBox";
+import Button from "../../../../../components/Button";
+import SettingBox from "../../../SettingBox";
 
 const SignOutEverywhereBox = () => {
   return (

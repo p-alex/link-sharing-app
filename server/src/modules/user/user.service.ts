@@ -145,6 +145,11 @@ class UserService {
     if (!isValidPassword) throw new InvalidCredentialsException("Password is incorrect");
     return true;
   }
+
+  async deleteRequest(userId: string) {
+    await this._unitOfWork.user.deleteById(userId);
+    return true;
+  }
 }
 
 export default UserService;

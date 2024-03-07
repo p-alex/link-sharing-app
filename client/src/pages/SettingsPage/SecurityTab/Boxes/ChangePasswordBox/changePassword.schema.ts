@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { passwordSchema } from "../../../../../../schemas/user.schema";
+import { passwordSchema } from "../../../../../schemas/user.schema";
 
 const changePasswordSchema = z
   .object({

@@ -1,4 +1,5 @@
 import { CloseIcon } from "../../svgs";
+import DeleteAccountConfirmStep from "../Modal/ModalSteps/DeleteAccountConfirmationStep";
 import useGlobalPopups from "./useGlobalPopups";
 
 const GlobalPopups = () => {
@@ -7,7 +8,7 @@ const GlobalPopups = () => {
   return (
     <>
       {popups.length > 0 ? (
-        <ul className="fixed bottom-0 left-0 flex w-full flex-col-reverse items-center gap-4 p-4">
+        <ul className="fixed bottom-0 left-0 z-[100] flex w-full flex-col-reverse items-center gap-4 p-4">
           {popups.map((popup) => {
             return (
               <li

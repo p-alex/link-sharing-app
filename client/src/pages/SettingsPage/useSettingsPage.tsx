@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import SecurityTab from "./SecurityTab/SecurityTab/SecurityTab";
 import { InfoIcon, LockIcon } from "../../svgs";
-import AccountTab from "./SecurityTab/AccountTab/AccountTab";
+import AccountTab from "./AccountTab/AccountTab";
+import SecurityTab from "./SecurityTab/SecurityTab";
 
 const TABS = {
   account: {

@@ -1,10 +1,10 @@
 import React from "react";
 import changePasswordSchema from "./changePassword.schema";
-import useForm from "../../../../../../hooks/useForm";
-import useAxiosPrivate from "../../../../../../hooks/useAxiosPrivate";
-import { IDefaultResponse } from "../../../../../../apiRequests";
 import { useDispatch } from "react-redux";
-import { addPopupAction } from "../../../../../../redux/features/globalPopupsSlice/globalPopupsSlice";
+import useAxiosPrivate from "../../../../../hooks/useAxiosPrivate";
+import useForm from "../../../../../hooks/useForm";
+import { IDefaultResponse } from "../../../../../apiRequests";
+import { addPopupAction } from "../../../../../redux/features/globalPopupsSlice/globalPopupsSlice";
 
 const useChangePasswordBox = () => {
   const dispatch = useDispatch();

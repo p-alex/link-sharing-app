@@ -1,6 +1,5 @@
 import { InputHTMLAttributes, forwardRef, LegacyRef } from "react";
 import { useInputGroupContext } from "./InputGroupContext";
-import { twJoin, twMerge } from "tailwind-merge";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   icon?: React.ReactNode;

@@ -10,7 +10,7 @@ type ErrorsType<TPayload> = {
 
 function useForm<
   TPayload extends { [key: string]: string | number | readonly string[] | undefined },
-  TSchema extends ZodSchema,
+  TSchema extends ZodSchema | undefined,
 >({ payload, zodSchema }: { payload: TPayload; zodSchema: TSchema }) {
   const dispatch = useDispatch();
   const [data, setData] = useState<TPayload>(payload);
@@ -23,6 +23,8 @@ function useForm<
   const [fieldErrors, setFieldErrors] = useState<ErrorsType<TPayload> | null>(null);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const isValid = fieldErrors === null;
 
   function createFocusedInputsObject() {
     const keys = Object.keys(data);
@@ -75,7 +77,9 @@ function useForm<
 
   const handleValidate = () => {
     try {
-      zodSchema.parse(data);
+      if (zodSchema) {
+        zodSchema.parse(data);
+      }
       setFieldErrors(null);
     } catch (error) {
       if (error instanceof ZodError) {
@@ -89,6 +93,7 @@ function useForm<
     submitFunc: (data: TPayload) => Promise<void>,
   ) => {
     event.preventDefault();
+    if (!isValid) return;
     try {
       setIsLoading(true);
       await submitFunc(data);
@@ -124,7 +129,7 @@ function useForm<
     register,
     formState: {
       fieldErrors,
-      isValid: fieldErrors === null,
+      isValid,
       isLoading,
       responseError,
     },

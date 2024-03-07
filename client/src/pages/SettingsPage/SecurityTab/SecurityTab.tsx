@@ -1,4 +1,4 @@
-import Section from "../../../../components/Section";
+import Section from "../../../components/Section";
 import ChangePasswordBox from "./Boxes/ChangePasswordBox/ChangePasswordBox";
 import SignOutEverywhereBox from "./Boxes/SignOutEverywhere";
 

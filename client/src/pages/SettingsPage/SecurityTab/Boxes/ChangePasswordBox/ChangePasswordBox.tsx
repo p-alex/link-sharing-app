@@ -1,6 +1,6 @@
-import Button from "../../../../../../components/Button";
-import InputGroup from "../../../../../../components/InputGroup";
-import SettingBox from "../../../../SettingBox";
+import Button from "../../../../../components/Button";
+import InputGroup from "../../../../../components/InputGroup";
+import SettingBox from "../../../SettingBox";
 import useChangePasswordBox from "./useChangePasswordBox";
 
 const ChangePasswordBox = () => {

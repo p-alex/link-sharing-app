@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, LegacyRef, forwardRef } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -13,18 +13,24 @@ const variantOptions = {
   error: "bg-error hover:opacity-80 text-white border-none",
 };
 
-const Button = ({ variant = "fill", icon, children, ...buttonProps }: Props) => {
-  return (
-    <button
-      {...buttonProps}
-      className={twMerge(
-        `flex items-center justify-center gap-2 border border-primary px-[27px] py-[11px] ${variantOptions[variant]} min-h-[46px] rounded-lg font-semibold shadow transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50`,
-        buttonProps.className,
-      )}
-    >
-      {icon} {children}
-    </button>
-  );
-};
+const Button = forwardRef(
+  (
+    { variant = "fill", icon, children, ...buttonProps }: Props,
+    ref: LegacyRef<HTMLButtonElement>,
+  ) => {
+    return (
+      <button
+        {...buttonProps}
+        className={twMerge(
+          `flex items-center justify-center gap-2 border border-primary px-[27px] py-[11px] ${variantOptions[variant]} min-h-[46px] rounded-lg font-semibold shadow transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50`,
+          buttonProps.className,
+        )}
+        ref={ref}
+      >
+        {icon} {children}
+      </button>
+    );
+  },
+);
 
 export default Button;

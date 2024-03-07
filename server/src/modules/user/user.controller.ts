@@ -30,6 +30,7 @@ import {
 } from "../../middleware/rateLimiting";
 import { CustomRequest } from "../../server";
 import { validateCaptcha } from "../../middleware/validateCaptcha";
+import setRefreshTokenCookie from "../../utils/setRefreshTokenCookie";
 
 @controller("/users")
 export class UserController {
@@ -88,6 +89,14 @@ export class UserController {
       oldPassword,
       newPassword,
     );
+    return HttpResponse.success(res);
+  }
+
+  @httpDelete("/delete-request", lowRateLimit, requireAuth)
+  async deleteRequest(req: CustomRequest, res: Response) {
+    const user = req.user;
+    await this._userService.deleteRequest(user.id);
+    setRefreshTokenCookie(res, "", 0);
     return HttpResponse.success(res);
   }
 
