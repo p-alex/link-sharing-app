@@ -8,7 +8,9 @@ import {
 import { auth_logoutAction } from "../../redux/features/auth/authSlice";
 import { addPopupAction } from "../../redux/features/globalPopupsSlice/globalPopupsSlice";
 
-function useDeleteAccountModal({ handleCloseModal }: { handleCloseModal: () => void }) {
+function useDeleteAccountModal({ handleCloseModal }: { handleCloseModal: () => void }): {
+  steps: ModalStepsListType[];
+} {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

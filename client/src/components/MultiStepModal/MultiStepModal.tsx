@@ -9,6 +9,10 @@ interface Props {
   steps: (context: IMultiStepModalContext) => React.ReactNode[];
 }
 
+export interface IMultiStepModalProps {
+  handleCloseModal: () => void;
+}
+
 export type ModalStepsListType = ({
   context,
 }: {
