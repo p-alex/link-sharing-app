@@ -1,27 +1,20 @@
-import sgMail, { MailService } from "@sendgrid/mail";
-import EmailApi from "./EmailApi";
+import nodemailer from "nodemailer";
 import { config } from "../../config";
+import EmailApi, {
+  IEmailApiSendEmailResponse,
+  IEmailApiVerificationEmailArgs,
+  IEmailTemplate,
+} from "./EmailApi";
+import Mail from "nodemailer/lib/mailer";
+import SMTPServer from "./smtpServers/SMTPServer";
 
-interface IEmailApiArgs {
-  to: string;
-}
-
-export interface IEmailApiVerificationEmailArgs extends IEmailApiArgs {
-  verificationToken: string;
-}
-
-export type IEmailApiSendEmailResponse = {
-  success: boolean;
-};
-
-class SendGridEmailApi extends EmailApi {
-  private readonly _client: MailService;
+class NodemailerEmailApi extends EmailApi {
+  private readonly _transporter: Mail;
   private readonly _from: string;
-  constructor() {
+  constructor(private readonly _smtpServer: SMTPServer) {
     super();
-    this._client = sgMail;
-    this._client.setApiKey(config.SENDGRID_API_KEY);
-    this._from = config.SENDGRID_SENDER;
+    this._transporter = nodemailer.createTransport(this._smtpServer);
+    this._from = config.SMTP_SENDER;
   }
 
   async sendAccountVerificationEmail(
@@ -43,7 +36,6 @@ class SendGridEmailApi extends EmailApi {
 
     return { success: true };
   }
-
   async sendResetPasswordVerificationEmail(
     args: IEmailApiVerificationEmailArgs,
   ): Promise<IEmailApiSendEmailResponse> {
@@ -64,20 +56,14 @@ class SendGridEmailApi extends EmailApi {
     return { success: true };
   }
 
-  private async sendEmail(data: {
-    to: string;
-    from: string;
-    subject: string;
-    text: string;
-    html: string;
-  }) {
+  private async sendEmail(data: IEmailTemplate) {
     if (config.NODE_ENV === "development") {
       console.log(data);
       return;
     }
 
-    await this._client.send(data);
+    await this._transporter.sendMail(data);
   }
 }
 
-export default SendGridEmailApi;
+export default NodemailerEmailApi;

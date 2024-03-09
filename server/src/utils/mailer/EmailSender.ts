@@ -1,5 +1,4 @@
-import EmailApi from "./EmailApi";
-import { IEmailApiSendEmailResponse, IEmailApiVerificationEmailArgs } from "./SendGridEmailApi";
+import EmailApi, { IEmailApiSendEmailResponse, IEmailApiVerificationEmailArgs } from "./EmailApi";
 
 class EmailSender extends EmailApi {
   private static emailSenderInstance: EmailSender;

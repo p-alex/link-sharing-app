@@ -21,6 +21,9 @@ export const config = {
   DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET!,
   SENDGRID_API_KEY: process.env.SENDGRID_API_KEY!,
   SENDGRID_SENDER: process.env.SENDGRID_SENDER!,
+  MAILJET_API_KEY: process.env.MAILJET_API_KEY!,
+  MAILJET_API_SECRET: process.env.MAILJET_API_SECRET!,
+  SMTP_SENDER: process.env.SMTP_SENDER!,
   CAPTCHA_SITE_KEY: process.env.CAPTCHA_SITE_KEY!,
   CAPTCHA_SECRET_KEY: process.env.CAPTCHA_SECRET_KEY!,
   jwtSecrets: {

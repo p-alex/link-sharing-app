@@ -1,4 +1,22 @@
-import { IEmailApiSendEmailResponse, IEmailApiVerificationEmailArgs } from "./SendGridEmailApi";
+export interface IEmailTemplate {
+  to: string;
+  from: string;
+  subject: string;
+  text: string;
+  html: string;
+}
+
+interface IEmailApiArgs {
+  to: string;
+}
+
+export interface IEmailApiVerificationEmailArgs extends IEmailApiArgs {
+  verificationToken: string;
+}
+
+export type IEmailApiSendEmailResponse = {
+  success: boolean;
+};
 
 abstract class EmailApi {
   abstract sendAccountVerificationEmail(
