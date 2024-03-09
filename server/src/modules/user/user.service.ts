@@ -4,22 +4,17 @@ import AlreadyExistsException from "../../exceptions/AlreadyExistsException";
 import { CreateUserInput } from "./user.schema";
 import UnitOfWork from "../../unitOfWork";
 import Cryptography from "../../utils/cryptography";
-import Mailer from "../../utils/mailer";
-import EmailVerificationTemplate from "../../emailTemplates/EmailVerificationTemplate";
 import { TimeConverter } from "../../utils/timeConverter";
 import Jwt from "../../utils/jwt";
-import ResetPasswordVerificationTemplate from "../../emailTemplates/ResetPasswordVerificationTemplate";
 import VerificationTokenVerifier from "../../utils/verificationTokenVerifier";
 import InvalidCredentialsException from "../../exceptions/InvalidCredentialsException";
+import emailSender from "../../utils/mailer";
 
 @injectable()
 class UserService {
   constructor(
     private readonly _unitOfWork: UnitOfWork,
     private readonly _cryptography: Cryptography,
-    private readonly _mailer: Mailer,
-    private readonly _emailVerificationTemplate: EmailVerificationTemplate,
-    private readonly _resetPasswordVerificationTemplate: ResetPasswordVerificationTemplate,
     private readonly _timeConverter: TimeConverter,
     private readonly _jwt: Jwt,
     private readonly _verificationTokenVerifier: VerificationTokenVerifier,
@@ -44,9 +39,7 @@ class UserService {
       expires_at: new Date(Date.now() + verificationTokenExpireMs),
     });
 
-    await this._mailer.send(
-      this._emailVerificationTemplate.setup(newUser.email, verificationToken),
-    );
+    await emailSender.sendAccountVerificationEmail({ to: newUser.email, verificationToken });
 
     return { id: newUser.id! };
   }
@@ -79,9 +72,10 @@ class UserService {
       expires_at: new Date(Date.now() + verificationTokenExpireMs),
     });
 
-    await this._mailer.send(
-      this._resetPasswordVerificationTemplate.setup(user.email, verificationToken),
-    );
+    await emailSender.sendResetPasswordVerificationEmail({
+      to: user.email,
+      verificationToken,
+    });
 
     return true;
   }
