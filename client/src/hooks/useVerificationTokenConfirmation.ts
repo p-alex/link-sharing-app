@@ -30,7 +30,6 @@ const useVerificationTokenConfirmation = ({
       if (result.success) {
         setTokenIsValid(true);
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error instanceof AxiosError) {
         setTokenConfirmationError(error.response?.data.errors[0]);

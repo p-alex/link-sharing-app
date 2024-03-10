@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import Button from "../../../../components/Button";
-import DeleteAccountModal from "../../../../components/DeleteAccountModal/DeleteAccountModal";
 import SettingBox from "../../SettingBox";
+import { DeleteAccountModal } from "../../../../components/Modals";
 
 const DeleteAccountBox = () => {
   const [isModalActive, setIsModalActive] = useState(false);

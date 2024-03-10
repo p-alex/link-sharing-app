@@ -1,5 +1,5 @@
-import MultiStepModal from "../MultiStepModal";
-import { IMultiStepModalProps } from "../MultiStepModal/MultiStepModal";
+import MultiStepModal from "../../MultiStepModal";
+import { IMultiStepModalProps } from "../../MultiStepModal/MultiStepModal";
 import useDeleteAccountModal from "./useDeleteAccountModal";
 
 const DeleteAccountModal = ({ handleCloseModal }: IMultiStepModalProps) => {

@@ -1,12 +1,12 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { ModalStepsListType } from "../MultiStepModal/MultiStepModal";
+import { ModalStepsListType } from "../../MultiStepModal/MultiStepModal";
 import {
   DeleteAccountConfirmationStep,
   PasswordValidationStep,
-} from "../MultiStepModal/ModalSteps";
-import { auth_logoutAction } from "../../redux/features/auth/authSlice";
-import { addPopupAction } from "../../redux/features/globalPopupsSlice/globalPopupsSlice";
+} from "../../MultiStepModal/ModalSteps";
+import { auth_logoutAction } from "../../../redux/features/auth/authSlice";
+import { addPopupAction } from "../../../redux/features/globalPopupsSlice/globalPopupsSlice";
 
 function useDeleteAccountModal({ handleCloseModal }: { handleCloseModal: () => void }): {
   steps: ModalStepsListType[];

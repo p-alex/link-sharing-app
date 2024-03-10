@@ -11,7 +11,9 @@ import useRedirectIfSignedIn from "../../hooks/useRedirectIfSignedIn";
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate();
+
   useRedirectIfSignedIn({});
+
   const { formState, reset, register, handleSubmit } = useForm({
     payload: { password: "", confirmPassword: "" },
     zodSchema: resetPasswordSchema,
