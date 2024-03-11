@@ -3,7 +3,8 @@ import { createContext, useContext } from "react";
 export interface IMultiStepModalContext {
   currentStepIndex: number;
   handleNextStep: () => void;
-  firstFocusableElementRef: React.RefObject<HTMLButtonElement>;
+  securityToken: string;
+  handleSetSecurityToken: (securityToken: string) => void;
   lastFocusableElementRef: React.RefObject<HTMLButtonElement>;
 }
 

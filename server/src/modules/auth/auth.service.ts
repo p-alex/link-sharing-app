@@ -7,7 +7,7 @@ import InvalidCredentialsException from "../../exceptions/InvalidCredentialsExce
 import SecurePasswordGenerator from "../../utils/securePasswordGenerator";
 import User from "../user/user.entity";
 import OAuthStrategy from "./oauth.strategy";
-import ValidationTokenVerifier from "../../utils/verificationTokenVerifier";
+import SecurityStringVerifier from "../../utils/securityStringVerifier";
 import { OAuthProvidersType } from "../identity/identity.entity";
 import { IClientAuth } from "./auth.interfaces";
 import RandomIdentifier from "../../utils/randomIdentifier";
@@ -20,7 +20,7 @@ class AuthService {
     private readonly _jwt: Jwt,
     private readonly _securePasswordGenerator: SecurePasswordGenerator,
     private readonly _oauthStrategy: OAuthStrategy,
-    private readonly _validationTokenVerifier: ValidationTokenVerifier,
+    private readonly _securityStringVerifier: SecurityStringVerifier,
     private readonly _randomIdentifier: RandomIdentifier,
   ) {}
 
@@ -137,7 +137,7 @@ class AuthService {
   }
 
   async verifyEmail(token: string) {
-    const { tokenPayload, hashedToken } = await this._validationTokenVerifier.verify<{
+    const { tokenPayload, hashedToken } = await this._securityStringVerifier.verifyToken<{
       id: string;
     }>(token, "EMAIL_VERIFICATION_TOKEN_SECRET");
 
@@ -152,7 +152,7 @@ class AuthService {
       is_email_verified: true,
     });
 
-    await this._unitOfWork.verificationToken.deleteByToken(hashedToken);
+    await this._unitOfWork.securityToken.deleteByToken(hashedToken);
 
     return true;
   }

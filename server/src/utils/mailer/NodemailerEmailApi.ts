@@ -1,6 +1,7 @@
 import nodemailer from "nodemailer";
 import { config } from "../../config";
 import EmailApi, {
+  IEmailApiSecurityCodeEmailArgs,
   IEmailApiSendEmailResponse,
   IEmailApiVerificationEmailArgs,
   IEmailTemplate,
@@ -49,6 +50,24 @@ class NodemailerEmailApi extends EmailApi {
       subject: "Reset password verification",
       text: `Reset password verification link: ${verificationLink}`,
       html: `Reset password verification link: <a href="${verificationLink}">Click to verify</a>${verificationToken}`,
+    };
+
+    await this.sendEmail(data);
+
+    return { success: true };
+  }
+
+  async sendSecurityCodeEmail(
+    args: IEmailApiSecurityCodeEmailArgs,
+  ): Promise<IEmailApiSendEmailResponse> {
+    const { to, code } = args;
+
+    const data = {
+      to,
+      from: this._from,
+      subject: "Security code",
+      text: `Your security code: ${code}`,
+      html: `Your security code: <p style="font-weight: bold; letter-spacing: 2px; font-size: 2rem;">${code}</p>`,
     };
 
     await this.sendEmail(data);

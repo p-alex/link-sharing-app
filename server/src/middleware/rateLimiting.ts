@@ -5,10 +5,10 @@ import DefaultResponse from "../lib/defaultResponse";
 const timeConverter = new TimeConverter();
 
 export const veryHighRateLimit = rateLimit({
-  windowMs: timeConverter.toMs(1, "hour"),
+  windowMs: timeConverter.toMs(90, "minute"),
   limit: 6,
   message: new DefaultResponse(false, 429, null, [
-    "Too many requests. Please try again in 1 hour.",
+    "Too many requests. Please try again in 90 minutes.",
   ]),
 });
 export const highRateLimit = rateLimit({

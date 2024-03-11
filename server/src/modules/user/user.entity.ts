@@ -9,6 +9,8 @@ import {
 import Session from "../session/session.entity";
 import Link from "../link/link.entity";
 import Identity from "../identity/identity.entity";
+import SecurityCode from "../securityCode/securityCode.entity";
+import SecurityToken from "../securityToken/securityToken.entity";
 
 @Entity("users")
 class User {
@@ -30,6 +32,12 @@ class User {
   @OneToMany(() => Identity, (identity) => identity.user)
   public readonly identities: Identity[];
 
+  @OneToMany(() => SecurityToken, (securityToken) => securityToken.user)
+  public readonly securityTokens: SecurityToken[];
+
+  @OneToMany(() => SecurityCode, (securityCode) => securityCode.user)
+  public readonly securityCodes: SecurityCode[];
+
   @CreateDateColumn({ type: "timestamptz", nullable: false })
   public created_at: Date;
 
@@ -46,6 +54,8 @@ class User {
     sessions: Session[],
     links: Link[],
     identities: Identity[],
+    securityTokens: SecurityToken[],
+    securityCodes: SecurityCode[],
     created_at: Date,
     modified_at: Date,
     is_email_verified: boolean,
@@ -56,6 +66,8 @@ class User {
     this.sessions = sessions;
     this.links = links;
     this.identities = identities;
+    this.securityTokens = securityTokens;
+    this.securityCodes = securityCodes;
     this.created_at = created_at;
     this.modified_at = modified_at;
     this.is_email_verified = is_email_verified;

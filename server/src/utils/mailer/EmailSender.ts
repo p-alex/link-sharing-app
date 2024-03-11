@@ -1,4 +1,8 @@
-import EmailApi, { IEmailApiSendEmailResponse, IEmailApiVerificationEmailArgs } from "./EmailApi";
+import EmailApi, {
+  IEmailApiSecurityCodeEmailArgs,
+  IEmailApiSendEmailResponse,
+  IEmailApiVerificationEmailArgs,
+} from "./EmailApi";
 
 class EmailSender extends EmailApi {
   private static emailSenderInstance: EmailSender;
@@ -29,6 +33,12 @@ class EmailSender extends EmailApi {
     this.validateEmailSender();
 
     return this.emailApi!.sendResetPasswordVerificationEmail(args);
+  }
+
+  sendSecurityCodeEmail(args: IEmailApiSecurityCodeEmailArgs): Promise<IEmailApiSendEmailResponse> {
+    this.validateEmailSender();
+
+    return this.emailApi!.sendSecurityCodeEmail(args);
   }
 
   private validateEmailSender(): void {

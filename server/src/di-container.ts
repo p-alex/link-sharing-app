@@ -15,12 +15,15 @@ import SessionController from "./modules/session/session.controller";
 import SecurePasswordGenerator from "./utils/securePasswordGenerator";
 import OAuthStrategy from "./modules/auth/oauth.strategy";
 import CodeGenerator from "./utils/codeGenerator";
-import VerificationTokenRepository from "./modules/verificationToken/verificationToken.repository";
-import VerificationTokenVerifier from "./utils/verificationTokenVerifier";
+import VerificationTokenRepository from "./modules/securityToken/securityToken.repository";
 import LinkRepository from "./modules/link/link.repository";
 import LinkService from "./modules/link/link.service";
 import RandomIdentifier from "./utils/randomIdentifier";
 import IdentityRepository from "./modules/identity/identity.repository";
+import SecurityCodeController from "./modules/securityCode/securityCode.controller";
+import SecurityCodeService from "./modules/securityCode/securityCode.service";
+import SecurityCodeRepository from "./modules/securityCode/securityCode.repository";
+import SecurityStringVerifier from "./utils/securityStringVerifier";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -47,6 +50,10 @@ container.bind(OAuthStrategy).toSelf();
 
 container.bind(IdentityRepository).toSelf();
 
+container.bind(SecurityCodeController).toSelf();
+container.bind(SecurityCodeService).toSelf();
+container.bind(SecurityCodeRepository).toSelf();
+
 container.bind(Cryptography).toSelf();
 container.bind(Jwt).toSelf();
 container.bind(TimeConverter).toSelf();
@@ -54,4 +61,4 @@ container.bind(SecurePasswordGenerator).toSelf();
 container.bind(CodeGenerator).toSelf();
 container.bind(RandomIdentifier).toSelf();
 
-container.bind(VerificationTokenVerifier).toSelf();
+container.bind(SecurityStringVerifier).toSelf();

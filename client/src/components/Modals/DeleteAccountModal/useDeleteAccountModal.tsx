@@ -1,10 +1,7 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ModalStepsListType } from "../../MultiStepModal/MultiStepModal";
-import {
-  DeleteAccountConfirmationStep,
-  PasswordValidationStep,
-} from "../../MultiStepModal/ModalSteps";
+import { DeleteAccountStep, PasswordValidationStep } from "../../MultiStepModal/ModalSteps";
 import { auth_logoutAction } from "../../../redux/features/auth/authSlice";
 import { addPopupAction } from "../../../redux/features/globalPopupsSlice/globalPopupsSlice";
 
@@ -16,7 +13,7 @@ function useDeleteAccountModal({ handleCloseModal }: { handleCloseModal: () => v
 
   const steps: ModalStepsListType[] = [
     ({ context }) => <PasswordValidationStep onSuccess={context.handleNextStep} />,
-    () => <DeleteAccountConfirmationStep onSuccess={handleFinalStepSuccess} />,
+    () => <DeleteAccountStep onSuccess={handleFinalStepSuccess} />,
   ];
 
   const handleFinalStepSuccess = () => {

@@ -6,9 +6,9 @@ import UnitOfWork from "../../unitOfWork";
 import Cryptography from "../../utils/cryptography";
 import { TimeConverter } from "../../utils/timeConverter";
 import Jwt from "../../utils/jwt";
-import VerificationTokenVerifier from "../../utils/verificationTokenVerifier";
 import InvalidCredentialsException from "../../exceptions/InvalidCredentialsException";
 import emailSender from "../../utils/mailer";
+import SecurityStringVerifier from "../../utils/securityStringVerifier";
 
 @injectable()
 class UserService {
@@ -17,7 +17,7 @@ class UserService {
     private readonly _cryptography: Cryptography,
     private readonly _timeConverter: TimeConverter,
     private readonly _jwt: Jwt,
-    private readonly _verificationTokenVerifier: VerificationTokenVerifier,
+    private readonly _securityStringVerifier: SecurityStringVerifier,
   ) {}
 
   async create(userInput: CreateUserInput): Promise<{ id: string }> {
@@ -34,7 +34,7 @@ class UserService {
       this._timeConverter.toSeconds(verificationTokenExpireMs, "milisecond"),
     );
 
-    await this._unitOfWork.verificationToken.create({
+    await this._unitOfWork.securityToken.create({
       token: this._cryptography.fastHash(verificationToken),
       expires_at: new Date(Date.now() + verificationTokenExpireMs),
     });
@@ -67,7 +67,7 @@ class UserService {
       this._timeConverter.toSeconds(verificationTokenExpireMs, "milisecond"),
     );
 
-    await this._unitOfWork.verificationToken.create({
+    await this._unitOfWork.securityToken.create({
       token: this._cryptography.fastHash(verificationToken),
       expires_at: new Date(Date.now() + verificationTokenExpireMs),
     });
@@ -81,7 +81,7 @@ class UserService {
   }
 
   async resetPasswordConfirmation(token: string) {
-    const { tokenPayload } = await this._verificationTokenVerifier.verify<{
+    const { tokenPayload } = await this._securityStringVerifier.verifyToken<{
       id: string;
     }>(token, "RESET_PASSWORD_VERIFICATION_TOKEN_SECRET");
 
@@ -93,7 +93,7 @@ class UserService {
   }
 
   async resetPassword(newPassword: string, token: string) {
-    const { tokenPayload, hashedToken } = await this._verificationTokenVerifier.verify<{
+    const { tokenPayload, hashedToken } = await this._securityStringVerifier.verifyToken<{
       id: string;
     }>(token, "RESET_PASSWORD_VERIFICATION_TOKEN_SECRET");
 
@@ -108,7 +108,7 @@ class UserService {
       password: hashedPassword,
     });
 
-    await this._unitOfWork.verificationToken.deleteByToken(hashedToken);
+    await this._unitOfWork.securityToken.deleteByToken(hashedToken);
 
     await this._unitOfWork.session.deleteAllByUserId(user.id);
 

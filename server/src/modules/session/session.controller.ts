@@ -8,6 +8,8 @@ import setRefreshTokenCookie, {
   REFRESH_TOKEN_COOKIE_NAME,
 } from "../../utils/setRefreshTokenCookie";
 import requireAuth from "../../middleware/requireAuth";
+import { validateResource } from "../../middleware/validateResource";
+import { DeleteAllOtherSessionsInput, deleteAllOtherSessionsSchema } from "./session.schemas";
 
 @controller("/sessions")
 class SessionController {
@@ -27,10 +29,19 @@ class SessionController {
     return HttpResponse.success(res, clientAuthData);
   }
 
-  @httpDelete("/delete-all-other-sessions", lowRateLimit, requireAuth)
-  async deleteAllOtherSessions(req: CustomRequest, res: Response) {
+  @httpDelete(
+    "/delete-all-other-sessions",
+    lowRateLimit,
+    requireAuth,
+    validateResource(deleteAllOtherSessionsSchema),
+  )
+  async deleteAllOtherSessions(
+    req: CustomRequest<{}, {}, DeleteAllOtherSessionsInput>,
+    res: Response,
+  ) {
+    const { securityToken } = req.body;
     const user = req.user;
-    await this._sessionService.deleteAllOtherSessions(user.id, user.sessionId);
+    await this._sessionService.deleteAllOtherSessions(user.id, user.sessionId, securityToken);
     return HttpResponse.success(res);
   }
 }

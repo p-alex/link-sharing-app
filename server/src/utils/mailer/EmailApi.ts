@@ -14,6 +14,10 @@ export interface IEmailApiVerificationEmailArgs extends IEmailApiArgs {
   verificationToken: string;
 }
 
+export interface IEmailApiSecurityCodeEmailArgs extends IEmailApiArgs {
+  code: string;
+}
+
 export type IEmailApiSendEmailResponse = {
   success: boolean;
 };
@@ -25,6 +29,10 @@ abstract class EmailApi {
 
   abstract sendResetPasswordVerificationEmail(
     args: IEmailApiVerificationEmailArgs,
+  ): Promise<IEmailApiSendEmailResponse>;
+
+  abstract sendSecurityCodeEmail(
+    args: IEmailApiSecurityCodeEmailArgs,
   ): Promise<IEmailApiSendEmailResponse>;
 }
 

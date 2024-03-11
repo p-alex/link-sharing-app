@@ -13,7 +13,6 @@ const ProfileDetails = () => {
 
   const submit = async (data: ProfileDetailsType) => {
     if (!formState.isValid) return;
-    console.log(data);
   };
 
   return (

@@ -22,6 +22,10 @@ export type ModalStepsListType = ({
 const MultiStepModal = ({ name, handleCloseModal, steps }: Props) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
+  const [securityToken, setSecurityToken] = useState("");
+
+  const handleSetSecurityToken = (securityToken: string) => setSecurityToken(securityToken);
+
   const handleNextStep = () => setCurrentStepIndex((prevState) => prevState + 1);
 
   const firstFocusableElementRef = useRef<HTMLButtonElement>(null);
@@ -30,8 +34,9 @@ const MultiStepModal = ({ name, handleCloseModal, steps }: Props) => {
   const context = {
     currentStepIndex,
     handleNextStep,
-    firstFocusableElementRef,
     lastFocusableElementRef,
+    handleSetSecurityToken,
+    securityToken,
   };
 
   const currentStep = steps(context)[currentStepIndex];

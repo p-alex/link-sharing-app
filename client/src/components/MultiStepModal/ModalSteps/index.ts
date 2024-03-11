@@ -1,4 +1,5 @@
 import PasswordValidationStep from "./PasswordValidationStep/PasswordValidationStep";
-import DeleteAccountConfirmationStep from "./DeleteAccountConfirmationStep";
-import VerificationCodeStep from "./VerificationCodeStep";
-export { PasswordValidationStep, DeleteAccountConfirmationStep, VerificationCodeStep };
+import DeleteAccountStep from "./DeleteAccountStep";
+import VerificationCodeStep from "./SendSecurityCodeStep";
+
+export { PasswordValidationStep, DeleteAccountStep, VerificationCodeStep };
