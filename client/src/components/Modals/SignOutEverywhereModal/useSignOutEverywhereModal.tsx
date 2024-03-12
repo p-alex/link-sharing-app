@@ -5,7 +5,6 @@ import SendSecurityCodeStep from "../../MultiStepModal/ModalSteps/SendSecurityCo
 import VerifySecurityCodeStep from "../../MultiStepModal/ModalSteps/VerifySecurityCodeStep/VerifySecurityCodeStep";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import { IDefaultResponse } from "../../../apiRequests";
-import { IMultiStepModalContext } from "../../MultiStepModal/useMultiStepModalContext";
 
 const useSignOutEverywhereModal = ({ handleCloseModal }: { handleCloseModal: () => void }) => {
   const dispatch = useDispatch();

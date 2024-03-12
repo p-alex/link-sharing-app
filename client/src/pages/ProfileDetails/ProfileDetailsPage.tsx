@@ -11,7 +11,7 @@ const ProfileDetails = () => {
     zodSchema: profileDetailsSchema,
   });
 
-  const submit = async (data: ProfileDetailsType) => {
+  const submit = async (_: ProfileDetailsType) => {
     if (!formState.isValid) return;
   };
 

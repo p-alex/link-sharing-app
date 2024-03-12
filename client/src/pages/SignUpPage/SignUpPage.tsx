@@ -5,7 +5,6 @@ import useForm from "../../hooks/useForm";
 import Section from "../../components/Section";
 import Button from "../../components/Button";
 import SuccessIcon from "../../svgs/SuccessIcon";
-import Error from "../../components/Error/Error";
 import useSignUpPage from "./useSignUpPage";
 import OAuthButton from "../../components/OAuthButton/OAuthButton";
 import useRedirectIfSignedIn from "../../hooks/useRedirectIfSignedIn";

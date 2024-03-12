@@ -1,4 +1,3 @@
-import { FormEvent } from "react";
 import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 import useCaptcha from "../../../../hooks/useCaptcha";
 import { IDefaultResponse } from "../../../../apiRequests";

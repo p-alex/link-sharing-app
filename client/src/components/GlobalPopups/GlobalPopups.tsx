@@ -1,5 +1,4 @@
 import { CloseIcon } from "../../svgs";
-import DeleteAccountConfirmStep from "../Modal/ModalSteps/DeleteAccountConfirmationStep";
 import useGlobalPopups from "./useGlobalPopups";
 
 const GlobalPopups = () => {
