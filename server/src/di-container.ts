@@ -24,6 +24,11 @@ import SecurityCodeController from "./modules/securityCode/securityCode.controll
 import SecurityCodeService from "./modules/securityCode/securityCode.service";
 import SecurityCodeRepository from "./modules/securityCode/securityCode.repository";
 import SecurityStringVerifier from "./utils/securityStringVerifier";
+import EmailSender from "./utils/mailer/EmailSender";
+import EmailApi from "./utils/mailer/EmailApi";
+import { MailjetSMTPServer } from "./utils/mailer/smtpServers";
+import NodemailerEmailApi from "./utils/mailer/NodemailerEmailApi";
+import SMTPServer from "./utils/mailer/smtpServers/SMTPServer";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -62,3 +67,8 @@ container.bind(CodeGenerator).toSelf();
 container.bind(RandomIdentifier).toSelf();
 
 container.bind(SecurityStringVerifier).toSelf();
+// EMAIL SENDER
+container.bind(EmailSender).toSelf();
+container.bind(NodemailerEmailApi).toSelf();
+container.bind(SMTPServer).toSelf();
+container.bind(MailjetSMTPServer).toSelf();

@@ -1,12 +1,12 @@
 import { injectable } from "inversify";
 import UnitOfWork from "../../unitOfWork";
 import CodeGenerator from "../../utils/codeGenerator";
-import emailSender from "../../utils/mailer";
 import SecurityCode from "./securityCode.entity";
 import { TimeConverter } from "../../utils/timeConverter";
 import Jwt from "../../utils/jwt";
 import Cryptography from "../../utils/cryptography";
 import SecurityStringVerifier from "../../utils/securityStringVerifier";
+import EmailSender from "../../utils/mailer/EmailSender";
 
 @injectable()
 class SecurityCodeService {
@@ -17,6 +17,7 @@ class SecurityCodeService {
     private readonly _jwt: Jwt,
     private readonly _cryptography: Cryptography,
     private readonly _securityStringVerifier: SecurityStringVerifier,
+    private readonly _emailSender: EmailSender,
   ) {}
 
   async sendCode(userId: string) {
@@ -32,7 +33,7 @@ class SecurityCodeService {
 
     await this._unitOfWork.securityCode.create(newSecurityCode);
 
-    await emailSender.sendSecurityCodeEmail({ to: user.email, code });
+    await this._emailSender.sendSecurityCodeEmail({ to: user.email, code });
 
     return true;
   }

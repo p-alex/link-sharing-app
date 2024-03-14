@@ -1,50 +1,33 @@
+import { injectable } from "inversify";
 import EmailApi, {
   IEmailApiSecurityCodeEmailArgs,
   IEmailApiSendEmailResponse,
   IEmailApiVerificationEmailArgs,
 } from "./EmailApi";
+import NodemailerEmailApi from "./NodemailerEmailApi";
 
+@injectable()
 class EmailSender extends EmailApi {
-  private static emailSenderInstance: EmailSender;
-  private emailApi: EmailApi | undefined;
-
-  static getInstance() {
-    if (!this.emailSenderInstance) {
-      this.emailSenderInstance = new EmailSender();
-    }
-    return this.emailSenderInstance;
-  }
-
-  setEmailApi(emailApi: EmailApi) {
-    this.emailApi = emailApi;
+  constructor(private readonly _emailApi: NodemailerEmailApi) {
+    super();
   }
 
   async sendAccountVerificationEmail(
     args: IEmailApiVerificationEmailArgs,
   ): Promise<IEmailApiSendEmailResponse> {
-    this.validateEmailSender();
-
-    return this.emailApi!.sendAccountVerificationEmail(args);
+    return this._emailApi!.sendAccountVerificationEmail(args);
   }
 
   async sendResetPasswordVerificationEmail(
     args: IEmailApiVerificationEmailArgs,
   ): Promise<IEmailApiSendEmailResponse> {
-    this.validateEmailSender();
-
-    return this.emailApi!.sendResetPasswordVerificationEmail(args);
+    return this._emailApi!.sendResetPasswordVerificationEmail(args);
   }
 
-  sendSecurityCodeEmail(args: IEmailApiSecurityCodeEmailArgs): Promise<IEmailApiSendEmailResponse> {
-    this.validateEmailSender();
-
-    return this.emailApi!.sendSecurityCodeEmail(args);
-  }
-
-  private validateEmailSender(): void {
-    if (!this.emailApi) {
-      throw new Error("EmailApi is not set");
-    }
+  async sendSecurityCodeEmail(
+    args: IEmailApiSecurityCodeEmailArgs,
+  ): Promise<IEmailApiSendEmailResponse> {
+    return await this._emailApi!.sendSecurityCodeEmail(args);
   }
 }
 

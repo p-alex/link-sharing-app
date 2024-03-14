@@ -7,8 +7,8 @@ import Cryptography from "../../utils/cryptography";
 import { TimeConverter } from "../../utils/timeConverter";
 import Jwt from "../../utils/jwt";
 import InvalidCredentialsException from "../../exceptions/InvalidCredentialsException";
-import emailSender from "../../utils/mailer";
 import SecurityStringVerifier from "../../utils/securityStringVerifier";
+import EmailSender from "../../utils/mailer/EmailSender";
 
 @injectable()
 class UserService {
@@ -18,6 +18,7 @@ class UserService {
     private readonly _timeConverter: TimeConverter,
     private readonly _jwt: Jwt,
     private readonly _securityStringVerifier: SecurityStringVerifier,
+    private readonly _emailSender: EmailSender,
   ) {}
 
   async create(userInput: CreateUserInput): Promise<{ id: string }> {
@@ -39,7 +40,7 @@ class UserService {
       expires_at: new Date(Date.now() + verificationTokenExpireMs),
     });
 
-    await emailSender.sendAccountVerificationEmail({ to: newUser.email, verificationToken });
+    await this._emailSender.sendAccountVerificationEmail({ to: newUser.email, verificationToken });
 
     return { id: newUser.id! };
   }
@@ -72,7 +73,7 @@ class UserService {
       expires_at: new Date(Date.now() + verificationTokenExpireMs),
     });
 
-    await emailSender.sendResetPasswordVerificationEmail({
+    await this._emailSender.sendResetPasswordVerificationEmail({
       to: user.email,
       verificationToken,
     });

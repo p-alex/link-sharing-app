@@ -1,3 +1,5 @@
+import { injectable } from "inversify";
+
 export interface IEmailTemplate {
   to: string;
   from: string;
@@ -22,6 +24,7 @@ export type IEmailApiSendEmailResponse = {
   success: boolean;
 };
 
+@injectable()
 abstract class EmailApi {
   abstract sendAccountVerificationEmail(
     args: IEmailApiVerificationEmailArgs,

@@ -1,11 +1,13 @@
+import { injectable } from "inversify";
 import { config } from "../../../config";
 import SMTPServer from "./SMTPServer";
 
+@injectable()
 class MailjetSMTPServer extends SMTPServer {
-  public host: string;
-  public port: number;
-  public secure: boolean;
-  public auth: { user: string; pass: string };
+  public readonly host: string;
+  public readonly port: number;
+  public readonly secure: boolean;
+  public readonly auth: { user: string; pass: string };
 
   constructor() {
     super();

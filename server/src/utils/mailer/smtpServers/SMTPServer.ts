@@ -1,3 +1,6 @@
+import { injectable } from "inversify";
+
+@injectable()
 abstract class SMTPServer {
   public abstract readonly host: string;
   public abstract readonly port: number;

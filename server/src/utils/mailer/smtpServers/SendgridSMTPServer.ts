@@ -1,6 +1,8 @@
+import { injectable } from "inversify";
 import { config } from "../../../config";
 import SMTPServer from "./SMTPServer";
 
+@injectable()
 class SendgridSMTPServer extends SMTPServer {
   public host: string;
   public port: number;

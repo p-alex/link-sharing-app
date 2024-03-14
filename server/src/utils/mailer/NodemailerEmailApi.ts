@@ -8,10 +8,13 @@ import EmailApi, {
 } from "./EmailApi";
 import Mail from "nodemailer/lib/mailer";
 import SMTPServer from "./smtpServers/SMTPServer";
+import { injectable } from "inversify";
 
+@injectable()
 class NodemailerEmailApi extends EmailApi {
   private readonly _transporter: Mail;
   private readonly _from: string;
+
   constructor(private readonly _smtpServer: SMTPServer) {
     super();
     this._transporter = nodemailer.createTransport(this._smtpServer);
@@ -37,6 +40,7 @@ class NodemailerEmailApi extends EmailApi {
 
     return { success: true };
   }
+
   async sendResetPasswordVerificationEmail(
     args: IEmailApiVerificationEmailArgs,
   ): Promise<IEmailApiSendEmailResponse> {
