@@ -24,9 +24,9 @@ class NodemailerEmailApi extends EmailApi {
   async sendAccountVerificationEmail(
     args: IEmailApiVerificationEmailArgs,
   ): Promise<IEmailApiSendEmailResponse> {
-    const { to, verificationToken } = args;
+    const { to, token } = args;
 
-    const verificationLink = `${config.CLIENT_BASE_URL}/verify-email?token=${verificationToken}`;
+    const verificationLink = `${config.CLIENT_BASE_URL}/verify-email?token=${token}`;
 
     const data = {
       to,
@@ -44,16 +44,16 @@ class NodemailerEmailApi extends EmailApi {
   async sendResetPasswordVerificationEmail(
     args: IEmailApiVerificationEmailArgs,
   ): Promise<IEmailApiSendEmailResponse> {
-    const { to, verificationToken } = args;
+    const { to, token } = args;
 
-    const verificationLink = `${config.CLIENT_BASE_URL}/reset-password?token=${verificationToken}`;
+    const verificationLink = `${config.CLIENT_BASE_URL}/reset-password?token=${token}`;
 
     const data = {
       to,
       from: this._from,
       subject: "Reset password verification",
       text: `Reset password verification link: ${verificationLink}`,
-      html: `Reset password verification link: <a href="${verificationLink}">Click to verify</a>${verificationToken}`,
+      html: `Reset password verification link: <a href="${verificationLink}">Click to verify</a>`,
     };
 
     await this.sendEmail(data);

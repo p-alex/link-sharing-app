@@ -10,7 +10,7 @@ class SecurityToken {
   public readonly token: string;
 
   @OneToMany(() => User, (user) => user.securityTokens, { onDelete: "CASCADE" })
-  user: User;
+  public readonly user: User;
 
   @Column({ type: "timestamptz", nullable: false })
   public readonly expires_at: Date;

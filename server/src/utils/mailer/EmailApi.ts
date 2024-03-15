@@ -13,7 +13,7 @@ interface IEmailApiArgs {
 }
 
 export interface IEmailApiVerificationEmailArgs extends IEmailApiArgs {
-  verificationToken: string;
+  token: string;
 }
 
 export interface IEmailApiSecurityCodeEmailArgs extends IEmailApiArgs {

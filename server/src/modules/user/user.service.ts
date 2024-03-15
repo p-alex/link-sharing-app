@@ -27,20 +27,23 @@ class UserService {
     const hashedPassword = await this._cryptography.slowHash(userInput.password);
     const newUser = await this._unitOfWork.user.create({ ...userInput, password: hashedPassword });
 
-    const verificationTokenExpireMs = this._timeConverter.toMs(24, "hour");
+    const securityTokenExpireMs = this._timeConverter.toMs(24, "hour");
 
-    const verificationToken = this._jwt.signJwt(
+    const securityToken = this._jwt.signJwt(
       { id: newUser.id },
       "EMAIL_VERIFICATION_TOKEN_SECRET",
-      this._timeConverter.toSeconds(verificationTokenExpireMs, "milisecond"),
+      this._timeConverter.toSeconds(securityTokenExpireMs, "milisecond"),
     );
 
     await this._unitOfWork.securityToken.create({
-      token: this._cryptography.fastHash(verificationToken),
-      expires_at: new Date(Date.now() + verificationTokenExpireMs),
+      token: this._cryptography.fastHash(securityToken),
+      expires_at: new Date(Date.now() + securityTokenExpireMs),
     });
 
-    await this._emailSender.sendAccountVerificationEmail({ to: newUser.email, verificationToken });
+    await this._emailSender.sendAccountVerificationEmail({
+      to: newUser.email,
+      token: securityToken,
+    });
 
     return { id: newUser.id! };
   }
@@ -60,22 +63,22 @@ class UserService {
 
     if (!user) return true;
 
-    const verificationTokenExpireMs = this._timeConverter.toMs(24, "hour");
+    const securityTokenExpireMs = this._timeConverter.toMs(24, "hour");
 
-    const verificationToken = this._jwt.signJwt(
+    const securityToken = this._jwt.signJwt(
       { id: user.id },
       "RESET_PASSWORD_VERIFICATION_TOKEN_SECRET",
-      this._timeConverter.toSeconds(verificationTokenExpireMs, "milisecond"),
+      this._timeConverter.toSeconds(securityTokenExpireMs, "milisecond"),
     );
 
     await this._unitOfWork.securityToken.create({
-      token: this._cryptography.fastHash(verificationToken),
-      expires_at: new Date(Date.now() + verificationTokenExpireMs),
+      token: this._cryptography.fastHash(securityToken),
+      expires_at: new Date(Date.now() + securityTokenExpireMs),
     });
 
     await this._emailSender.sendResetPasswordVerificationEmail({
       to: user.email,
-      verificationToken,
+      token: securityToken,
     });
 
     return true;
