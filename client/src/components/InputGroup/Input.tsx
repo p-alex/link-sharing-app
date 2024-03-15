@@ -17,9 +17,7 @@ const Input = forwardRef(({ icon, ...inputProps }: Props, ref: LegacyRef<HTMLInp
         {icon && icon}
         <input
           {...inputProps}
-          className={
-            "w-full bg-none outline-none disabled:cursor-not-allowed disabled:bg-none disabled:opacity-60"
-          }
+          className={"w-full bg-none outline-none disabled:cursor-text disabled:bg-transparent"}
           aria-invalid={isError ? "true" : "false"}
           ref={ref}
         />

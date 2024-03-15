@@ -9,7 +9,22 @@ const AccountInformationBox = () => {
   return (
     <SettingBox title="Account information">
       <div className="flex flex-col gap-4">
-        <p>ID: {authState.id}</p>
+        <div className="flex items-end gap-2">
+          <InputGroup
+            label={<InputGroup.InputLabel htmlFor="accountId">Account ID</InputGroup.InputLabel>}
+            input={
+              <InputGroup.Input
+                className="w-[200px]"
+                type="text"
+                name="accountId"
+                id="accountId"
+                value={authState.id}
+                disabled
+              />
+            }
+            error={null}
+          />
+        </div>
         <div className="flex items-end gap-2">
           <InputGroup
             label={<InputGroup.InputLabel htmlFor="email">Email</InputGroup.InputLabel>}
@@ -25,11 +40,6 @@ const AccountInformationBox = () => {
             }
             error={null}
           />
-          <Button
-            variant="fill"
-            icon={<EditIcon width={21} height={21} />}
-            title="change your email"
-          ></Button>
         </div>
       </div>
     </SettingBox>

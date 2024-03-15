@@ -6,10 +6,13 @@ import { SignOutEverywhereModal } from "../../../../../components/Modals";
 const SignOutEverywhereBox = () => {
   const [isModalActive, setIsModalActive] = useState(false);
 
-  const handleToggleOffModal = () => setIsModalActive(false);
+  const handleToggleOffModal = () => {
+    signOutOtherSessionsBtn.current?.focus();
+    setIsModalActive(false);
+  };
+
   const handleToggleOnModal = () => {
     setIsModalActive(true);
-    signOutOtherSessionsBtn.current?.focus();
   };
 
   const signOutOtherSessionsBtn = useRef<HTMLButtonElement>(null);
