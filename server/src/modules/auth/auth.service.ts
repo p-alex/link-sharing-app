@@ -38,6 +38,10 @@ class AuthService {
 
     if (!isValidPassword) throw new InvalidCredentialsException("Invalid email or password");
 
+    const profileData = await this._unitOfWork.profile.findOneByUserId(userWithEmail.id);
+
+    if (!profileData) throw new Error("This user has no profile created");
+
     const sessionId = this._randomIdentifier.createUUID();
 
     const accessToken = this._jwt.signAccessToken({
@@ -57,12 +61,13 @@ class AuthService {
     });
 
     return {
-      clientAuthData: {
+      authData: {
         id: userWithEmail.id,
         email: userWithEmail.email,
         accessToken,
         sessionId: session.id,
       },
+      profileData,
       refreshToken,
       refreshTokenExpireInMs,
     };

@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import User from "../user/user.entity";
 
 @Entity("securityTokens")
@@ -9,7 +9,7 @@ class SecurityToken {
   @PrimaryColumn("varchar", { length: 64, unique: true, nullable: false })
   public readonly token: string;
 
-  @OneToMany(() => User, (user) => user.securityTokens, { onDelete: "CASCADE" })
+  @ManyToOne(() => User, (user) => user.securityTokens, { onDelete: "CASCADE" })
   public readonly user: User;
 
   @Column({ type: "timestamptz", nullable: false })

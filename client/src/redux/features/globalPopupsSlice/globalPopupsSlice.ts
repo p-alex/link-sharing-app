@@ -1,5 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
 import { v4 as uuidV4 } from "uuid";
+import { RootState } from "../../app/store";
 
 type PopupType = "error" | "info";
 
@@ -48,6 +50,11 @@ const globalPopupsSlice = createSlice({
     },
   },
 });
+
+export const useGlobalPopupsSlice = () => {
+  const globalPopups = useSelector((state: RootState) => state.globalPopups);
+  return globalPopups;
+};
 
 export const { addPopupAction, removePopupAction, removeLastPopupAction } =
   globalPopupsSlice.actions;

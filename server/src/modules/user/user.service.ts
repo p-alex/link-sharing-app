@@ -23,9 +23,17 @@ class UserService {
 
   async create(userInput: CreateUserInput): Promise<{ id: string }> {
     const userWithEmail = await this._unitOfWork.user.findOneByEmail(userInput.email);
+
     if (userWithEmail) throw new AlreadyExistsException("A user with that email already exists");
+
     const hashedPassword = await this._cryptography.slowHash(userInput.password);
-    const newUser = await this._unitOfWork.user.create({ ...userInput, password: hashedPassword });
+
+    const newUser = await this._unitOfWork.user.create({
+      email: userInput.email,
+      password: hashedPassword,
+    });
+
+    await this._unitOfWork.profile.create({ user: newUser, userId: newUser.id });
 
     const securityTokenExpireMs = this._timeConverter.toMs(24, "hour");
 
@@ -36,6 +44,7 @@ class UserService {
     );
 
     await this._unitOfWork.securityToken.create({
+      userId: newUser.id,
       token: this._cryptography.fastHash(securityToken),
       expires_at: new Date(Date.now() + securityTokenExpireMs),
     });

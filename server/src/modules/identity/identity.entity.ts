@@ -9,8 +9,8 @@ class Identity {
   @PrimaryGeneratedColumn("uuid")
   public readonly id: string;
 
-  @ManyToOne(() => User, (user) => user.identities, { onDelete: "CASCADE" })
-  public readonly user: User;
+  @Column("uuid")
+  public readonly userId: string;
 
   @Column("enum", { enum: OAUTH_PROVIDERS })
   public readonly provider: OAuthProvidersType;
@@ -18,11 +18,21 @@ class Identity {
   @CreateDateColumn({ type: "timestamptz" })
   public readonly created_at: Date;
 
-  constructor(id: string, user: User, provider: OAuthProvidersType, created_at: Date) {
+  @ManyToOne(() => User, (user) => user.identities, { onDelete: "CASCADE" })
+  public readonly user: User;
+
+  constructor(
+    id: string,
+    userId: string,
+    user: User,
+    provider: OAuthProvidersType,
+    created_at: Date,
+  ) {
     this.id = id;
-    this.user = user;
+    this.userId = userId;
     this.provider = provider;
     this.created_at = created_at;
+    this.user = user;
   }
 }
 

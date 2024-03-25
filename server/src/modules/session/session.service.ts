@@ -49,13 +49,18 @@ class SessionService {
 
     await this._unitOfWork.session.update(newSession);
 
+    const profileData = await this._unitOfWork.profile.findOneByUserId(user.id);
+
+    if (!profileData) throw new Error("This user has no profile created");
+
     return {
-      clientAuthData: {
+      authData: {
         id: user.id,
         email: user.email,
         accessToken: newAccessToken,
         sessionId: session.id,
       },
+      profileData,
       refreshToken: newRefreshToken,
       refreshTokenExpireInMs: session.expires_at.getTime() - Date.now(),
     };

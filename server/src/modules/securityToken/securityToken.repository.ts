@@ -9,6 +9,10 @@ class SecurityTokenRepository extends Repository<SecurityToken> {
     super();
   }
 
+  createNewInstance(entity: Partial<SecurityToken>): SecurityToken {
+    return this._database.client.getRepository(SecurityToken).create(entity);
+  }
+
   async findAll(): Promise<SecurityToken[]> {
     const result = await this._database.manager.find(SecurityToken);
     return result;

@@ -9,6 +9,10 @@ class SessionRepository extends Repository<Session> {
     super();
   }
 
+  createNewInstance(entity: Partial<Session>): Session {
+    return this._database.client.getRepository(Session).create(entity);
+  }
+
   async findAll(): Promise<Session[]> {
     const result = await this._database.manager.find(Session);
     return result;

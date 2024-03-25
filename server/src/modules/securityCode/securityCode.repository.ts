@@ -5,6 +5,14 @@ import SecurityCode from "./securityCode.entity";
 
 @injectable()
 class SecurityCodeRepository extends Repository<SecurityCode> {
+  constructor(private readonly _database: Database) {
+    super();
+  }
+
+  createNewInstance(entity: Partial<SecurityCode>): SecurityCode {
+    return this._database.client.getRepository(SecurityCode).create(entity);
+  }
+
   async findAll(): Promise<SecurityCode[]> {
     const result = await this._database.client.manager.find(SecurityCode);
     return result;
@@ -38,9 +46,6 @@ class SecurityCodeRepository extends Repository<SecurityCode> {
       .where("userId = :userId AND code = :code", { userId, code })
       .execute();
     return true;
-  }
-  constructor(private readonly _database: Database) {
-    super();
   }
 }
 

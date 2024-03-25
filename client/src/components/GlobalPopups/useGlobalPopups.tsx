@@ -1,11 +1,10 @@
-import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { RootState } from "../../redux/app/store";
 import { useCallback, useEffect } from "react";
 import {
   IPopup,
   removeLastPopupAction,
   removePopupAction,
+  useGlobalPopupsSlice,
 } from "../../redux/features/globalPopupsSlice/globalPopupsSlice";
 import { ErrorIcon, InfoIcon } from "../../svgs";
 
@@ -22,7 +21,7 @@ const POPUP_STYLES = {
 
 const useGlobalPopups = () => {
   const dispatch = useDispatch();
-  const popups = useSelector((state: RootState) => state.globalPopups.popups);
+  const { popups } = useGlobalPopupsSlice();
 
   const handlePopErrors = useCallback(() => {
     if (popups.length === 0) return;

@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
 
 export interface IAuth {
   id: string;
@@ -25,7 +27,7 @@ export const authSlice = createSlice({
       return state;
     },
     [`${authSliceName}_refreshSessionAction`]: (state, action: PayloadAction<IAuth>) => {
-      state = action.payload;
+      state = { ...state, ...action.payload };
       return state;
     },
     [`${authSliceName}_logoutAction`]: (state) => {
@@ -34,6 +36,11 @@ export const authSlice = createSlice({
     },
   },
 });
+
+export const useAuthSlice = () => {
+  const auth = useSelector((state: RootState) => state.auth);
+  return auth;
+};
 
 export const { auth_loginAction, auth_refreshSessionAction, auth_logoutAction } = authSlice.actions;
 

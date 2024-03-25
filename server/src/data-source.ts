@@ -7,6 +7,7 @@ import SecurityToken from "./modules/securityToken/securityToken.entity";
 import Link from "./modules/link/link.entity";
 import Identity from "./modules/identity/identity.entity";
 import SecurityCode from "./modules/securityCode/securityCode.entity";
+import Profile from "./modules/profile/profile.entity";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -17,7 +18,7 @@ export const AppDataSource = new DataSource({
   database: config.DB_NAME,
   synchronize: true,
   logging: false,
-  entities: [User, Session, SecurityToken, Link, Identity, SecurityCode],
+  entities: [User, Session, SecurityToken, Link, Identity, SecurityCode, Profile],
   migrations: [],
   subscribers: [],
 });

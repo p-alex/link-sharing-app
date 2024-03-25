@@ -5,6 +5,7 @@ import SecurityTokenRepository from "../modules/securityToken/securityToken.repo
 import LinkRepository from "../modules/link/link.repository";
 import IdentityRepository from "../modules/identity/identity.repository";
 import SecurityCodeRepository from "../modules/securityCode/securityCode.repository";
+import ProfileRepository from "../modules/profile/profile.repository";
 
 @injectable()
 class UnitOfWork {
@@ -15,6 +16,7 @@ class UnitOfWork {
     public readonly link: LinkRepository,
     public readonly identity: IdentityRepository,
     public readonly securityCode: SecurityCodeRepository,
+    public readonly profile: ProfileRepository,
   ) {}
 }
 

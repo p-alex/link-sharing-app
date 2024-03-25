@@ -7,6 +7,7 @@ import useCaptcha from "../../hooks/useCaptcha";
 import { useDispatch } from "react-redux";
 import { auth_loginAction } from "../../redux/features/auth/authSlice";
 import { addPopupAction } from "../../redux/features/globalPopupsSlice/globalPopupsSlice";
+import { setProfileAction } from "../../redux/features/profile/profileSlice";
 
 const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
   const navigate = useNavigate();
@@ -30,7 +31,8 @@ const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
 
     if (success && data) {
       resetForm();
-      dispatch(auth_loginAction(data));
+      dispatch(auth_loginAction(data.authData));
+      dispatch(setProfileAction(data.profileData));
       navigate("/links");
     }
   };

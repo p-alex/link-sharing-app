@@ -1,8 +1,8 @@
 import { IDefaultResponse, axiosPublic } from "..";
-import { IAuth } from "../../redux/features/auth/authSlice";
+import { IAuthResponse } from "../auth";
 
 export const refreshSessionRequest = async () => {
-  const result = await axiosPublic.post<IDefaultResponse<IAuth>>(
+  const result = await axiosPublic.post<IDefaultResponse<IAuthResponse>>(
     "/sessions/refresh",
     {},
     { withCredentials: true },

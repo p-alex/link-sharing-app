@@ -8,6 +8,9 @@ class LinkRepository extends Repository<Link> {
   constructor(private readonly _database: Database) {
     super();
   }
+  createNewInstance(entity: Partial<Link>): Link {
+    return this._database.client.getRepository(Link).create(entity);
+  }
   async findAll(): Promise<Link[]> {
     const result = await this._database.manager.find(Link);
     return result;

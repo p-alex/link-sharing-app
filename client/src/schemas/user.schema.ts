@@ -1,10 +1,5 @@
 import { z } from "zod";
 
-export const nameSchema = z
-  .string({ required_error: "First name is required" })
-  .min(1, "First name can't be empty")
-  .max(21, "First name must be at most 21 characters long");
-
 export const emailSchema = z
   .string({ required_error: "Email is required" })
   .email("Email is invalid")
@@ -50,12 +45,6 @@ export const resetPasswordSchema = z
     path: ["confirmPassword"],
   });
 
-export const profileDetailsSchema = z.object({
-  firstName: nameSchema,
-  lastName: nameSchema,
-  publicEmail: emailSchema.optional(),
-});
-
 export type SignUpSchemaType = z.TypeOf<typeof signUpSchema>;
 
 export type SignInSchemaType = z.TypeOf<typeof signInSchema>;
@@ -63,5 +52,3 @@ export type SignInSchemaType = z.TypeOf<typeof signInSchema>;
 export type ForgetPasswordType = z.TypeOf<typeof forgetPasswordSchema>;
 
 export type ResetPasswordType = z.TypeOf<typeof resetPasswordSchema>;
-
-export type ProfileDetailsType = z.TypeOf<typeof profileDetailsSchema>;

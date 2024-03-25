@@ -1,7 +1,5 @@
-import Button from "../../../../components/Button";
 import InputGroup from "../../../../components/InputGroup";
 import useAuth from "../../../../hooks/useAuth";
-import { EditIcon } from "../../../../svgs";
 import SettingBox from "../../SettingBox";
 
 const AccountInformationBox = () => {

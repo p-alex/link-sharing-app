@@ -21,12 +21,12 @@ class SessionController {
 
     if (!currentRefreshToken) return HttpResponse.error(res, 403, ["You have to be logged in!"]);
 
-    const { clientAuthData, refreshToken, refreshTokenExpireInMs } =
+    const { authData, profileData, refreshToken, refreshTokenExpireInMs } =
       await this._sessionService.refreshSession(currentRefreshToken);
 
     setRefreshTokenCookie(res, refreshToken, refreshTokenExpireInMs);
 
-    return HttpResponse.success(res, clientAuthData);
+    return HttpResponse.success(res, { authData, profileData });
   }
 
   @httpDelete(
@@ -36,7 +36,7 @@ class SessionController {
     validateResource(deleteAllOtherSessionsSchema),
   )
   async deleteAllOtherSessions(
-    req: CustomRequest<{}, {}, DeleteAllOtherSessionsInput>,
+    req: CustomRequest<object, object, DeleteAllOtherSessionsInput>,
     res: Response,
   ) {
     const { securityToken } = req.body;

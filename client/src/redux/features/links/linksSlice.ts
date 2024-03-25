@@ -3,6 +3,8 @@ import { LinkType, PlatformType } from "../../../schemas/link.schema";
 import swapItemInArray from "../../../utils/swapItemInArray";
 import { v4 as uuidV4 } from "uuid";
 import { refreshLinksIndexes } from "../../../utils/refreshLinksIndexes";
+import { useSelector } from "react-redux";
+import { RootState } from "../../app/store";
 
 interface ILinksState {
   isLinkListModified: boolean;
@@ -97,6 +99,11 @@ const linksSlice = createSlice({
     },
   },
 });
+
+export const useLinksSlice = () => {
+  const links = useSelector((state: RootState) => state.links);
+  return links;
+};
 
 export const {
   setLinksAction,

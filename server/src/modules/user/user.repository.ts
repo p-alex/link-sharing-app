@@ -9,6 +9,10 @@ class UserRepository extends Repository<User> {
     super();
   }
 
+  createNewInstance(entity: Partial<User>): User {
+    return this._database.client.getRepository(User).create(entity);
+  }
+
   async findAll(): Promise<User[]> {
     const result = await this._database.manager.find(User);
     return result;

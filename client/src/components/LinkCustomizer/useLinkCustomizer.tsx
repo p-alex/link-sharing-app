@@ -14,6 +14,7 @@ import {
   setLinkPlatformAction,
   setLinksAction,
   setLinksAsSavedAction,
+  useLinksSlice,
 } from "../../redux/features/links/linksSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/app/store";
@@ -27,7 +28,7 @@ const useLinkCustomizer = () => {
 
   const dispatch = useDispatch();
 
-  const links = useSelector((state: RootState) => state.links.links);
+  const { links } = useLinksSlice();
   const isLinkListModified = useSelector((state: RootState) => state.links.isLinkListModified);
 
   const [isLoading, setIsLoading] = useState(true);

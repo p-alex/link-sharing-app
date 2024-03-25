@@ -15,7 +15,7 @@ import SessionController from "./modules/session/session.controller";
 import SecurePasswordGenerator from "./utils/securePasswordGenerator";
 import OAuthStrategy from "./modules/auth/oauth.strategy";
 import CodeGenerator from "./utils/codeGenerator";
-import VerificationTokenRepository from "./modules/securityToken/securityToken.repository";
+import SecurityTokenRepository from "./modules/securityToken/securityToken.repository";
 import LinkRepository from "./modules/link/link.repository";
 import LinkService from "./modules/link/link.service";
 import RandomIdentifier from "./utils/randomIdentifier";
@@ -24,49 +24,67 @@ import SecurityCodeController from "./modules/securityCode/securityCode.controll
 import SecurityCodeService from "./modules/securityCode/securityCode.service";
 import SecurityCodeRepository from "./modules/securityCode/securityCode.repository";
 import SecurityStringVerifier from "./utils/securityStringVerifier";
+import CloudManager from "./utils/cloud/CloudManager";
+import CloudinaryCloudApi from "./utils/cloud/CloudinaryCloudApi";
 import EmailSender from "./utils/mailer/EmailSender";
-import EmailApi from "./utils/mailer/EmailApi";
 import { MailjetSMTPServer } from "./utils/mailer/smtpServers";
 import NodemailerEmailApi from "./utils/mailer/NodemailerEmailApi";
 import SMTPServer from "./utils/mailer/smtpServers/SMTPServer";
+import ProfileRepository from "./modules/profile/profile.repository";
+import ProfileService from "./modules/profile/profile.service";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
 container.bind(Database).toSelf();
 container.bind(UnitOfWork).toSelf();
 
+//USER
 container.bind(UserController).toSelf();
 container.bind(UserService).toSelf();
 container.bind(UserRepository).toSelf();
 
+// SESSION
 container.bind(SessionController).toSelf();
 container.bind(SessionService).toSelf();
 container.bind(SessionRepository).toSelf();
 
+// LINK
 container.bind(LinkService).toSelf();
 container.bind(LinkRepository).toSelf();
 
-container.bind(VerificationTokenRepository).toSelf();
+// SECURITY TOKEN
+container.bind(SecurityTokenRepository).toSelf();
 
+// AUTH
 container.bind(AuthController).toSelf();
 container.bind(AuthService).toSelf();
-
 container.bind(OAuthStrategy).toSelf();
 
+// IDENTITY
 container.bind(IdentityRepository).toSelf();
 
+// SECURITY CODE
 container.bind(SecurityCodeController).toSelf();
 container.bind(SecurityCodeService).toSelf();
 container.bind(SecurityCodeRepository).toSelf();
 
+// PROFILE
+container.bind(ProfileService).toSelf();
+container.bind(ProfileRepository).toSelf();
+
+// UTILS
 container.bind(Cryptography).toSelf();
 container.bind(Jwt).toSelf();
 container.bind(TimeConverter).toSelf();
 container.bind(SecurePasswordGenerator).toSelf();
 container.bind(CodeGenerator).toSelf();
 container.bind(RandomIdentifier).toSelf();
-
 container.bind(SecurityStringVerifier).toSelf();
+
+// CLOUD MANAGER
+container.bind(CloudManager).toSelf();
+container.bind(CloudinaryCloudApi).toSelf();
+
 // EMAIL SENDER
 container.bind(EmailSender).toSelf();
 container.bind(NodemailerEmailApi).toSelf();

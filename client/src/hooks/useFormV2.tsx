@@ -1,11 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { getFileDataUrl } from "../utils/getFileDataUrl";
 import { ZodError, ZodSchema } from "zod";
+import { AxiosError } from "axios";
+import { useDispatch } from "react-redux";
+import { addPopupAction } from "../redux/features/globalPopupsSlice/globalPopupsSlice";
 
 function useFormV2<TPayload extends object, TZodSchema extends ZodSchema>(
   payload: TPayload,
   zodSchema: TZodSchema,
 ) {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState<TPayload>(payload);
   const [focusedInputs, setFocusedInputs] = useState<{ [Property in keyof TPayload]: boolean }>(
     createFocusedInputsObject(payload),
@@ -14,6 +18,7 @@ function useFormV2<TPayload extends object, TZodSchema extends ZodSchema>(
     null,
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [isChanged, setIsChanged] = useState(false);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setFormData((prevState) => ({ ...prevState, [event.target.name]: event.target.value }));
@@ -50,6 +55,7 @@ function useFormV2<TPayload extends object, TZodSchema extends ZodSchema>(
     key: keyof TPayload,
   ): React.InputHTMLAttributes<HTMLInputElement> => ({
     onChange: handleFileInputChange,
+    multiple: false,
     ...register(key),
   });
 
@@ -63,8 +69,13 @@ function useFormV2<TPayload extends object, TZodSchema extends ZodSchema>(
     setIsLoading(true);
     try {
       await submitFunc(formData);
-    } catch (error) {
-      console.log(error);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        const errorMessage = error.response?.data.errors
+          ? error.response?.data.errors[0]
+          : "Something went wrong. Please try again later.";
+        dispatch(addPopupAction({ type: "error", message: errorMessage }));
+      }
     } finally {
       setIsLoading(false);
     }
@@ -107,8 +118,10 @@ function useFormV2<TPayload extends object, TZodSchema extends ZodSchema>(
     );
   }
 
-  const reset = () => {
-    setFormData(payload);
+  const resetForm = (formData?: TPayload) => {
+    const newFormData = formData ? formData : payload;
+    setFormData(newFormData);
+    payload = newFormData;
     setFieldErrors(null);
     setFocusedInputs(createFocusedInputsObject(payload));
   };
@@ -116,6 +129,10 @@ function useFormV2<TPayload extends object, TZodSchema extends ZodSchema>(
   useEffect(() => {
     handleValidate();
   }, [formData, handleValidate]);
+
+  useEffect(() => {
+    setIsChanged(JSON.stringify(payload).toString() !== JSON.stringify(formData).toString());
+  }, [formData, payload]);
 
   return {
     registerInput,
@@ -126,8 +143,9 @@ function useFormV2<TPayload extends object, TZodSchema extends ZodSchema>(
       fieldErrors,
       isLoading,
       isValid: fieldErrors === null,
+      isChanged,
     },
-    reset,
+    resetForm,
   };
 }
 

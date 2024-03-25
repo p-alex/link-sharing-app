@@ -1,8 +1,7 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/app/store";
+import { useAuthSlice } from "../redux/features/auth/authSlice";
 
 const useAuth = () => {
-  const authState = useSelector((state: RootState) => state.auth);
+  const authState = useAuthSlice();
   return { isAuth: authState.accessToken !== "", authState };
 };
 

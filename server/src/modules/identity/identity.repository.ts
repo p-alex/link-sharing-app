@@ -9,12 +9,15 @@ class IdentityRepository extends Repository<Identity> {
   constructor(private readonly _database: Database) {
     super();
   }
+  createNewInstance(entity: Partial<Identity>): Identity {
+    return this._database.client.getRepository(Identity).create(entity);
+  }
   async findAll(): Promise<Identity[]> {
     const result = await this._database.client.manager.find(Identity);
     return result;
   }
   async findAllByUserId(user: Partial<User>): Promise<Identity[]> {
-    const result = await this._database.client.manager.findBy(Identity, { user: user });
+    const result = await this._database.client.manager.findBy(Identity, { userId: user.id });
     return result;
   }
   async findOneById(id: string): Promise<Identity | null> {
