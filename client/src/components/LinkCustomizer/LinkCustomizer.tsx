@@ -20,7 +20,7 @@ const LinkCustomizer = () => {
   if (isLoading) <p>Loading...</p>;
 
   return (
-    <section className="flex flex-col gap-10 rounded-lg bg-white p-10 max-[800px]:p-6">
+    <section className="flex w-full flex-col gap-10 rounded-lg bg-white p-10 max-[800px]:p-6">
       <header className="flex flex-col gap-2">
         <h1>Customize your links</h1>
         <p>Add/edit/remove links below and then share all your profiles with the world!</p>

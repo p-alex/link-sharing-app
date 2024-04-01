@@ -1,6 +1,6 @@
 import { ZodIssueCode, z } from "zod";
 
-const PLATFORMS_LIST = [
+export const PLATFORMS_LIST = [
   "github",
   "youtube",
   "facebook",

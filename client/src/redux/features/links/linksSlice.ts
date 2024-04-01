@@ -9,11 +9,13 @@ import { RootState } from "../../app/store";
 interface ILinksState {
   isLinkListModified: boolean;
   links: LinkType[];
+  wereLinksFetchedOnce: boolean;
 }
 
 const initialState: ILinksState = {
   isLinkListModified: false,
   links: [],
+  wereLinksFetchedOnce: false,
 };
 
 const linksSlice = createSlice({
@@ -58,6 +60,10 @@ const linksSlice = createSlice({
         link.index = index;
         return link;
       });
+      return state;
+    },
+    setWereLinksFetchedOnce: (state) => {
+      state.wereLinksFetchedOnce = true;
       return state;
     },
     reorderLinksAction: (
@@ -111,6 +117,7 @@ export const {
   removeLinkAction,
   setLinksAsSavedAction,
   reorderLinksAction,
+  setWereLinksFetchedOnce,
   setLinkPlatformAction,
   setLinkHrefAction,
 } = linksSlice.actions;

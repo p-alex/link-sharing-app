@@ -14,6 +14,7 @@ import {
   setLinkPlatformAction,
   setLinksAction,
   setLinksAsSavedAction,
+  setWereLinksFetchedOnce,
   useLinksSlice,
 } from "../../redux/features/links/linksSlice";
 import { useSelector } from "react-redux";
@@ -28,12 +29,11 @@ const useLinkCustomizer = () => {
 
   const dispatch = useDispatch();
 
-  const { links } = useLinksSlice();
+  const { links, wereLinksFetchedOnce } = useLinksSlice();
   const isLinkListModified = useSelector((state: RootState) => state.links.isLinkListModified);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<LinkCustomizerFieldErrorType | null>(null);
-  const [isFetchedOnce, setIsFetchedOnce] = useState(false);
 
   const handleGetLinks = useCallback(async () => {
     try {
@@ -45,6 +45,7 @@ const useLinkCustomizer = () => {
           .map((link) => ({ ...link, isSaved: true }))
           .sort((a, b) => (a.index > b.index ? 1 : -1));
         dispatch(setLinksAction(links));
+        dispatch(setWereLinksFetchedOnce());
       }
     } catch (error) {
       dispatch(
@@ -55,14 +56,13 @@ const useLinkCustomizer = () => {
       );
     } finally {
       setIsLoading(false);
-      setIsFetchedOnce(true);
     }
   }, [axiosPrivate, dispatch]);
 
   useEffect(() => {
-    if (isFetchedOnce) return;
+    if (wereLinksFetchedOnce) return;
     handleGetLinks();
-  }, [isFetchedOnce, handleGetLinks]);
+  }, [wereLinksFetchedOnce, handleGetLinks]);
 
   const handleRemoveLink = async (linkToBeDeleted: LinkType) => {
     if (!linkToBeDeleted.isSaved) {

@@ -26,6 +26,8 @@ import CloseIcon from "./CloseIcon";
 import InfoIcon from "./InfoIcon";
 import LockIcon from "./LockIcon";
 
+export type SvgType = React.SVGAttributes<SVGElement>;
+
 export {
   ErrorIcon,
   LinkIcon,
