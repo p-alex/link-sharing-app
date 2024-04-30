@@ -13,6 +13,12 @@ const ChangePasswordBox = () => {
     >
       <form className="flex flex-col gap-4" onSubmit={handleChangePassword}>
         <InputGroup
+          label={<InputGroup.InputLabel htmlFor="email">Email</InputGroup.InputLabel>}
+          input={<InputGroup.Input type="email" autoComplete="email" className="hidden" />}
+          error={null}
+          className="hidden"
+        />
+        <InputGroup
           label={<InputGroup.InputLabel htmlFor="oldPassword">Old Password</InputGroup.InputLabel>}
           input={
             <InputGroup.Input
