@@ -95,7 +95,7 @@ export const linkSchema = z
     }
   });
 
-export const linksSchema = z.array(linkSchema);
+export const linksSchema = z.array(linkSchema, { required_error: "Links must be an array" });
 
 export const createLinkSchema = z.object({ link: linkSchema });
 

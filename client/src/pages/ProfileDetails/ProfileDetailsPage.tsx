@@ -10,8 +10,10 @@ import {
 import useProfileDetailsPage from "./useProfileDetailsPage";
 import { useProfileSlice } from "../../redux/features/profile/profileSlice";
 import ProfilePreview from "../../components/ProfilePreview";
+import useFetchLinksOnce from "../../hooks/useFetchLinksOnce";
 
 const ProfileDetails = () => {
+  useFetchLinksOnce();
   const profile = useProfileSlice();
 
   const { registerInput, registerSingleFileInput, formState, handleSubmit, resetForm } = useFormV2<
