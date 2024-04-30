@@ -1,7 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
 import { LinkType, PlatformType, linksSchema } from "../../schemas/link.schema";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import { IDefaultResponse } from "../../apiRequests";
 import { ZodError } from "zod";
 import { DropResult } from "react-beautiful-dnd";
 import suportedLinkPlatforms from "../../static/supported-link-platforms";
@@ -21,6 +19,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/app/store";
 import { addPopupAction } from "../../redux/features/globalPopupsSlice/globalPopupsSlice";
 import { refreshLinksIndexes } from "../../utils/refreshLinksIndexes";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import { IDefaultResponse } from "../../apiRequests";
+import { AxiosError } from "axios";
 
 export type LinkCustomizerFieldErrorType = { [key: number]: { path: string; message: string }[] };
 
@@ -30,21 +31,29 @@ const useLinkCustomizer = () => {
   const dispatch = useDispatch();
 
   const { links, wereLinksFetchedOnce } = useLinksSlice();
+
   const isLinkListModified = useSelector((state: RootState) => state.links.isLinkListModified);
 
   const [isLoading, setIsLoading] = useState(false);
+
   const [fieldErrors, setFieldErrors] = useState<LinkCustomizerFieldErrorType | null>(null);
 
   const handleGetLinks = useCallback(async () => {
     try {
       setIsLoading(true);
-      const result = await axiosPrivate.get<IDefaultResponse<{ links: LinkType[] }>>("/links");
-      const data = result.data;
-      if (data.success && data.data) {
-        const links = data.data.links
+
+      const requestResponse =
+        await axiosPrivate.get<IDefaultResponse<{ links: LinkType[] }>>("/links");
+
+      const result = requestResponse.data;
+
+      if (result.success && result.data) {
+        const links = result.data.links
           .map((link) => ({ ...link, isSaved: true }))
           .sort((a, b) => (a.index > b.index ? 1 : -1));
+
         dispatch(setLinksAction(links));
+
         dispatch(setWereLinksFetchedOnce());
       }
     } catch (error) {
@@ -57,27 +66,38 @@ const useLinkCustomizer = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [axiosPrivate, dispatch]);
+  }, []);
 
   useEffect(() => {
     if (wereLinksFetchedOnce) return;
+
     handleGetLinks();
   }, [wereLinksFetchedOnce, handleGetLinks]);
 
   const handleRemoveLink = async (linkToBeDeleted: LinkType) => {
     if (!linkToBeDeleted.isSaved) {
       dispatch(removeLinkAction({ linkId: linkToBeDeleted.id }));
+
       return;
     }
     try {
       setIsLoading(true);
+
       handleResetFieldErrors();
+
       if (linkToBeDeleted.isSaved) {
-        await axiosPrivate.delete("/links", { data: { link: linkToBeDeleted } });
+        await axiosPrivate.delete("/links", {
+          data: {
+            link: linkToBeDeleted,
+          },
+        });
+
         dispatch(removeLinkAction({ linkId: linkToBeDeleted.id }));
+
         const newLinks = refreshLinksIndexes(
           links.filter((link) => link.id !== linkToBeDeleted.id),
         );
+
         if (newLinks.length > 0) {
           await handleSaveLinks(newLinks);
         }
@@ -97,18 +117,31 @@ const useLinkCustomizer = () => {
   const handleSaveLinks = async (links: LinkType[]) => {
     try {
       setIsLoading(true);
+
       const isValid = handleValidate();
+
       if (!isValid) return;
-      await axiosPrivate.put<IDefaultResponse<null>>("/links", { links });
-      dispatch(setLinksAsSavedAction());
-      dispatch(addPopupAction({ message: "Links saved successfully!", type: "info" }));
+
+      const requestResponse = await axiosPrivate<IDefaultResponse<null>>("/links", {
+        data: { links },
+      });
+
+      const result = requestResponse.data;
+
+      if (result?.success) {
+        dispatch(setLinksAsSavedAction());
+
+        dispatch(addPopupAction({ message: "Links saved successfully!", type: "info" }));
+      }
     } catch (error) {
-      dispatch(
-        addPopupAction({
-          message: "Something went wrong while trying to save links. Try again later.",
-          type: "error",
-        }),
-      );
+      if (error instanceof AxiosError) {
+        dispatch(
+          addPopupAction({
+            message: error.response?.data.errors[0],
+            type: "error",
+          }),
+        );
+      }
     } finally {
       setIsLoading(false);
     }
@@ -116,12 +149,15 @@ const useLinkCustomizer = () => {
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+
     handleResetFieldErrors();
+
     await handleSaveLinks(links);
   };
 
   const handleAddLink = async () => {
     if (links.length + 1 > Object.keys(suportedLinkPlatforms).length) return;
+
     dispatch(addLinkAction({ index: links.length }));
   };
 
@@ -140,10 +176,12 @@ const useLinkCustomizer = () => {
   const handleValidate = () => {
     try {
       linksSchema.parse(links);
+
       return true;
     } catch (error) {
       if (error instanceof ZodError) {
         const errors: { [key: number]: { path: string; message: string }[] } = {};
+
         error.issues.map((issue) => {
           const errorLinkIndex = issue.path[0] as number;
           const errorPath = issue.path[1] as string;
@@ -156,6 +194,7 @@ const useLinkCustomizer = () => {
             errors[errorLinkIndex] = [{ path: errorPath, message: issue.message }];
           }
         });
+
         setFieldErrors(errors);
       }
       return false;
@@ -164,19 +203,27 @@ const useLinkCustomizer = () => {
 
   const handleReorderLinks = (result: DropResult) => {
     const { destination, source } = result;
+
     if (!destination || !source) return;
+
     dispatch(
       reorderLinksAction({ sourceIndex: source.index, destinationIndex: destination.index }),
     );
+
     handleReorderFieldErrors(source.index, destination.index);
   };
 
   const handleReorderFieldErrors = (sourceIndex: number, destinationIndex: number) => {
     if (!fieldErrors) return;
+
     const newFieldError = { ...fieldErrors };
+
     const temp = newFieldError[destinationIndex];
+
     newFieldError[destinationIndex] = newFieldError[sourceIndex];
+
     newFieldError[sourceIndex] = temp;
+
     setFieldErrors(newFieldError);
   };
 

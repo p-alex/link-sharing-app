@@ -2,7 +2,7 @@ import axios from "axios";
 
 export interface IDefaultResponse<TData> {
   success: boolean;
-  status_code: number;
+  statusCode: number;
   errors?: string[];
   data: TData | null;
 }

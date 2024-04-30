@@ -6,7 +6,6 @@ import Section from "../../components/Section";
 import Button from "../../components/Button";
 import Error from "../../components/Error/Error";
 import useSignInPage from "./useSignInPage";
-import OAuthButton from "../../components/OAuthButton/OAuthButton";
 import useRedirectIfSignedIn from "../../hooks/useRedirectIfSignedIn";
 import Captcha from "../../components/Captcha";
 import CaptchaPrivacyAndTerms from "../../components/Captcha/CaptchaPrivacyAndTerms/CaptchaPrivacyAndTerms";
@@ -47,6 +46,7 @@ const SignInPage = () => {
                     icon={<img src="/images/icon-email.svg" alt="" width={16} height={16} />}
                     type="email"
                     placeholder="Enter your email"
+                    autoComplete="email"
                     autoFocus
                   />
                 }
@@ -64,6 +64,7 @@ const SignInPage = () => {
                     icon={<img src="/images/icon-password.svg" alt="" width={16} height={16} />}
                     type="password"
                     placeholder="Enter your password"
+                    autoComplete="current-password"
                   />
                 }
                 error={
@@ -88,47 +89,6 @@ const SignInPage = () => {
                 <Link className="text-primary" to={"/forget-password"}>
                   Forgot password?
                 </Link>
-              </div>
-
-              <div className="border-t-2 pt-4">
-                <p className="mb-4 text-center">Or sign in with</p>
-                <ul
-                  style={{ gridTemplateColumns: "repeat(auto-fill, minmax(90px, 1fr))" }}
-                  className="grid gap-2"
-                >
-                  <li>
-                    <OAuthButton
-                      variant="github"
-                      title="sign in with github"
-                      disabled={formState.isLoading}
-                      onMouseUp={reset}
-                    />
-                  </li>
-                  <li>
-                    <OAuthButton
-                      variant="discord"
-                      title="sign in with discord"
-                      disabled={formState.isLoading}
-                      onMouseUp={reset}
-                    />
-                  </li>
-                  <li>
-                    <OAuthButton
-                      variant="linkedin"
-                      title="sign in with linkedin"
-                      disabled={formState.isLoading}
-                      onMouseUp={reset}
-                    />
-                  </li>
-                  <li>
-                    <OAuthButton
-                      variant="google"
-                      title="sign in with google"
-                      disabled={formState.isLoading}
-                      onMouseUp={reset}
-                    />
-                  </li>
-                </ul>
               </div>
             </div>
           </form>

@@ -103,6 +103,11 @@ const linksSlice = createSlice({
       });
       return state;
     },
+    resetLinksAction: (state) => {
+      state.links = [];
+      state.wereLinksFetchedOnce = false;
+      return state;
+    },
   },
 });
 
@@ -120,6 +125,7 @@ export const {
   setWereLinksFetchedOnce,
   setLinkPlatformAction,
   setLinkHrefAction,
+  resetLinksAction,
 } = linksSlice.actions;
 
 export const linksReducer = linksSlice.reducer;

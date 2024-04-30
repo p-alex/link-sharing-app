@@ -3,7 +3,6 @@ import Jwt from "../../utils/jwt";
 import Cryptography from "../../utils/cryptography";
 import UnitOfWork from "../../unitOfWork";
 import { IClientAuth } from "../auth/auth.interfaces";
-import SecurityStringVerifier from "../../utils/securityStringVerifier";
 
 @injectable()
 class SessionService {
@@ -11,7 +10,6 @@ class SessionService {
     private readonly _unitOfWork: UnitOfWork,
     private readonly _jwt: Jwt,
     private readonly _cryptography: Cryptography,
-    private readonly _securityStringVerifier: SecurityStringVerifier,
   ) {}
 
   async refreshSession(refreshToken: string): Promise<IClientAuth> {
@@ -23,7 +21,7 @@ class SessionService {
         "REFRESH_TOKEN_SECRET",
       ).id;
     } catch (_) {
-      throw new Error("Refresh token expired");
+      throw new Error("Your session expired. Please log in again.");
     }
 
     const user = await this._unitOfWork.user.findOneById(userIdFromRefreshToken);
@@ -64,16 +62,6 @@ class SessionService {
       refreshToken: newRefreshToken,
       refreshTokenExpireInMs: session.expires_at.getTime() - Date.now(),
     };
-  }
-
-  async deleteAllOtherSessions(userId: string, currentSessionId: string, securityToken: string) {
-    await this._securityStringVerifier.verifyToken<{
-      securityCode: string;
-    }>(securityToken, "SECURITY_CODE_VERIFICATION_TOKEN_SECRET");
-
-    await this._unitOfWork.session.deleteAllOtherSessions(userId, currentSessionId);
-
-    return true;
   }
 }
 

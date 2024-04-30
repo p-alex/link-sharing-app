@@ -6,6 +6,7 @@ import { IDefaultResponse } from "../../../apiRequests";
 import { useDispatch } from "react-redux";
 import { auth_logoutAction } from "../../../redux/features/auth/authSlice";
 import useHideWhenClickOutside from "../../../hooks/useHideWhenClickOutside";
+import { resetLinksAction } from "../../../redux/features/links/linksSlice";
 
 const useNavProfile = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ const useNavProfile = () => {
       );
       if (result.data.success) {
         dispatch(auth_logoutAction());
+        dispatch(resetLinksAction());
         navigate("/sign-in");
       }
     } catch (error) {

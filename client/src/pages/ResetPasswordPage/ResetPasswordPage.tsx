@@ -63,6 +63,7 @@ const ResetPasswordPage = () => {
                       icon={<img src="/images/icon-password.svg" alt="" width={16} height={16} />}
                       type="password"
                       placeholder="Enter your new password"
+                      autoComplete="new-password"
                       autoFocus
                     />
                   }
@@ -86,6 +87,7 @@ const ResetPasswordPage = () => {
                       icon={<img src="/images/icon-password.svg" alt="" width={16} height={16} />}
                       type="password"
                       placeholder="Retype your new password"
+                      autoComplete="new-password"
                     />
                   }
                   error={

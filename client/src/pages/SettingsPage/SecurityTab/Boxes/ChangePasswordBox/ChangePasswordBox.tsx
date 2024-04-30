@@ -19,6 +19,7 @@ const ChangePasswordBox = () => {
               icon={<img src="/images/icon-password.svg" alt="" width={16} height={16} />}
               type="password"
               placeholder="Enter your current password..."
+              autoComplete="current-password"
               {...register("oldPassword")}
             />
           }
@@ -35,6 +36,7 @@ const ChangePasswordBox = () => {
               icon={<img src="/images/icon-password.svg" alt="" width={16} height={16} />}
               type="password"
               placeholder="Enter your new password..."
+              autoComplete="new-password"
               {...register("newPassword")}
             />
           }
@@ -54,6 +56,7 @@ const ChangePasswordBox = () => {
             <InputGroup.Input
               icon={<img src="/images/icon-password.svg" alt="" width={16} height={16} />}
               placeholder="Repeat your new password..."
+              autoComplete="new-password"
               type="password"
               {...register("confirmNewPassword")}
             />
@@ -69,7 +72,7 @@ const ChangePasswordBox = () => {
         <Button
           variant="fill"
           type="submit"
-          className="w-max"
+          className="mt-4 w-max"
           disabled={formState.isLoading || !formState.isValid}
         >
           Change Password

@@ -11,8 +11,8 @@ function DeleteAccountConfirmationStep({ onSuccess }: IModalStepProps) {
 
   return (
     <ModalStep
-      title={"Delete account"}
-      description={"Are you sure?"}
+      title={"Account deletion"}
+      description={"Are you sure you want to delete your account permanently?"}
       render={(context) => {
         return (
           <form onSubmit={(event) => handleSubmit(event, submit)}>
@@ -24,7 +24,7 @@ function DeleteAccountConfirmationStep({ onSuccess }: IModalStepProps) {
               ref={context.lastFocusableElementRef}
               autoFocus
             >
-              Delete my account
+              Yes, delete my account
             </Button>
           </form>
         );

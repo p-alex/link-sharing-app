@@ -2,10 +2,12 @@ import { useDispatch } from "react-redux";
 import { refreshSessionRequest } from "../apiRequests/sessions";
 import { auth_refreshSessionAction } from "../redux/features/auth/authSlice";
 import { setProfileAction } from "../redux/features/profile/profileSlice";
+import { useCallback } from "react";
 
 const useRefreshToken = () => {
   const dispatch = useDispatch();
-  const handleRefreshToken = async () => {
+
+  const handleRefreshToken = useCallback(async () => {
     try {
       const result = await refreshSessionRequest();
       if (result.success && result.data) {
@@ -17,7 +19,8 @@ const useRefreshToken = () => {
       return "";
     }
     return "";
-  };
+  }, [dispatch]);
+
   return handleRefreshToken;
 };
 
