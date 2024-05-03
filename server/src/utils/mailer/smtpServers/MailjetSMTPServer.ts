@@ -12,8 +12,8 @@ class MailjetSMTPServer extends SMTPServer {
   constructor() {
     super();
     this.host = "in-v3.mailjet.com";
-    this.port = config.NODE_ENV === "development" ? 587 : 465;
-    this.secure = config.NODE_ENV === "production";
+    this.port = config.NODE_ENV === "production" ? 465 : 587;
+    this.secure = config.NODE_ENV === "production" ? true : false;
     this.auth = {
       user: config.MAILJET_API_KEY,
       pass: config.MAILJET_API_SECRET,

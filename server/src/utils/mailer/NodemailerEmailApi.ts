@@ -80,10 +80,10 @@ class NodemailerEmailApi extends EmailApi {
   }
 
   private async sendEmail(data: IEmailTemplate) {
-    if (config.NODE_ENV === "development") {
-      console.log(data);
-      return;
-    }
+    // if (config.NODE_ENV === "development") {
+    //   console.log(data);
+    //   return;
+    // }
 
     await this._transporter.sendMail(data);
   }
