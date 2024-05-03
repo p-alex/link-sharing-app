@@ -94,16 +94,18 @@ function ProfilePage() {
       {!isLoading && (
         <div className="userProfileContainerAnimation relative mx-auto mt-[120px] flex w-full max-w-[349px] flex-col gap-14 rounded-3xl bg-white px-14 py-12 shadow-xl">
           <div className="flex flex-col gap-6">
-            <img
-              src={
-                userProfile?.profilePicture
-                  ? userProfile?.profilePicture
-                  : "/images/blank-profile-picture.webp"
-              }
-              width={104}
-              height={104}
-              className="mx-auto rounded-full"
-            />
+            <div className="mx-auto h-[104px] w-[104px] rounded-full ">
+              <img
+                src={
+                  userProfile?.profilePicture
+                    ? userProfile?.profilePicture
+                    : "/images/blank-profile-picture.webp"
+                }
+                width={104}
+                height={104}
+                className="h-full w-full rounded-[inherit] object-cover"
+              />
+            </div>
             <div className="flex flex-col gap-2">
               {fullName && <h1 className="text-center text-2xl font-bold">{fullName}</h1>}
               {userProfile?.publicEmail && <p className="text-center">{userProfile.publicEmail}</p>}
