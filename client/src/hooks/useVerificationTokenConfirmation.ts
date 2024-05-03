@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import getParamFromUrl from "../utils/getParamFromUrl";
 import { useNavigate } from "react-router-dom";
 import { tokenSchema } from "../schemas/common.schema";
-import { IDefaultResponse } from "../apiRequests";
 import { AxiosError } from "axios";
+import { IDefaultResponse } from "../apiRequests";
 
 const useVerificationTokenConfirmation = ({
   tokenParamName,
@@ -30,7 +30,7 @@ const useVerificationTokenConfirmation = ({
       if (result.success) {
         setTokenIsValid(true);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof AxiosError) {
         setTokenConfirmationError(error.response?.data.errors[0]);
       }

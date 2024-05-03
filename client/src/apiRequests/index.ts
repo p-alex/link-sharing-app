@@ -4,7 +4,7 @@ export interface IDefaultResponse<TData> {
   success: boolean;
   statusCode: number;
   errors?: string[];
-  data: TData | null;
+  data: TData;
 }
 
 export const axiosPublic = axios.create({
