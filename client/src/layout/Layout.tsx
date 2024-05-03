@@ -1,14 +1,14 @@
 import React from "react";
-import NavBar from "../components/NavBar";
 
 interface Props {
+  navbar: React.ReactNode;
   children: React.ReactNode;
 }
 
-const Layout = ({ children }: Props) => {
+const Layout = ({ navbar, children }: Props) => {
   return (
     <div className={`mx-auto max-w-[1352px]`}>
-      <NavBar />
+      {navbar}
       <main className={"mx-auto max-[1376px]:mx-6"}>{children}</main>
     </div>
   );

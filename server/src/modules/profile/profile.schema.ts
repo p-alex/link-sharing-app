@@ -1,9 +1,5 @@
 import { z } from "zod";
 
-export const getProfileByUserIdSchema = z.object({
-  userId: z.string().uuid(),
-});
-
 export const updateProfileDetailsSchema = z.object({
   id: z.string().uuid(),
   profilePicture: z.union([z.literal(""), z.string()]),
@@ -22,8 +18,6 @@ export const updateProfileDetailsSchema = z.object({
 export const removeProfilePictureSchema = z.object({
   profileId: z.string().uuid(),
 });
-
-export type GetProfileByUserIdInput = z.TypeOf<typeof getProfileByUserIdSchema>;
 
 export type UpdateProfileDetailsInput = z.TypeOf<typeof updateProfileDetailsSchema>;
 

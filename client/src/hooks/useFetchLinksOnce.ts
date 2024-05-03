@@ -1,5 +1,5 @@
-import { useCallback, useEffect } from "react";
-import { IDefaultResponse, axiosPrivate } from "../apiRequests";
+import { useCallback, useEffect, useState } from "react";
+import { IDefaultResponse, axiosPublic } from "../apiRequests";
 import { LinkType } from "../schemas/link.schema";
 import { useDispatch } from "react-redux";
 import {
@@ -8,16 +8,20 @@ import {
   useLinksSlice,
 } from "../redux/features/links/linksSlice";
 import { addPopupAction } from "../redux/features/globalPopupsSlice/globalPopupsSlice";
+import useAuth from "./useAuth";
 
 function useFetchLinksOnce() {
+  const [isLoading, setIsLoading] = useState(true);
+  const { isAuth, authState } = useAuth();
   const dispatch = useDispatch();
 
   const { wereLinksFetchedOnce } = useLinksSlice();
 
   const handleGetLinks = useCallback(async () => {
     try {
-      const requestResponse =
-        await axiosPrivate.get<IDefaultResponse<{ links: LinkType[] }>>("/links");
+      const requestResponse = await axiosPublic.get<IDefaultResponse<{ links: LinkType[] }>>(
+        "/links/user/" + authState.id,
+      );
 
       const result = requestResponse.data;
 
@@ -27,7 +31,6 @@ function useFetchLinksOnce() {
           .sort((a, b) => (a.index > b.index ? 1 : -1));
 
         dispatch(setLinksAction(links));
-
         dispatch(setWereLinksFetchedOnce());
       }
     } catch (error) {
@@ -37,16 +40,21 @@ function useFetchLinksOnce() {
           type: "error",
         }),
       );
+    } finally {
+      setIsLoading(false);
     }
   }, [dispatch]);
 
   useEffect(() => {
-    if (wereLinksFetchedOnce) return;
-    console.log("here");
-    handleGetLinks();
-  }, []);
+    if (wereLinksFetchedOnce && isAuth) {
+      setIsLoading(false);
+      return;
+    }
+    if (isAuth) handleGetLinks();
+    setIsLoading(false);
+  }, [isAuth]);
 
-  return null;
+  return { isFetchLinksOnceLoading: isLoading };
 }
 
 export default useFetchLinksOnce;

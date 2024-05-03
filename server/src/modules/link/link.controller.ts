@@ -8,14 +8,15 @@ import requireAuth from "../../middleware/requireAuth";
 import { validateResource } from "../../middleware/validateResource";
 import { deleteLinkSchema, saveLinksSchema } from "./link.schema";
 import { lowRateLimit } from "../../middleware/rateLimiting";
+import { UserIdParamInput, userIdParamSchema } from "../../commonSchemas";
 
 @controller("/links")
 class LinkController {
   constructor(private readonly _linkService: LinkService) {}
 
-  @httpGet("/", lowRateLimit, requireAuth)
-  async findAllUserLinks(req: CustomRequest, res: Response) {
-    const links = await this._linkService.findAllUserLinks(req.user.id);
+  @httpGet("/user/:userId", lowRateLimit, validateResource(userIdParamSchema))
+  async findAllUserLinks(req: CustomRequest<object, object, UserIdParamInput>, res: Response) {
+    const links = await this._linkService.findAllUserLinks(req.body.userId);
     return HttpResponse.success(res, { links }, 200);
   }
 

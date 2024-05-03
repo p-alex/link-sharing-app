@@ -10,6 +10,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 import RedirectToHomePage from "./RedirectToHomePage";
 import SettingsPage from "./pages/SettingsPage/SettingsPage";
 import ProfileDetails from "./pages/ProfileDetails/ProfileDetailsPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -18,7 +19,9 @@ function App() {
         <Route path="/verify-email" element={<VerifyEmail />}></Route>
         <Route path="/forget-password" element={<ForgetPasswordPage />}></Route>
         <Route path="/reset-password" element={<ResetPasswordPage />}></Route>
+
         <Route element={<RefreshTokenRoute />}>
+          <Route path="/users/:userId" element={<ProfilePage />}></Route>
           <Route path="/sign-up" element={<SignUpPage />}></Route>
           <Route path="/sign-in" element={<SignInPage />}></Route>
           <Route path="/" element={<RedirectToHomePage />}></Route>

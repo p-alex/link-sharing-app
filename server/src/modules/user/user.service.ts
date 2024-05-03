@@ -9,6 +9,7 @@ import Jwt from "../../utils/jwt";
 import InvalidCredentialsException from "../../exceptions/InvalidCredentialsException";
 import SecurityStringVerifier from "../../utils/securityStringVerifier";
 import EmailSender from "../../utils/mailer/EmailSender";
+import CloudManager from "../../utils/cloud/CloudManager";
 
 @injectable()
 class UserService {
@@ -19,6 +20,7 @@ class UserService {
     private readonly _jwt: Jwt,
     private readonly _securityStringVerifier: SecurityStringVerifier,
     private readonly _emailSender: EmailSender,
+    private readonly _cloudManager: CloudManager,
   ) {}
 
   async create(userInput: CreateUserInput): Promise<{ id: string }> {
@@ -154,7 +156,11 @@ class UserService {
   }
 
   async deleteRequest(userId: string) {
+    const user = await this._unitOfWork.user.findOneById(userId);
+    if (!user) throw new Error("A user with that user id does not exist");
     await this._unitOfWork.user.deleteById(userId);
+    await this._unitOfWork.profile.deleteById(user.profileId);
+    await this._cloudManager.deleteImage(user.profileId);
     return true;
   }
 }

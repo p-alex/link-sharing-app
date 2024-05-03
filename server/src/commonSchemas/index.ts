@@ -9,3 +9,9 @@ export const captchaTokenSchema = z
   .min(1000);
 
 export const idSchema = z.string({ required_error: "Id is required" }).uuid("Id must be a uuid");
+
+export const userIdParamSchema = z.object({
+  userId: z.string().uuid(),
+});
+
+export type UserIdParamInput = z.TypeOf<typeof userIdParamSchema>;

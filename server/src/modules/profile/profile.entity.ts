@@ -39,7 +39,10 @@ class Profile {
   @UpdateDateColumn({ type: "timestamptz" })
   public readonly updatedAt: Date;
 
-  @OneToOne(() => User, (user) => user.profile, { onDelete: "CASCADE" })
+  @OneToOne(() => User, (user) => user.profile, {
+    onDelete: "CASCADE",
+    orphanedRowAction: "delete",
+  })
   public readonly user: User;
 
   constructor(

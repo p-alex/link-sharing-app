@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { SignInSchemaType } from "../../schemas/user.schema";
 import { emailSignInRequest } from "../../apiRequests/auth";
 import getParamFromUrl from "../../utils/getParamFromUrl";
@@ -11,6 +11,10 @@ import { setProfileAction } from "../../redux/features/profile/profileSlice";
 
 const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const previousPath = location.state?.path;
+
   const [oauthError, setOAuthError] = useState("");
   const dispatch = useDispatch();
 
@@ -33,7 +37,7 @@ const useSignInPage = ({ resetForm }: { resetForm: () => void }) => {
       resetForm();
       dispatch(auth_loginAction(data.authData));
       dispatch(setProfileAction(data.profileData));
-      navigate("/links");
+      navigate(previousPath ? previousPath : "/links");
     }
   };
 

@@ -11,6 +11,7 @@ import useProfileDetailsPage from "./useProfileDetailsPage";
 import { useProfileSlice } from "../../redux/features/profile/profileSlice";
 import ProfilePreview from "../../components/ProfilePreview";
 import useFetchLinksOnce from "../../hooks/useFetchLinksOnce";
+import EditorNavbar from "../../components/NavBar/EditorNavbar";
 
 const ProfileDetails = () => {
   useFetchLinksOnce();
@@ -31,7 +32,7 @@ const ProfileDetails = () => {
   } = useProfileDetailsPage({ resetForm });
 
   return (
-    <Layout>
+    <Layout navbar={<EditorNavbar />}>
       <div className="flex gap-6">
         <ProfilePreview />
         <Section

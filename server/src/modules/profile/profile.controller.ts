@@ -6,21 +6,20 @@ import { lowRateLimit } from "../../middleware/rateLimiting";
 import requireAuth from "../../middleware/requireAuth";
 import { validateResource } from "../../middleware/validateResource";
 import {
-  GetProfileByUserIdInput,
   RemoveProfilePictureInput,
   UpdateProfileDetailsInput,
-  getProfileByUserIdSchema,
   removeProfilePictureSchema,
   updateProfileDetailsSchema,
 } from "./profile.schema";
 import { HttpResponse } from "../../utils/httpResponse";
+import { UserIdParamInput, userIdParamSchema } from "../../commonSchemas";
 
 @controller("/profiles")
 class ProfileController {
   constructor(private readonly _service: ProfileService) {}
 
-  @httpGet("/:userId", lowRateLimit, requireAuth, validateResource(getProfileByUserIdSchema))
-  async getByUserId(req: CustomRequest<object, object, GetProfileByUserIdInput>, res: Response) {
+  @httpGet("/:userId", lowRateLimit, validateResource(userIdParamSchema))
+  async getByUserId(req: CustomRequest<object, object, UserIdParamInput>, res: Response) {
     const result = await this._service.get(req.body.userId);
     return HttpResponse.success(res, result);
   }

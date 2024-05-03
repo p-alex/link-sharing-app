@@ -3,7 +3,6 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  JoinTable,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -39,7 +38,7 @@ class User {
   @Column("bool", { default: false })
   public readonly is_email_verified: boolean;
 
-  @OneToOne(() => Profile, (profile) => profile.user)
+  @OneToOne(() => Profile, (profile) => profile.user, { cascade: ["remove"] })
   @JoinColumn()
   public readonly profile: Profile;
 

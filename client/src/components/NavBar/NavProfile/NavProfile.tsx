@@ -1,8 +1,15 @@
-import { Link } from "react-router-dom";
-import { LogoutIcon, ProfileDetailsHeaderIcon, SettingsIcon } from "../../../svgs";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  LogoutIcon,
+  PreviewHeaderIcon,
+  ProfileDetailsHeaderIcon,
+  SettingsIcon,
+} from "../../../svgs";
 import useNavProfile from "./useNavProfile";
 
 const NavProfile = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const { authState, handleLogout, handleToggleDropdown, isActive } = useNavProfile();
 
   return (
@@ -22,12 +29,21 @@ const NavProfile = () => {
             <p className="mb-1 border-b-2 border-gray-100 pb-3 font-semibold text-primary">
               {authState.email}
             </p>
+            <button
+              className="flex items-center justify-center gap-2 rounded-lg px-6 py-3 font-semibold text-mediumGrey transition-colors hover:bg-lightPurple hover:text-primary max-[800px]:px-3"
+              onClick={() =>
+                navigate(`/users/${authState.id}`, { state: { path: location.pathname } })
+              }
+            >
+              <PreviewHeaderIcon width={20} height={20} /> View Profile
+            </button>
             <Link
               to="/settings"
               className="flex items-center justify-center gap-2 rounded-lg px-6 py-3 font-semibold text-mediumGrey transition-colors hover:bg-lightPurple hover:text-primary max-[800px]:px-3"
             >
               <SettingsIcon width={20} height={20} /> Settings
             </Link>
+
             <button
               onClick={handleLogout}
               className="flex items-center justify-center gap-2 rounded-lg px-6 py-3 font-semibold text-mediumGrey transition-colors hover:bg-red-100 hover:text-error max-[800px]:px-3"

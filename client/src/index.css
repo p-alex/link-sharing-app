@@ -44,3 +44,19 @@ h1,
 h2 {
   @apply font-bold leading-[48px] text-darkGray;
 }
+
+.userProfileContainerAnimation {
+  animation-duration: 300ms;
+  animation-name: scaleUpAndFadeIn;
+}
+
+@keyframes scaleUpAndFadeIn {
+  from {
+    transform: scale(80%) translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(100%) translateY(0);
+    opacity: 1;
+  }
+}
