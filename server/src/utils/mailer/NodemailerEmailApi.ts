@@ -7,15 +7,15 @@ import EmailApi, {
   IEmailTemplate,
 } from "./EmailApi";
 import Mail from "nodemailer/lib/mailer";
-import SMTPServer from "./smtpServers/SMTPServer";
 import { injectable } from "inversify";
+import { MailjetSMTPServer } from "./smtpServers";
 
 @injectable()
 class NodemailerEmailApi extends EmailApi {
   private readonly _transporter: Mail;
   private readonly _from: string;
 
-  constructor(private readonly _smtpServer: SMTPServer) {
+  constructor(private readonly _smtpServer: MailjetSMTPServer) {
     super();
     this._transporter = nodemailer.createTransport(this._smtpServer);
     this._from = config.SMTP_SENDER;
@@ -80,10 +80,10 @@ class NodemailerEmailApi extends EmailApi {
   }
 
   private async sendEmail(data: IEmailTemplate) {
-    // if (config.NODE_ENV === "development") {
-    //   console.log(data);
-    //   return;
-    // }
+    if (config.NODE_ENV === "development") {
+      console.log(data);
+      return;
+    }
 
     await this._transporter.sendMail(data);
   }
