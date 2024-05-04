@@ -1,9 +1,5 @@
 import { injectable } from "inversify";
-import EmailApi, {
-  IEmailApiSecurityCodeEmailArgs,
-  IEmailApiSendEmailResponse,
-  IEmailApiVerificationEmailArgs,
-} from "./EmailApi";
+import EmailApi, { IEmailApiSendEmailResponse, IEmailApiVerificationEmailArgs } from "./EmailApi";
 import NodemailerEmailApi from "./NodemailerEmailApi";
 
 @injectable()
@@ -22,12 +18,6 @@ class EmailSender extends EmailApi {
     args: IEmailApiVerificationEmailArgs,
   ): Promise<IEmailApiSendEmailResponse> {
     return this._emailApi!.sendResetPasswordVerificationEmail(args);
-  }
-
-  async sendSecurityCodeEmail(
-    args: IEmailApiSecurityCodeEmailArgs,
-  ): Promise<IEmailApiSendEmailResponse> {
-    return await this._emailApi!.sendSecurityCodeEmail(args);
   }
 }
 

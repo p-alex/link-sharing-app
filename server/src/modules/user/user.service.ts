@@ -83,6 +83,8 @@ class UserService {
     );
 
     await this._unitOfWork.securityToken.create({
+      userId: user.id,
+      user,
       token: this._cryptography.fastHash(securityToken),
       expires_at: new Date(Date.now() + securityTokenExpireMs),
     });

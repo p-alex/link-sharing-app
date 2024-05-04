@@ -1,7 +1,6 @@
 import nodemailer from "nodemailer";
 import { config } from "../../config";
 import EmailApi, {
-  IEmailApiSecurityCodeEmailArgs,
   IEmailApiSendEmailResponse,
   IEmailApiVerificationEmailArgs,
   IEmailTemplate,
@@ -9,15 +8,22 @@ import EmailApi, {
 import Mail from "nodemailer/lib/mailer";
 import { injectable } from "inversify";
 import { MailjetSMTPServer } from "./smtpServers";
+import makeEmailTemplate from "./makeEmailTemplate";
+import LocalSMTPServer from "./smtpServers/LocalSMTPServer";
 
 @injectable()
 class NodemailerEmailApi extends EmailApi {
   private readonly _transporter: Mail;
   private readonly _from: string;
 
-  constructor(private readonly _smtpServer: MailjetSMTPServer) {
+  constructor(
+    private readonly _smtpServer: MailjetSMTPServer,
+    private readonly _localSmtpServer: LocalSMTPServer,
+  ) {
     super();
-    this._transporter = nodemailer.createTransport(this._smtpServer);
+    this._transporter = nodemailer.createTransport(
+      config.NODE_ENV === "production" ? this._smtpServer : this._localSmtpServer,
+    );
     this._from = config.SMTP_SENDER;
   }
 
@@ -31,9 +37,13 @@ class NodemailerEmailApi extends EmailApi {
     const data = {
       to,
       from: this._from,
-      subject: "Account verification",
-      text: `Account verification link: ${verificationLink}`,
-      html: `Account verification link: <a href="${verificationLink}">Click to verify</a>`,
+      subject: "Devlinks account verification",
+      text: `Devlinks account verification link: ${verificationLink}`,
+      html: makeEmailTemplate({
+        title: "Account Verification",
+        description: "Please click on the button below to verify your account.",
+        linkButton: { href: verificationLink, value: "Verify Account" },
+      }),
     };
 
     await this.sendEmail(data);
@@ -53,25 +63,11 @@ class NodemailerEmailApi extends EmailApi {
       from: this._from,
       subject: "Reset password verification",
       text: `Reset password verification link: ${verificationLink}`,
-      html: `Reset password verification link: <a href="${verificationLink}">Click to verify</a>`,
-    };
-
-    await this.sendEmail(data);
-
-    return { success: true };
-  }
-
-  async sendSecurityCodeEmail(
-    args: IEmailApiSecurityCodeEmailArgs,
-  ): Promise<IEmailApiSendEmailResponse> {
-    const { to, code } = args;
-
-    const data = {
-      to,
-      from: this._from,
-      subject: "Security code",
-      text: `Your security code: ${code}`,
-      html: `Your security code: <p style="font-weight: bold; letter-spacing: 2px; font-size: 2rem;">${code}</p>`,
+      html: makeEmailTemplate({
+        title: "Password Reset",
+        description: "Please click the button below to reset your password.",
+        linkButton: { href: verificationLink, value: "Reset Password" },
+      }),
     };
 
     await this.sendEmail(data);
@@ -80,11 +76,6 @@ class NodemailerEmailApi extends EmailApi {
   }
 
   private async sendEmail(data: IEmailTemplate) {
-    if (config.NODE_ENV === "development") {
-      console.log(data);
-      return;
-    }
-
     await this._transporter.sendMail(data);
   }
 }

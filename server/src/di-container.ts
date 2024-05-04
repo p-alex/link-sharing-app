@@ -32,6 +32,7 @@ import NodemailerEmailApi from "./utils/mailer/NodemailerEmailApi";
 import SMTPServer from "./utils/mailer/smtpServers/SMTPServer";
 import ProfileRepository from "./modules/profile/profile.repository";
 import ProfileService from "./modules/profile/profile.service";
+import LocalSMTPServer from "./utils/mailer/smtpServers/LocalSMTPServer";
 
 export const container = new Container({ defaultScope: "Singleton" });
 
@@ -90,3 +91,4 @@ container.bind(EmailSender).toSelf();
 container.bind(NodemailerEmailApi).toSelf();
 container.bind(SMTPServer).toSelf();
 container.bind(MailjetSMTPServer).toSelf();
+container.bind(LocalSMTPServer).toSelf();
