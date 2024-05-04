@@ -20,9 +20,6 @@ import LinkRepository from "./modules/link/link.repository";
 import LinkService from "./modules/link/link.service";
 import RandomIdentifier from "./utils/randomIdentifier";
 import IdentityRepository from "./modules/identity/identity.repository";
-import SecurityCodeController from "./modules/securityCode/securityCode.controller";
-import SecurityCodeService from "./modules/securityCode/securityCode.service";
-import SecurityCodeRepository from "./modules/securityCode/securityCode.repository";
 import SecurityStringVerifier from "./utils/securityStringVerifier";
 import CloudManager from "./utils/cloud/CloudManager";
 import CloudinaryCloudApi from "./utils/cloud/CloudinaryCloudApi";
@@ -63,11 +60,6 @@ container.bind(OAuthStrategy).toSelf();
 
 // IDENTITY
 container.bind(IdentityRepository).toSelf();
-
-// SECURITY CODE
-container.bind(SecurityCodeController).toSelf();
-container.bind(SecurityCodeService).toSelf();
-container.bind(SecurityCodeRepository).toSelf();
 
 // PROFILE
 container.bind(ProfileService).toSelf();

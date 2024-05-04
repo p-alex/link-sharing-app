@@ -11,7 +11,6 @@ import {
 import Session from "../session/session.entity";
 import Link from "../link/link.entity";
 import Identity from "../identity/identity.entity";
-import SecurityCode from "../securityCode/securityCode.entity";
 import SecurityToken from "../securityToken/securityToken.entity";
 import Profile from "../profile/profile.entity";
 
@@ -54,12 +53,6 @@ class User {
   @OneToMany(() => SecurityToken, (securityToken) => securityToken.user)
   public readonly securityTokens: SecurityToken[];
 
-  @OneToMany(() => SecurityCode, (securityCode) => securityCode.user, {
-    onDelete: "SET NULL",
-    nullable: true,
-  })
-  public readonly securityCodes: SecurityCode[];
-
   constructor(
     id: string,
     profileId: string,
@@ -73,7 +66,6 @@ class User {
     links: Link[],
     identities: Identity[],
     securityTokens: SecurityToken[],
-    securityCodes: SecurityCode[],
   ) {
     this.id = id;
     this.profileId = profileId;
@@ -87,7 +79,6 @@ class User {
     this.links = links;
     this.identities = identities;
     this.securityTokens = securityTokens;
-    this.securityCodes = securityCodes;
   }
 }
 

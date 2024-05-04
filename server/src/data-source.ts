@@ -6,7 +6,6 @@ import Session from "./modules/session/session.entity";
 import SecurityToken from "./modules/securityToken/securityToken.entity";
 import Link from "./modules/link/link.entity";
 import Identity from "./modules/identity/identity.entity";
-import SecurityCode from "./modules/securityCode/securityCode.entity";
 import Profile from "./modules/profile/profile.entity";
 
 export const AppDataSource = new DataSource({
@@ -18,7 +17,7 @@ export const AppDataSource = new DataSource({
   database: config.DB_NAME,
   synchronize: true,
   logging: false,
-  entities: [User, Session, SecurityToken, Link, Identity, SecurityCode, Profile],
+  entities: [User, Session, SecurityToken, Link, Identity, Profile],
   migrations: [],
   subscribers: [],
 });

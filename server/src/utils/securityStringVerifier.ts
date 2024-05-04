@@ -35,26 +35,6 @@ class SecurityStringVerifier {
 
     return { tokenPayload, hashedToken };
   }
-
-  async verifyCode(userId: string, code: string) {
-    const securityCode = await this._unitOfWork.securityCode.findOneByUserIdAndCode(userId, code);
-
-    if (!securityCode) {
-      throw new Error("Security code is invalid");
-    }
-
-    const isExpired = new Date(securityCode.expires_at).getMilliseconds() >= Date.now();
-
-    if (isExpired) {
-      await this._unitOfWork.securityCode.deleteByUserIdAndCode(userId, code);
-
-      throw new Error("Security code is expired");
-    }
-
-    await this._unitOfWork.securityCode.deleteByUserIdAndCode(userId, code);
-
-    return { securityCode };
-  }
 }
 
 export default SecurityStringVerifier;
