@@ -21,9 +21,8 @@ function makeEmailTemplate({
         sans-serif;
       width: 100%;
       max-width: 767px;
-      padding: 48px 56px;
+      padding: 16px;
       background-color: #fafafa;
-      padding: 72px;
       border-radius: 8px;
       text-align: center;
   "
