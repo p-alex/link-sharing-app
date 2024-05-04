@@ -12,7 +12,6 @@ const AccountInformationBox = () => {
             label={<InputGroup.InputLabel htmlFor="accountId">Account ID</InputGroup.InputLabel>}
             input={
               <InputGroup.Input
-                className="w-[200px]"
                 type="text"
                 name="accountId"
                 id="accountId"
@@ -28,7 +27,6 @@ const AccountInformationBox = () => {
             label={<InputGroup.InputLabel htmlFor="email">Email</InputGroup.InputLabel>}
             input={
               <InputGroup.Input
-                className="w-[200px]"
                 type="email"
                 name="email"
                 id="email"
