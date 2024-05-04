@@ -13,8 +13,6 @@ class ProfileService {
   async get(userId: string) {
     const profile = await this._unitOfWork.profile.findOneByUserId(userId);
 
-    if (!profile) throw new Error("Profile does not exist");
-
     return profile;
   }
 

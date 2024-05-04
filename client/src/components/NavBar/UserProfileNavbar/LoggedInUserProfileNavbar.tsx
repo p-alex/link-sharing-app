@@ -6,7 +6,11 @@ import { Link } from "react-router-dom";
 import { addPopupAction } from "../../../redux/features/globalPopupsSlice/globalPopupsSlice";
 import NavbarLogo from "../NavbarLogo";
 
-function LoggedInUserProfileNavbar() {
+function LoggedInUserProfileNavbar({
+  showShareLinkButton = true,
+}: {
+  showShareLinkButton: boolean | undefined;
+}) {
   const dispatch = useDispatch();
 
   const handleSaveLinkToClipboard = () => {
@@ -22,9 +26,11 @@ function LoggedInUserProfileNavbar() {
         <NavbarLogo />
       </Link>
       <div className="flex gap-2">
-        <Button variant="fill" onClick={handleSaveLinkToClipboard}>
-          Share
-        </Button>
+        {showShareLinkButton && (
+          <Button variant="fill" onClick={handleSaveLinkToClipboard}>
+            Share
+          </Button>
+        )}
         <NavProfile />
       </div>
     </NavbarContainer>

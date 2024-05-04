@@ -13,6 +13,8 @@ import { LinkType } from "../../schemas/link.schema";
 import { useDispatch } from "react-redux";
 import { addPopupAction } from "../../redux/features/globalPopupsSlice/globalPopupsSlice";
 import { AxiosError } from "axios";
+import { Helmet } from "react-helmet";
+import isUUID from "../../utils/isUUID";
 
 function ProfilePage() {
   const dispatch = useDispatch();
@@ -20,6 +22,8 @@ function ProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
 
   const params = useParams();
+
+  const isValidUserId = isUUID(params?.userId);
 
   const { isFetchLinksOnceLoading } = useFetchLinksOnce();
 
@@ -90,36 +94,47 @@ function ProfilePage() {
 
   return (
     <Layout navbar={<UserProfileNavbar />}>
-      <div className="absolute left-0 top-0 z-0 h-[357px] w-full rounded-bl-[32px] rounded-br-[32px] bg-primary"></div>
-      {!isLoading && (
-        <div className="userProfileContainerAnimation relative mx-auto mt-[120px] flex w-full max-w-[349px] flex-col gap-14 rounded-3xl bg-white px-14 py-12 shadow-xl">
-          <div className="flex flex-col gap-6">
-            <div className="mx-auto h-[104px] w-[104px] rounded-full ">
-              <img
-                src={
-                  userProfile?.profilePicture
-                    ? userProfile?.profilePicture
-                    : "/images/blank-profile-picture.webp"
-                }
-                width={104}
-                height={104}
-                className="h-full w-full rounded-[inherit] object-cover"
-              />
+      {!isLoading && isValidUserId && userProfile?.id && (
+        <>
+          <Helmet>
+            <title>{fullName}'s Devlinks Profile</title>
+          </Helmet>
+          <div className="absolute left-0 top-0 z-0 h-[357px] w-full rounded-bl-[32px] rounded-br-[32px] bg-primary"></div>
+          {!isLoading && (
+            <div className="userProfileContainerAnimation relative mx-auto mt-[120px] flex w-full max-w-[349px] flex-col gap-14 rounded-3xl bg-white px-14 py-12 shadow-xl">
+              <div className="flex flex-col gap-6">
+                <div className="mx-auto h-[104px] w-[104px] rounded-full ">
+                  <img
+                    src={
+                      userProfile?.profilePicture
+                        ? userProfile?.profilePicture
+                        : "/images/blank-profile-picture.webp"
+                    }
+                    width={104}
+                    height={104}
+                    className="h-full w-full rounded-[inherit] object-cover"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  {fullName && <h1 className="text-center text-2xl font-bold">{fullName}</h1>}
+                  {userProfile?.publicEmail && (
+                    <p className="text-center">{userProfile.publicEmail}</p>
+                  )}
+                </div>
+              </div>
+              <ul className="flex flex-col gap-5">
+                {userLinks !== null &&
+                  userLinks.length > 0 &&
+                  userLinks.map((link) => {
+                    if (link.link)
+                      return <LinkButton key={"userProfileLink-" + link.id} link={link} />;
+                  })}
+              </ul>
             </div>
-            <div className="flex flex-col gap-2">
-              {fullName && <h1 className="text-center text-2xl font-bold">{fullName}</h1>}
-              {userProfile?.publicEmail && <p className="text-center">{userProfile.publicEmail}</p>}
-            </div>
-          </div>
-          <ul className="flex flex-col gap-5">
-            {userLinks !== null &&
-              userLinks.length > 0 &&
-              userLinks.map((link) => {
-                if (link.link) return <LinkButton key={"userProfileLink-" + link.id} link={link} />;
-              })}
-          </ul>
-        </div>
+          )}
+        </>
       )}
+      {!isLoading && (!isValidUserId || !userProfile?.id) && <p>User does not exist.</p>}
     </Layout>
   );
 }
