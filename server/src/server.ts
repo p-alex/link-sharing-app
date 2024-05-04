@@ -22,7 +22,6 @@ import "./modules/user/user.controller";
 import "./modules/auth/auth.controller";
 import "./modules/session/session.controller";
 import "./modules/link/link.controller";
-import "./modules/securityCode/securityCode.controller";
 import "./modules/profile/profile.controller";
 
 class Server {
