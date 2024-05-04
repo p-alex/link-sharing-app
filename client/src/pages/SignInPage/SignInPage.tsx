@@ -93,6 +93,26 @@ const SignInPage = () => {
             </div>
           </form>
         </Section>
+        <div className="my-6 w-full text-center">
+          <p>
+            Created by{" "}
+            <a href="https://github.com/p-alex" target="_blank" className="text-primary">
+              p-alex
+            </a>
+            .
+          </p>
+          <p>
+            Source code available on{" "}
+            <a
+              href="https://github.com/p-alex/link-sharing-app"
+              target="_blank"
+              className="text-primary"
+            >
+              github
+            </a>
+            .
+          </p>
+        </div>
         <CaptchaPrivacyAndTerms />
       </div>
     </main>
