@@ -2,6 +2,7 @@ import Button from "../Button";
 import useLinkCustomizer from "./useLinkCustomizer";
 import LinkItem from "./LinkItem";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import Section from "../Section";
 
 const LinkCustomizer = () => {
   const {
@@ -20,11 +21,10 @@ const LinkCustomizer = () => {
   if (isLoading) <p>Loading...</p>;
 
   return (
-    <section className="flex w-full flex-col gap-10 rounded-lg bg-white p-10 max-[800px]:p-6">
-      <header className="flex flex-col gap-2">
-        <h1>Customize your links</h1>
-        <p>Add/edit/remove links below and then share all your profiles with the world!</p>
-      </header>
+    <Section
+      title="Customize your links"
+      description="Add/edit/remove links below and then share all your profiles with the world!"
+    >
       <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
         <Button variant="outline" type="button" onClick={handleAddLink}>
           + Add new link
@@ -90,7 +90,7 @@ const LinkCustomizer = () => {
           </div>
         )}
       </form>
-    </section>
+    </Section>
   );
 };
 
