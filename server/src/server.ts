@@ -8,6 +8,7 @@ import { Database } from "./database";
 import cookieParser from "cookie-parser";
 import { exceptionHandler } from "./middleware/exceptionHandler";
 import { IAccessTokenPayload } from "./utils/jwt";
+import vercelRouter from "./modules/vercel.router";
 
 export interface CustomRequest<
   TParams = undefined,
@@ -18,7 +19,6 @@ export interface CustomRequest<
   user: IAccessTokenPayload;
 }
 
-import "./modules/vercel.controller";
 import "./modules/user/user.controller";
 import "./modules/auth/auth.controller";
 import "./modules/session/session.controller";
@@ -37,6 +37,7 @@ class Server {
 
     server.setConfig((app) => {
       app.set("trust proxy", 1);
+      app.use("/", vercelRouter);
       app.use(
         cors({
           credentials: true,
