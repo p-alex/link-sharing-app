@@ -25,6 +25,8 @@ import "./modules/session/session.controller";
 import "./modules/link/link.controller";
 import "./modules/profile/profile.controller";
 
+//ping
+
 class Server {
   setup() {
     const server = new InversifyExpressServer(container, null, { rootPath: "/api/v1" });
