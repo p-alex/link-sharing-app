@@ -18,6 +18,7 @@ export interface CustomRequest<
   user: IAccessTokenPayload;
 }
 
+import "./modules/vercel.controller";
 import "./modules/user/user.controller";
 import "./modules/auth/auth.controller";
 import "./modules/session/session.controller";
