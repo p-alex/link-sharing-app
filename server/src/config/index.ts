@@ -1,5 +1,5 @@
 export const config = {
-  PORT: process.env.PORT || 3000,
+  PORT: process.env.PORT || 5000,
   NODE_ENV: process.env.NODE_ENV! as "development" | "production",
   CLIENT_BASE_URL: process.env.CLIENT_BASE_URL!,
   SERVER_BASE_URL: process.env.SERVER_BASE_URL!,
